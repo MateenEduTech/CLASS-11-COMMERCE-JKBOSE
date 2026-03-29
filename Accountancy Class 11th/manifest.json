@@ -1,0 +1,27 @@
+{
+  "name": "Class 11 Accountancy – JKBOSE",
+  "short_name": "Accountancy App",
+  "description": "Interactive JKBOSE Class 11 Accountancy Learning App by Mateen Yousuf",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a237e",
+  "theme_color": "#1a237e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%231a237e'/><rect x='40' y='50' width='112' height='12' rx='6' fill='%23f9a825'/><rect x='40' y='74' width='70' height='8' rx='4' fill='white' opacity='0.7'/><rect x='40' y='90' width='55' height='8' rx='4' fill='white' opacity='0.7'/><rect x='40' y='106' width='80' height='8' rx='4' fill='white' opacity='0.7'/><line x1='120' y1='68' x2='120' y2='140' stroke='white' stroke-width='2' opacity='0.4'/><rect x='40' y='128' width='110' height='3' rx='2' fill='%23f9a825' opacity='0.6'/><rect x='40' y='135' width='110' height='8' rx='4' fill='%23f9a825'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='64' fill='%231a237e'/><rect x='100' y='130' width='312' height='32' rx='8' fill='%23f9a825'/><rect x='100' y='180' width='200' height='20' rx='4' fill='white' opacity='0.7'/><rect x='100' y='210' width='160' height='20' rx='4' fill='white' opacity='0.7'/><rect x='100' y='240' width='220' height='20' rx='4' fill='white' opacity='0.7'/><rect x='100' y='340' width='312' height='8' rx='4' fill='%23f9a825' opacity='0.6'/><rect x='100' y='356' width='312' height='24' rx='8' fill='%23f9a825'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en",
+  "screenshots": []
+}

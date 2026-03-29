@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a3a6e">
+<meta name="description" content="Class 11 Economics Interactive Learning App - JKBOSE by Mateen Yousuf">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Class 11 Economics | JKBOSE</title>
+<link rel="manifest" href="manifest.json">
+<style>
+/* ========== CSS VARIABLES & RESET ========== */
+:root {
+  --primary: #1a3a6e;
+  --primary-light: #2d5fa6;
+  --accent: #f59e0b;
+  --accent2: #10b981;
+  --accent3: #ef4444;
+  --bg: #0d1b2a;
+  --bg2: #162032;
+  --bg3: #1e2d40;
+  --card: #1a2d42;
+  --card2: #243550;
+  --text: #e8f0fe;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --border: #2d4a6e;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
+
+/* ========== SCREENS ========== */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ========== SPLASH / TITLE SCREEN ========== */
+#splash {
+  background: linear-gradient(135deg, #0d1b2a 0%, #1a3a6e 50%, #0d1b2a 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; position: relative; overflow: hidden; padding: 20px;
+}
+.splash-bg {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.splash-bg svg { width: 100%; height: 100%; opacity: 0.08; }
+.splash-content { position: relative; z-index: 2; text-align: center; max-width: 480px; width: 100%; }
+.splash-badge {
+  display: inline-block; background: rgba(245,158,11,0.2); border: 1px solid var(--gold);
+  color: var(--gold); padding: 6px 18px; border-radius: 20px; font-size: 0.78rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
+  animation: fadeIn 0.8s ease;
+}
+.splash-icon {
+  width: 90px; height: 90px; margin: 0 auto 20px;
+  animation: bounceIn 1s ease;
+}
+.splash-icon svg { width: 100%; height: 100%; }
+.splash-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #93c5fd 50%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.2; margin-bottom: 10px;
+  animation: slideUp 0.8s ease 0.2s both;
+}
+.splash-subtitle {
+  color: var(--text2); font-size: 1rem; margin-bottom: 30px;
+  animation: slideUp 0.8s ease 0.4s both;
+}
+/* Author card */
+.author-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 30px;
+  display: flex; align-items: center; gap: 16px;
+  animation: slideUp 0.8s ease 0.6s both;
+  backdrop-filter: blur(10px);
+}
+.author-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 3px solid var(--gold); overflow: hidden; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+}
+.author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.author-avatar-fallback { font-size: 1.8rem; }
+.author-info { text-align: left; }
+.author-name { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+.author-title { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+/* Chapters preview */
+.chapters-preview {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 30px; animation: slideUp 0.8s ease 0.8s both;
+}
+.ch-tag {
+  background: rgba(26,58,110,0.6); border: 1px solid var(--border);
+  border-radius: 8px; padding: 4px 10px; font-size: 0.72rem; color: var(--text2);
+}
+.btn-start {
+  background: linear-gradient(135deg, var(--primary-light), var(--accent));
+  color: white; border: none; padding: 16px 48px; border-radius: 50px;
+  font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(26,115,232,0.4); transition: all 0.3s;
+  animation: slideUp 0.8s ease 1s both; position: relative; overflow: hidden;
+}
+.btn-start::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%); transition: 0.5s;
+}
+.btn-start:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(26,115,232,0.6); }
+.btn-start:hover::after { transform: translateX(100%); }
+.splash-footer { margin-top: 24px; color: var(--text3); font-size: 0.75rem; animation: fadeIn 1s ease 1.2s both; }
+
+/* ========== MAIN APP ========== */
+#app { display: none; flex-direction: column; min-height: 100vh; }
+#app.active { display: flex; }
+
+/* Top Bar */
+.topbar {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
+}
+.topbar-back {
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
+  font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+  transition: 0.2s; flex-shrink: 0;
+}
+.topbar-back:hover { background: rgba(255,255,255,0.25); }
+.topbar-title { font-size: 1rem; font-weight: 700; flex: 1; }
+.topbar-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+.topbar-progress-wrap { width: 40px; height: 40px; flex-shrink: 0; }
+.progress-ring { transform: rotate(-90deg); }
+.progress-ring-bg { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 3; }
+.progress-ring-fill {
+  fill: none; stroke: var(--gold); stroke-width: 3;
+  stroke-dasharray: 100; stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.5s ease; stroke-linecap: round;
+}
+.topbar-progress-text {
+  position: absolute; font-size: 0.6rem; font-weight: 700; color: var(--gold);
+}
+
+/* Content Area */
+.content { flex: 1; overflow-y: auto; padding: 16px; }
+
+/* ========== HOME DASHBOARD ========== */
+.dashboard-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--bg3) 100%);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.dashboard-hero::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(245,158,11,0.15), transparent);
+  border-radius: 50%;
+}
+.hero-greeting { font-size: 0.85rem; color: var(--text2); margin-bottom: 4px; }
+.hero-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+.hero-sub { font-size: 0.82rem; color: var(--text2); }
+.hero-stats { display: flex; gap: 16px; margin-top: 16px; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 1.4rem; font-weight: 800; color: var(--gold); }
+.hero-stat-label { font-size: 0.7rem; color: var(--text2); }
+
+/* Section heading */
+.section-heading {
+  font-size: 1rem; font-weight: 700; color: var(--text);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.section-heading::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--gold); border-radius: 2px; }
+
+/* Navigation Cards Grid */
+.nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.nav-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; cursor: pointer; transition: all 0.3s; text-align: center;
+  position: relative; overflow: hidden;
+}
+.nav-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, var(--blue));
+}
+.nav-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--card-accent, var(--blue)); }
+.nav-card-icon { font-size: 2rem; margin-bottom: 8px; }
+.nav-card-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+.nav-card-desc { font-size: 0.72rem; color: var(--text2); }
+
+/* Chapter list */
+.chapter-list { display: flex; flex-direction: column; gap: 10px; }
+.chapter-item {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; gap: 12px;
+}
+.chapter-item:hover { border-color: var(--primary-light); transform: translateX(4px); }
+.chapter-item.completed { border-color: var(--green); }
+.chapter-num {
+  width: 36px; height: 36px; background: var(--primary); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem; flex-shrink: 0; color: var(--gold);
+}
+.chapter-item.completed .chapter-num { background: var(--green); color: white; }
+.chapter-info { flex: 1; }
+.chapter-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 2px; }
+.chapter-sub { font-size: 0.72rem; color: var(--text2); }
+.chapter-arrow { color: var(--text3); font-size: 1rem; }
+
+/* ========== CHAPTER VIEW ========== */
+.chapter-view { max-width: 100%; }
+.chapter-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.chapter-header-num { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+.chapter-header-title { font-size: 1.3rem; font-weight: 700; }
+.chapter-header-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.ch-badge {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px; padding: 3px 10px; font-size: 0.72rem; color: rgba(255,255,255,0.9);
+}
+/* Tabs */
+.tab-bar {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: var(--card); border: 1px solid var(--border); color: var(--text2);
+  border-radius: 10px; padding: 8px 16px; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
+}
+.tab-btn.active {
+  background: var(--primary-light); color: white; border-color: var(--primary-light);
+}
+/* Content card */
+.content-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+}
+.content-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--gold); }
+.content-card p { font-size: 0.88rem; line-height: 1.7; color: var(--text2); margin-bottom: 12px; }
+.content-card ul { padding-left: 20px; }
+.content-card ul li { font-size: 0.88rem; line-height: 1.8; color: var(--text2); }
+.highlight-box {
+  background: rgba(26,115,232,0.1); border-left: 4px solid var(--blue);
+  border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0;
+  font-size: 0.85rem; color: var(--text);
+}
+.formula-box {
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 10px; padding: 14px; margin: 12px 0; text-align: center;
+  font-family: monospace; font-size: 1rem; color: var(--gold); font-weight: 700;
+}
+.key-points {
+  background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 10px; padding: 14px; margin: 12px 0;
+}
+.key-points h4 { color: var(--green); font-size: 0.85rem; margin-bottom: 8px; }
+.key-points li { font-size: 0.83rem; color: var(--text2); line-height: 1.8; }
+
+/* ========== GRAPH / CANVAS ========== */
+.graph-wrap {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; margin: 12px 0; overflow-x: auto;
+}
+.graph-wrap canvas { display: block; max-width: 100%; }
+.graph-label { font-size: 0.78rem; color: var(--text2); text-align: center; margin-top: 8px; }
+
+/* ========== SIMULATION ========== */
+.sim-container {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 16px;
+}
+.sim-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; color: var(--gold); }
+.sim-desc { font-size: 0.8rem; color: var(--text2); margin-bottom: 16px; }
+.slider-group { margin-bottom: 14px; }
+.slider-label { font-size: 0.82rem; color: var(--text2); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.slider-label span { color: var(--accent); font-weight: 700; }
+input[type="range"] {
+  width: 100%; accent-color: var(--primary-light);
+  height: 6px; cursor: pointer;
+}
+.sim-output {
+  background: var(--card); border-radius: 10px; padding: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+}
+.sim-metric { text-align: center; }
+.sim-metric-val { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+.sim-metric-label { font-size: 0.72rem; color: var(--text3); }
+.sim-btn {
+  background: var(--primary-light); color: white; border: none;
+  padding: 10px 20px; border-radius: 10px; cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; margin-top: 12px; width: 100%;
+  transition: 0.2s;
+}
+.sim-btn:hover { background: var(--primary); }
+
+/* ========== QUIZ ========== */
+.quiz-container { max-width: 100%; }
+.quiz-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+}
+.quiz-counter { font-size: 0.85rem; color: var(--text2); }
+.quiz-score-badge {
+  background: var(--primary); border-radius: 20px; padding: 4px 14px;
+  font-size: 0.82rem; font-weight: 700; color: var(--gold);
+}
+.quiz-progress-bar {
+  height: 6px; background: var(--bg3); border-radius: 3px; margin-bottom: 20px; overflow: hidden;
+}
+.quiz-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--primary-light), var(--gold));
+  border-radius: 3px; transition: width 0.5s ease;
+}
+.question-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; margin-bottom: 16px;
+}
+.question-type {
+  font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.question-text { font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px; font-weight: 500; }
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  background: var(--bg3); border: 2px solid var(--border); border-radius: 10px;
+  padding: 12px 16px; cursor: pointer; font-size: 0.88rem; text-align: left;
+  transition: all 0.2s; color: var(--text);
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary-light); background: var(--card2); }
+.option-btn.correct { background: rgba(16,185,129,0.15); border-color: var(--green); color: var(--green); }
+.option-btn.wrong { background: rgba(239,68,68,0.15); border-color: var(--red); color: var(--red); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+.feedback-box {
+  border-radius: 10px; padding: 12px 16px; margin-top: 12px; font-size: 0.85rem; line-height: 1.6;
+}
+.feedback-box.correct { background: rgba(16,185,129,0.12); border: 1px solid var(--green); color: var(--green); }
+.feedback-box.wrong { background: rgba(239,68,68,0.1); border: 1px solid var(--red); color: #fca5a5; }
+.quiz-nav { display: flex; gap: 10px; margin-top: 16px; }
+.btn-next {
+  background: var(--primary-light); color: white; border: none; padding: 12px 24px;
+  border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; flex: 1;
+  transition: 0.2s;
+}
+.btn-next:hover { background: var(--primary); }
+.btn-skip {
+  background: var(--card); color: var(--text2); border: 1px solid var(--border);
+  padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;
+}
+/* Quiz result */
+.quiz-result {
+  text-align: center; padding: 40px 20px;
+}
+.result-emoji { font-size: 4rem; margin-bottom: 16px; }
+.result-score { font-size: 3rem; font-weight: 800; color: var(--gold); margin-bottom: 8px; }
+.result-label { font-size: 1rem; color: var(--text2); margin-bottom: 24px; }
+.result-breakdown {
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px;
+}
+.breakdown-item { text-align: center; }
+.breakdown-num { font-size: 1.6rem; font-weight: 800; }
+.breakdown-label { font-size: 0.72rem; color: var(--text3); }
+.btn-retry {
+  background: linear-gradient(135deg, var(--primary-light), var(--gold));
+  color: white; border: none; padding: 14px 36px; border-radius: 50px;
+  font-size: 1rem; font-weight: 700; cursor: pointer; margin: 8px;
+}
+
+/* ========== STATISTICS LAB ========== */
+.stats-input-area {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; margin-bottom: 16px;
+}
+.stats-input-area textarea {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px; color: var(--text); font-size: 0.88rem;
+  resize: vertical; min-height: 80px; outline: none; font-family: monospace;
+}
+.stats-input-area textarea:focus { border-color: var(--primary-light); }
+.stats-btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.stats-btn {
+  background: var(--primary); color: white; border: none; padding: 8px 16px;
+  border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+  transition: 0.2s;
+}
+.stats-btn:hover { background: var(--primary-light); }
+.stats-result {
+  background: var(--bg3); border-radius: 12px; padding: 16px; margin-top: 12px;
+}
+.stats-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stats-result-item { text-align: center; background: var(--card); border-radius: 10px; padding: 12px; }
+.stats-result-val { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+.stats-result-label { font-size: 0.72rem; color: var(--text3); }
+
+/* ========== PROGRESS TRACKER ========== */
+.progress-wrap { padding: 0; }
+.progress-overall {
+  background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+  text-align: center;
+}
+.progress-circle-big {
+  width: 120px; height: 120px; margin: 0 auto 16px; position: relative;
+}
+.progress-circle-big svg { transform: rotate(-90deg); }
+.progress-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+.progress-chapter-row {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+}
+.progress-bar-wrap { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.5s; }
+.progress-pct-small { font-size: 0.78rem; color: var(--text2); font-weight: 700; min-width: 36px; text-align: right; }
+
+/* ========== GRAPH LAB ========== */
+.graph-lab { }
+.graph-selector {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.graph-select-btn {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 14px; font-size: 0.8rem; color: var(--text2); cursor: pointer;
+  transition: 0.2s;
+}
+.graph-select-btn.active { background: var(--primary-light); color: white; border-color: var(--primary-light); }
+.graph-canvas-wrap {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 16px;
+}
+.graph-canvas-wrap canvas { display: block; max-width: 100%; margin: 0 auto; }
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* Bottom Nav */
+.bottom-nav {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; padding: 8px 0 12px;
+  position: sticky; bottom: 0; z-index: 100;
+}
+.bottom-nav-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: none; color: var(--text3); cursor: pointer;
+  padding: 6px 16px; border-radius: 10px; transition: 0.2s; font-size: 0.68rem;
+}
+.bottom-nav-btn.active { color: var(--accent); }
+.bottom-nav-btn .nav-icon { font-size: 1.3rem; }
+
+/* Toast notification */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: var(--card2); border: 1px solid var(--border); border-radius: 50px;
+  padding: 10px 24px; font-size: 0.85rem; z-index: 9999; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s; white-space: nowrap; box-shadow: var(--shadow);
+}
+.toast.show { opacity: 1; }
+
+/* Responsive */
+@media(min-width: 600px) {
+  .nav-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .content { max-width: 680px; margin: 0 auto; }
+}
+
+/* Install banner */
+.install-banner {
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 0.82rem; cursor: pointer; display: none;
+}
+.install-banner.visible { display: flex; }
+.install-btn { background: var(--gold); color: var(--bg); border: none; padding: 6px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.8rem; margin-left: auto; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ========== SPLASH SCREEN ========== -->
+<div id="splash" class="screen active">
+  <div class="splash-bg">
+    <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Supply-Demand Graph Background -->
+      <line x1="80" y1="500" x2="720" y2="500" stroke="white" stroke-width="2"/>
+      <line x1="80" y1="100" x2="80" y2="500" stroke="white" stroke-width="2"/>
+      <!-- Demand curve -->
+      <path d="M120 150 Q300 350 700 480" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
+      <!-- Supply curve -->
+      <path d="M120 480 Q300 300 700 120" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="8,4"/>
+      <!-- Equilibrium point -->
+      <circle cx="410" cy="310" r="10" fill="#f59e0b" opacity="0.8"/>
+      <line x1="410" y1="310" x2="410" y2="500" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <line x1="80" y1="310" x2="410" y2="310" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Bar chart right side -->
+      <rect x="580" y="300" width="30" height="200" fill="white" opacity="0.3" rx="4"/>
+      <rect x="620" y="250" width="30" height="250" fill="white" opacity="0.3" rx="4"/>
+      <rect x="660" y="200" width="30" height="300" fill="white" opacity="0.3" rx="4"/>
+      <rect x="700" y="350" width="30" height="150" fill="white" opacity="0.3" rx="4"/>
+      <!-- Axis labels -->
+      <text x="400" y="530" fill="white" font-size="14" text-anchor="middle" opacity="0.5">Quantity</text>
+      <text x="50" y="300" fill="white" font-size="14" text-anchor="middle" opacity="0.5" transform="rotate(-90,50,300)">Price</text>
+      <text x="710" y="125" fill="#ef4444" font-size="12" opacity="0.7">D</text>
+      <text x="710" y="105" fill="#10b981" font-size="12" opacity="0.7">S</text>
+    </svg>
+  </div>
+  <div class="splash-content">
+    <div class="splash-badge">JKBOSE • Class 11</div>
+    <div class="splash-icon animate-float">
+      <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="90" height="90" rx="20" fill="#1a3a6e"/>
+        <rect x="10" y="55" width="14" height="25" rx="3" fill="#3b82f6"/>
+        <rect x="30" y="40" width="14" height="40" rx="3" fill="#f59e0b"/>
+        <rect x="50" y="28" width="14" height="52" rx="3" fill="#10b981"/>
+        <rect x="70" y="42" width="14" height="38" rx="3" fill="#8b5cf6"/>
+        <line x1="8" y1="20" x2="82" y2="20" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="5,3"/>
+        <path d="M10 70 Q30 50 50 55 Q65 58 80 45" fill="none" stroke="#60a5fa" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="splash-title">Class 11 Economics<br>Learning App</div>
+    <div class="splash-subtitle">Interactive • Graphical • JKBOSE Aligned</div>
+    <div class="author-card">
+      <div class="author-avatar" id="authorAvatar">
+        <span class="author-avatar-fallback">👨‍🏫</span>
+      </div>
+      <div class="author-info">
+        <div class="author-name">Mateen Yousuf</div>
+        <div class="author-title">Teacher<br>School Education Department<br>Jammu &amp; Kashmir</div>
+      </div>
+    </div>
+    <div class="chapters-preview">
+      <span class="ch-tag">📚 12 Chapters</span>
+      <span class="ch-tag">🎯 120+ MCQs</span>
+      <span class="ch-tag">📊 6 Simulations</span>
+      <span class="ch-tag">📈 Graph Lab</span>
+      <span class="ch-tag">📉 Stats Lab</span>
+      <span class="ch-tag">🏆 Progress Tracker</span>
+    </div>
+    <button class="btn-start" onclick="startApp()">🚀 Start Learning</button>
+    <div class="splash-footer">NEP 2020 · NCF · PARAKH · NCERT Aligned</div>
+  </div>
+</div>
+
+<!-- ========== MAIN APP ========== -->
+<div id="app" class="screen">
+  <!-- Install Banner -->
+  <div class="install-banner" id="installBanner">
+    <span>📲 Install this app on your device</span>
+    <button class="install-btn" id="installBtn">Install</button>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button class="topbar-back" id="backBtn" onclick="goBack()">←</button>
+    <div style="flex:1">
+      <div class="topbar-title" id="topbarTitle">Economics Dashboard</div>
+      <div class="topbar-subtitle" id="topbarSubtitle">Class 11 | JKBOSE</div>
+    </div>
+    <div style="position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center;">
+      <svg class="progress-ring" width="40" height="40" viewBox="0 0 40 40">
+        <circle class="progress-ring-bg" cx="20" cy="20" r="15"/>
+        <circle class="progress-ring-fill" id="progressRing" cx="20" cy="20" r="15"
+          style="stroke-dasharray: 94.2; stroke-dashoffset: 94.2;"/>
+      </svg>
+      <span class="topbar-progress-text" id="progressPct">0%</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content" id="mainContent">
+    <!-- Dynamic content injected here -->
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-btn active" id="nav-home" onclick="navigateTo('home')">
+      <span class="nav-icon">🏠</span><span>Home</span>
+    </button>
+    <button class="bottom-nav-btn" id="nav-chapters" onclick="navigateTo('chapters')">
+      <span class="nav-icon">📚</span><span>Chapters</span>
+    </button>
+    <button class="bottom-nav-btn" id="nav-lab" onclick="navigateTo('lab')">
+      <span class="nav-icon">📊</span><span>Lab</span>
+    </button>
+    <button class="bottom-nav-btn" id="nav-quiz" onclick="navigateTo('quizSelect')">
+      <span class="nav-icon">🎯</span><span>Quiz</span>
+    </button>
+    <button class="bottom-nav-btn" id="nav-progress" onclick="navigateTo('progress')">
+      <span class="nav-icon">🏆</span><span>Progress</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+// ============================================================
+// DATA: CHAPTERS, CONTENT, QUESTIONS
+// ============================================================
+const CHAPTERS = [
+  {
+    id: 1, title: "Introduction to Economics",
+    icon: "💡", color: "#3b82f6",
+    tags: ["Micro", "Macro", "Basic Concepts"],
+    concepts: [
+      {
+        title: "What is Economics?",
+        content: `Economics is the social science that studies how individuals, firms, and governments make choices to allocate scarce resources among competing uses. It helps us understand why prices rise, why unemployment occurs, and how nations grow rich or remain poor.`,
+        highlight: "Economics = Study of scarcity and choice. Every economic problem arises from unlimited wants but limited resources.",
+        points: ["Scarcity is the fundamental economic problem", "Resources include land, labour, capital, and enterprise", "Economics studies both positive and normative questions", "Modern economics is divided into Microeconomics and Macroeconomics"]
+      },
+      {
+        title: "Microeconomics vs Macroeconomics",
+        content: `Microeconomics studies individual economic units — a single consumer, firm, or industry. Macroeconomics studies the economy as a whole — total output, total employment, and the general price level.`,
+        highlight: "Micro = trees; Macro = forest. Both are essential perspectives for economic analysis.",
+        points: ["Micro: demand, supply, market equilibrium, consumer theory", "Macro: GDP, inflation, unemployment, monetary policy", "Both use the same logical tools but different levels of aggregation"]
+      },
+      {
+        title: "Central Problems of an Economy",
+        content: `Every economy faces three fundamental questions: (1) What to produce and in what quantities? (2) How to produce — which production technique? (3) For whom to produce — how to distribute output?`,
+        highlight: "These three central problems exist because of scarcity. No society can escape them.",
+        formula: "Production Possibility Frontier (PPF): Shows all combinations of two goods an economy can produce with given resources and technology.",
+        points: ["Opportunity cost arises when choosing between alternatives", "PPF slopes downward due to trade-offs", "Points inside PPF = inefficiency; points on PPF = efficiency", "Points outside PPF = currently unattainable"]
+      }
+    ],
+    simId: null,
+    graphType: "ppf"
+  },
+  {
+    id: 2, title: "Consumer's Equilibrium and Demand",
+    icon: "🛒", color: "#10b981",
+    tags: ["Utility", "Demand", "MRS"],
+    concepts: [
+      {
+        title: "Utility and Consumer Behaviour",
+        content: `Utility is the satisfaction a consumer derives from consuming a good or service. Total Utility (TU) is the total satisfaction from all units consumed. Marginal Utility (MU) is the additional satisfaction from consuming one more unit.`,
+        highlight: "Law of Diminishing Marginal Utility: As more units are consumed, MU falls (eventually to zero or negative).",
+        formula: "MU = ΔTU / ΔQ  |  TU = Σ MU",
+        points: ["Cardinal utility: utility measured in numbers (utils)", "Ordinal utility: utility ranked (indifference curve approach)", "Consumer equilibrium: MU/P is equal for all goods", "For a single good: MU = P at equilibrium"]
+      },
+      {
+        title: "Demand and the Law of Demand",
+        content: `Demand is the quantity of a good a consumer is willing and able to purchase at various prices during a given time period. The Law of Demand states that, ceteris paribus, as price rises, quantity demanded falls.`,
+        highlight: "The demand curve slopes DOWNWARD from left to right, reflecting the inverse price–quantity relationship.",
+        formula: "Qd = f(P, I, Pr, T, E)",
+        points: ["Determinants: price, income, prices of related goods, tastes, expectations", "Movement along curve = price change; shift of curve = non-price factor change", "Substitute goods: price of X rises → demand for Y rises", "Complement goods: price of X rises → demand for Y falls"]
+      },
+      {
+        title: "Price Elasticity of Demand (PED)",
+        content: `Price Elasticity of Demand measures the responsiveness of quantity demanded to a change in price. It is calculated as the percentage change in Qd divided by the percentage change in price.`,
+        highlight: "PED > 1: Elastic  |  PED < 1: Inelastic  |  PED = 1: Unitary  |  PED = 0: Perfectly Inelastic  |  PED = ∞: Perfectly Elastic",
+        formula: "PED = (% ΔQd) / (% ΔP) = (ΔQ/Q) ÷ (ΔP/P)",
+        points: ["Luxury goods are elastic; necessities are inelastic", "More substitutes → more elastic", "Longer time period → more elastic", "PED determines total revenue changes with price"]
+      }
+    ],
+    simId: "demand",
+    graphType: "demand"
+  },
+  {
+    id: 3, title: "Producer Behaviour and Supply",
+    icon: "🏭", color: "#f59e0b",
+    tags: ["Production", "Costs", "Supply"],
+    concepts: [
+      {
+        title: "Production Function",
+        content: `A production function shows the technological relationship between inputs and output. In the short run, at least one factor (usually capital) is fixed. In the long run, all factors are variable.`,
+        highlight: "Law of Variable Proportions (Short Run): As more variable input is added to fixed input, MP first rises, then falls.",
+        formula: "Q = f(L, K)  |  MP_L = ΔTP / ΔL",
+        points: ["Three stages: increasing, diminishing, negative returns", "TP, AP, MP relationship: MP crosses AP at AP's maximum", "Long-run production: returns to scale", "Isoquants show equal output combinations"]
+      },
+      {
+        title: "Costs of Production",
+        content: `Total Cost (TC) = Fixed Cost (TFC) + Variable Cost (TVC). Average costs are per-unit costs. Marginal Cost (MC) is the cost of producing one extra unit.`,
+        highlight: "The MC curve cuts both ATC and AVC at their minimum points — this is a critical graphical relationship.",
+        formula: "TC = TFC + TVC  |  MC = ΔTC/ΔQ  |  ATC = TC/Q",
+        points: ["TFC is constant; TVC rises with output", "AC = AFC + AVC", "U-shaped cost curves due to law of variable proportions", "In long run, only LRAC matters (no fixed costs)"]
+      },
+      {
+        title: "Supply and Law of Supply",
+        content: `Supply is the quantity a producer is willing and able to offer for sale at various prices. The Law of Supply states that, ceteris paribus, higher prices lead to greater quantity supplied.`,
+        highlight: "Supply curve slopes UPWARD — higher price increases profit motive, encouraging more production.",
+        formula: "Qs = f(P, C, T, NF, G)",
+        points: ["Determinants: price, input costs, technology, number of firms, government policy", "Movement along = price change; shift = non-price change", "PES: elastic if producers can respond quickly", "Industry supply = horizontal sum of individual firm supplies"]
+      }
+    ],
+    simId: "supply",
+    graphType: "supply"
+  },
+  {
+    id: 4, title: "Forms of Market and Price Determination",
+    icon: "🏪", color: "#8b5cf6",
+    tags: ["Perfect Competition", "Monopoly", "Equilibrium"],
+    concepts: [
+      {
+        title: "Market Structures",
+        content: `Markets are classified by the number of firms, product differentiation, and barriers to entry. The four main structures are Perfect Competition, Monopolistic Competition, Oligopoly, and Monopoly.`,
+        highlight: "Key continuum: Perfect Competition ← more competitive → Monopoly ← less competitive",
+        points: ["Perfect Competition: many firms, identical product, free entry/exit", "Monopoly: single seller, unique product, high barriers", "Oligopoly: few interdependent firms (e.g. car industry)", "Monopolistic Competition: many firms, differentiated products"]
+      },
+      {
+        title: "Price Determination: Demand & Supply",
+        content: `In a competitive market, price is determined by the interaction of demand and supply. At equilibrium, quantity demanded equals quantity supplied. Surplus forces price down; shortage forces price up.`,
+        highlight: "Equilibrium: Qd = Qs. This is where the market 'clears' with no excess demand or supply.",
+        formula: "Surplus → Price falls  |  Shortage → Price rises  |  At Equilibrium: Qd = Qs",
+        points: ["Equilibrium price = market-clearing price", "Shift in demand → new equilibrium", "Shift in supply → new equilibrium", "Both shift together → ambiguous outcome"]
+      },
+      {
+        title: "Firm Equilibrium in Perfect Competition",
+        content: `Under perfect competition, a firm is a price-taker. It maximises profit where MC = MR = P. In the long run, economic profit = 0 (normal profit only) due to free entry.`,
+        highlight: "MR = MC is the universal profit-maximisation condition for ALL market structures.",
+        formula: "Profit = TR – TC  |  Profit max when: MR = MC  |  Under PC: P = MR = AR",
+        points: ["Short run: can earn supernormal or subnormal profit", "Long run: only normal profit under perfect competition", "Shut-down point: P < AVC", "Break-even point: P = ATC"]
+      }
+    ],
+    simId: "equilibrium",
+    graphType: "equilibrium"
+  },
+  {
+    id: 5, title: "Introduction to Statistics",
+    icon: "📊", color: "#06b6d4",
+    tags: ["Data", "Statistics", "Scope"],
+    concepts: [
+      {
+        title: "What is Statistics?",
+        content: `Statistics is the science of collecting, organising, presenting, analysing, and interpreting numerical data to assist in decision-making. In economics, statistics helps in understanding economic problems, testing theories, and formulating policies.`,
+        highlight: "Statistics turns raw data into meaningful information — essential for economic analysis and policy-making.",
+        points: ["Descriptive statistics: summarise and describe data", "Inferential statistics: draw conclusions about a population from a sample", "Economics uses statistics for national income, inflation, etc.", "Limitations: statistics can be misused; aggregate may hide individual variation"]
+      },
+      {
+        title: "Statistical Tools in Economics",
+        content: `Key statistical measures include measures of central tendency (mean, median, mode), measures of dispersion (range, variance, SD), correlation, and index numbers. Graphical tools include histograms, frequency polygons, and ogives.`,
+        highlight: "Statistics converts economic observations into actionable knowledge for planners and policymakers.",
+        points: ["Census: all members of population surveyed", "Sample: a subset representing the population", "Primary data: collected directly by researcher", "Secondary data: already collected by others"]
+      }
+    ],
+    simId: "stats",
+    graphType: "bar"
+  },
+  {
+    id: 6, title: "Collection of Data",
+    icon: "📋", color: "#f43f5e",
+    tags: ["Primary", "Secondary", "Sampling"],
+    concepts: [
+      {
+        title: "Primary vs Secondary Data",
+        content: `Primary data is original data collected first-hand for a specific purpose. Secondary data is already collected and available from other sources. Primary data is more reliable but costly; secondary data is cheaper but may lack relevance.`,
+        highlight: "Choose primary data for precision; secondary data for economy. Always evaluate source reliability.",
+        points: ["Primary methods: questionnaire, interview, observation, experiment", "Secondary sources: government reports, publications, research journals", "Pilot survey: small-scale test before main survey", "Census vs. Sample: all units vs. representative subset"]
+      },
+      {
+        title: "Sampling Methods",
+        content: `Sampling involves selecting a representative subset of the population. Probability sampling gives each unit an equal chance; non-probability sampling does not. Common methods include random sampling, stratified sampling, and systematic sampling.`,
+        highlight: "A good sample is representative, adequate, and unbiased — it gives valid conclusions about the population.",
+        formula: "Sampling Error = |Statistic – Parameter|",
+        points: ["Simple random sampling: lottery/random number method", "Stratified sampling: population divided into strata", "Systematic sampling: every nth unit selected", "Cluster sampling: natural groups selected as units"]
+      }
+    ],
+    simId: null,
+    graphType: "bar"
+  },
+  {
+    id: 7, title: "Organisation of Data",
+    icon: "🗂️", color: "#84cc16",
+    tags: ["Classification", "Frequency", "Tables"],
+    concepts: [
+      {
+        title: "Classification and Tabulation",
+        content: `Classification is the process of arranging data into classes/groups based on common characteristics. Tabulation is presenting classified data in rows and columns. Both help in making data manageable and understandable.`,
+        highlight: "Well-organised data reveals patterns hidden in raw numbers — this is the first step in all statistical analysis.",
+        points: ["Qualitative classification: by attributes (gender, region)", "Quantitative classification: by measurable values (income, marks)", "Class interval = upper limit – lower limit", "Class frequency = number of observations in a class"]
+      },
+      {
+        title: "Frequency Distribution",
+        content: `A frequency distribution shows how often each value or range of values occurs in a dataset. Cumulative frequency is the running total. Relative frequency shows frequency as a proportion of total.`,
+        highlight: "The frequency distribution is the foundation for all further statistical analysis and graphical representation.",
+        formula: "Relative Frequency = (Class Frequency) / (Total Frequency) × 100",
+        points: ["Inclusive class intervals: both limits included", "Exclusive class intervals: upper limit excluded", "Less than ogive: cumulative upward", "More than ogive: cumulative downward"]
+      }
+    ],
+    simId: null,
+    graphType: "histogram"
+  },
+  {
+    id: 8, title: "Presentation of Data",
+    icon: "📈", color: "#f97316",
+    tags: ["Graphs", "Diagrams", "Histogram"],
+    concepts: [
+      {
+        title: "Diagrammatic Presentation",
+        content: `Diagrams and graphs make data visually appealing and easy to understand. Types include bar diagrams (simple, multiple, subdivided), pie charts, frequency histograms, frequency polygons, and ogives.`,
+        highlight: "A good diagram conveys what hundreds of numbers cannot — always choose the diagram that best suits your data type.",
+        points: ["Simple bar diagram: compare single variable across categories", "Multiple bar diagram: compare multiple variables", "Subdivided bar: shows component parts", "Pie chart: shows proportion of a whole"]
+      },
+      {
+        title: "Frequency Histogram and Polygon",
+        content: `A histogram shows the distribution of continuous data using adjacent bars where the area represents frequency. A frequency polygon is formed by joining midpoints of histogram tops. Ogive (cumulative frequency curve) shows cumulative distribution.`,
+        highlight: "Histogram area = frequency. This distinguishes it from a bar chart where height = frequency.",
+        formula: "Class Midpoint = (Lower Limit + Upper Limit) / 2",
+        points: ["No gaps between bars in histogram (continuous data)", "Frequency polygon: connect class midpoints", "Less-than ogive increases upward; more-than ogive decreases", "Intersection of two ogives gives median"]
+      }
+    ],
+    simId: null,
+    graphType: "histogram"
+  },
+  {
+    id: 9, title: "Measures of Central Tendency",
+    icon: "🎯", color: "#a855f7",
+    tags: ["Mean", "Median", "Mode"],
+    concepts: [
+      {
+        title: "Arithmetic Mean",
+        content: `The arithmetic mean (average) is the sum of all values divided by the number of values. It is the most commonly used measure of central tendency. For grouped data, we use the midpoint of each class.`,
+        highlight: "Mean is affected by every value including extremes (outliers). It is ideal when data is symmetric and has no outliers.",
+        formula: "Mean (x̄) = Σx / n  |  Weighted Mean = Σwx / Σw",
+        points: ["Direct method: x̄ = Σfx / Σf for grouped data", "Assumed mean method: reduces calculation burden", "Step deviation method: further simplification", "Combined mean of two groups can be calculated"]
+      },
+      {
+        title: "Median",
+        content: `The median is the middle value when data is arranged in ascending or descending order. For grouped data, it is found using the formula involving the cumulative frequency table.`,
+        highlight: "Median divides distribution into two equal halves. It is NOT affected by extreme values — best for skewed distributions.",
+        formula: "Median (M) = L + [(n/2 – cf) / f] × h",
+        points: ["For odd n: middle value; for even n: average of two middle values", "L = lower limit of median class", "cf = cumulative frequency before median class", "f = frequency of median class; h = class width"]
+      },
+      {
+        title: "Mode",
+        content: `Mode is the value that occurs most frequently in a dataset. In grouped data, the modal class has the highest frequency. Mode is located within this class using a formula.`,
+        highlight: "Mode is the most fashionable value — it represents the most common observation. It can be multimodal.",
+        formula: "Mode (Z) = L + [f1 – f0 / (2f1 – f0 – f2)] × h",
+        points: ["Unimodal: one mode; bimodal: two modes; multimodal: many modes", "f1 = modal class frequency; f0 = preceding class freq; f2 = next class freq", "Empirical relationship: Mean – Mode = 3(Mean – Median)", "Mode is best for categorical/nominal data"]
+      }
+    ],
+    simId: "stats",
+    graphType: "bar"
+  },
+  {
+    id: 10, title: "Measures of Dispersion",
+    icon: "📉", color: "#0ea5e9",
+    tags: ["Range", "Variance", "Std Dev"],
+    concepts: [
+      {
+        title: "Range and Quartile Deviation",
+        content: `Range is the simplest measure of dispersion: the difference between the largest and smallest values. Quartile Deviation (Q.D.) is based on quartiles — it measures the spread of the middle 50% of data.`,
+        highlight: "Range uses only two extreme values and is highly affected by outliers. Q.D. is better for skewed distributions.",
+        formula: "Range = L – S  |  Q.D. = (Q3 – Q1) / 2  |  Coefficient of Q.D. = (Q3 – Q1)/(Q3 + Q1)",
+        points: ["Q1 = 25th percentile; Q3 = 75th percentile", "IQR = Q3 – Q1 (inter-quartile range)", "Coefficient of Range = (L – S) / (L + S)", "Range is used for quality control charts"]
+      },
+      {
+        title: "Mean Deviation and Standard Deviation",
+        content: `Mean Deviation (M.D.) is the average of absolute deviations from the mean or median. Standard Deviation (σ) is the square root of the arithmetic mean of squared deviations — it is the most important measure of dispersion.`,
+        highlight: "Standard Deviation is the most reliable measure of dispersion. Smaller σ = data clustered near mean; larger σ = data spread out.",
+        formula: "σ = √[Σf(x – x̄)² / N]  |  Variance = σ²  |  CV = (σ/x̄) × 100",
+        points: ["M.D. = Σ|x – x̄| / n (for ungrouped data)", "Coefficient of Variation (CV) compares variability across datasets", "CV is unit-free — used to compare dispersions of different series", "Normal distribution: 68% within 1σ; 95% within 2σ"]
+      }
+    ],
+    simId: "stats",
+    graphType: "bar"
+  },
+  {
+    id: 11, title: "Correlation",
+    icon: "🔗", color: "#ec4899",
+    tags: ["Karl Pearson", "Spearman", "Scatter Plot"],
+    concepts: [
+      {
+        title: "Concept of Correlation",
+        content: `Correlation measures the degree and direction of relationship between two variables. It ranges from –1 (perfect negative) to +1 (perfect positive). Zero indicates no linear relationship.`,
+        highlight: "Correlation ≠ Causation! Two variables can be correlated without one causing the other.",
+        points: ["Positive correlation: both variables move in same direction", "Negative correlation: variables move in opposite directions", "Perfect correlation: all points lie on a straight line", "Scatter diagram gives visual indication of correlation"]
+      },
+      {
+        title: "Karl Pearson's Coefficient (r)",
+        content: `Karl Pearson's Coefficient of Correlation (r) is the most widely used method. It measures linear correlation between two quantitative variables. The value always lies between –1 and +1.`,
+        highlight: "r = ±1: perfect correlation; r = 0: no linear correlation; |r| > 0.8: strong correlation",
+        formula: "r = Σdxdy / √(Σdx² × Σdy²)  where dx = x – x̄, dy = y – ȳ",
+        points: ["Assumes linear relationship between variables", "Affected by extreme values", "Calculate deviations from respective means", "Easier: step deviation method for large values"]
+      },
+      {
+        title: "Spearman's Rank Correlation",
+        content: `Spearman's Rank Correlation is used when data is given in the form of ranks or when the exact measurement is not possible. It is denoted by ρ (rho) or rs.`,
+        highlight: "Spearman's method is better for non-linear relationships and qualitative rankings (e.g., ranking beauty, intelligence).",
+        formula: "rs = 1 – [6ΣD² / n(n²–1)]  where D = Rank1 – Rank2",
+        points: ["D = difference in ranks for each pair", "For tied ranks, average the ranks assigned", "rs ranges from –1 to +1 (same interpretation as r)", "Best used when variables are measured on ordinal scale"]
+      }
+    ],
+    simId: "correlation",
+    graphType: "scatter"
+  },
+  {
+    id: 12, title: "Index Numbers",
+    icon: "📊", color: "#14b8a6",
+    tags: ["Laspeyres", "Paasche", "WPI CPI"],
+    concepts: [
+      {
+        title: "What are Index Numbers?",
+        content: `An index number is a statistical measure designed to show changes in a variable or a group of related variables over time or space. It is expressed as a percentage relative to a base period value (= 100).`,
+        highlight: "Index Numbers are called 'economic barometers' — they measure economic changes when direct measurement is difficult.",
+        formula: "Simple Price Index = (P1 / P0) × 100",
+        points: ["Base year: reference period (index = 100)", "Current year: period being compared", "Price index: measures price level changes", "Quantity index: measures quantity changes", "Value index: measures value changes"]
+      },
+      {
+        title: "Laspeyres, Paasche and Fisher Index",
+        content: `Laspeyres uses base year quantities as weights. Paasche uses current year quantities. Fisher's Ideal Index is the geometric mean of Laspeyres and Paasche — it satisfies both time reversal and factor reversal tests.`,
+        highlight: "Fisher's Ideal = √(Laspeyres × Paasche). It is called 'Ideal' because it satisfies both mathematical tests.",
+        formula: "Laspeyres = (ΣP1Q0 / ΣP0Q0) × 100  |  Paasche = (ΣP1Q1 / ΣP0Q1) × 100  |  Fisher = √(L × P)",
+        points: ["Laspeyres tends to overstate price rises", "Paasche tends to understate price rises", "Fisher's is the best but most complex", "Consumer Price Index (CPI) measures cost of living"]
+      },
+      {
+        title: "Uses and Limitations of Index Numbers",
+        content: `Index numbers are used to measure inflation (WPI, CPI), real wages, national income at constant prices, and standard of living. The Wholesale Price Index (WPI) and Consumer Price Index (CPI) are India's key indices.`,
+        highlight: "CPI measures retail prices paid by consumers; WPI measures wholesale prices. Both are critical policy tools for RBI.",
+        points: ["WPI: measures price at wholesale/producer level", "CPI: measures price at retail/consumer level", "Inflation rate = % change in CPI from previous year", "Deflation of GDP: Nominal GDP / Price Index × 100"]
+      }
+    ],
+    simId: null,
+    graphType: "bar"
+  }
+];
+
+// ============================================================
+// QUIZ QUESTIONS DATABASE
+// ============================================================
+const QUIZ_DB = {
+  1: [
+    { q: "The central problem of an economy arises because of:", opts: ["Unlimited wants and limited resources", "Too much production", "Government policies", "International trade"], ans: 0, exp: "Scarcity (unlimited wants vs limited resources) is the fundamental economic problem that gives rise to all three central problems." },
+    { q: "Which of the following is NOT a factor of production?", opts: ["Land", "Labour", "Money", "Capital"], ans: 2, exp: "Money is NOT a factor of production. The four factors are Land, Labour, Capital and Enterprise/Entrepreneurship." },
+    { q: "A point INSIDE the Production Possibility Frontier (PPF) indicates:", opts: ["Efficient use of resources", "Underutilization of resources", "Overproduction", "Technological advancement"], ans: 1, exp: "A point inside the PPF indicates that resources are not being used efficiently — there is underutilization (unemployment or idle resources)." },
+    { q: "Microeconomics studies:", opts: ["The entire economy", "Individual units like a firm or consumer", "National income", "Money supply"], ans: 1, exp: "Microeconomics studies individual economic units — consumers, firms, industries. 'Micro' means small." },
+    { q: "Opportunity cost is the cost of:", opts: ["Producing a good", "The next best alternative foregone", "Importing goods", "Government taxation"], ans: 1, exp: "Opportunity cost = the value of the next best alternative you give up when making a choice. It's the true cost of any decision." }
+  ],
+  2: [
+    { q: "Law of Diminishing Marginal Utility states that as consumption increases:", opts: ["Total utility decreases", "Marginal utility falls after a point", "Price increases", "Demand increases"], ans: 1, exp: "As more units are consumed, the additional satisfaction (MU) from each successive unit falls — this is the law of diminishing MU." },
+    { q: "A demand curve slopes downward from left to right because:", opts: ["Income effect only", "Substitution effect only", "Both income and substitution effects", "Price has no effect"], ans: 2, exp: "The demand curve slopes down due to (1) substitution effect — substitutes become cheaper, and (2) income effect — real income rises when price falls." },
+    { q: "If PED = 0.3, demand is:", opts: ["Elastic", "Inelastic", "Unitary elastic", "Perfectly elastic"], ans: 1, exp: "PED < 1 means demand is inelastic — quantity demanded is not very responsive to price changes. Examples: salt, petrol, medicines." },
+    { q: "When price of tea falls, demand for coffee:", opts: ["Rises", "Falls", "Remains same", "Cannot determine"], ans: 1, exp: "Tea and coffee are SUBSTITUTES. When tea becomes cheaper, consumers shift to tea, so demand for coffee falls." },
+    { q: "Consumer's equilibrium under utility analysis occurs when:", opts: ["MU = Price", "MU > Price", "MU < Price", "TU is maximum"], ans: 0, exp: "A rational consumer maximises utility when MU = P (price). If MU > P, buy more; if MU < P, buy less." }
+  ],
+  3: [
+    { q: "In the short run, as more labour is added to fixed capital, MP initially:", opts: ["Falls", "Rises", "Remains constant", "Becomes negative"], ans: 1, exp: "In Stage I of production, MP rises because specialization and division of labour increase. It then falls in Stage II." },
+    { q: "The MC curve cuts the ATC curve at:", opts: ["Its rising portion", "Its falling portion", "Its minimum point", "Its maximum point"], ans: 2, exp: "MC always cuts ATC (and AVC) at their minimum points. When MC < ATC, average is falling; when MC > ATC, average is rising." },
+    { q: "Total Fixed Cost (TFC):", opts: ["Rises with output", "Falls with output", "Remains constant", "Is zero in long run"], ans: 2, exp: "TFC is constant regardless of output in the short run — rent, interest, depreciation are examples. However, TFC = 0 in the long run." },
+    { q: "The supply curve slopes upward because:", opts: ["Higher prices reduce costs", "Higher prices increase profit motive", "Technology improves", "Input prices fall"], ans: 1, exp: "Higher prices make production more profitable, incentivising producers to supply more. This is why the supply curve has a positive slope." },
+    { q: "If technology improves in an industry, the supply curve will:", opts: ["Shift left", "Shift right", "Become steeper", "Not change"], ans: 1, exp: "Better technology reduces production costs, making it profitable to supply more at every price — supply curve shifts rightward." }
+  ],
+  4: [
+    { q: "Under perfect competition, a firm is a:", opts: ["Price maker", "Price taker", "Price leader", "Price discriminator"], ans: 1, exp: "Under perfect competition, individual firms are too small to influence market price. They accept the market price — they are price takers." },
+    { q: "Market equilibrium occurs when:", opts: ["Demand = Supply", "Price is lowest", "Price is highest", "Government sets price"], ans: 0, exp: "Equilibrium is the price at which Qd = Qs — the market clears. There is no surplus or shortage at this price." },
+    { q: "If market demand increases (shifts right) with supply unchanged:", opts: ["Price falls, quantity falls", "Price rises, quantity rises", "Price falls, quantity rises", "No change occurs"], ans: 1, exp: "An increase in demand creates excess demand at the old price, causing price to rise. Producers respond by supplying more, so quantity also rises." },
+    { q: "The profit maximisation condition is:", opts: ["TR = TC", "MR = MC", "AR = AC", "P = AFC"], ans: 1, exp: "A firm maximises profit where Marginal Revenue (MR) = Marginal Cost (MC). This applies to ALL market structures." },
+    { q: "In the long run under perfect competition, economic profit is:", opts: ["Positive", "Negative", "Zero (normal profit only)", "Infinite"], ans: 2, exp: "Free entry and exit eliminate supernormal profit in the long run. Firms earn only normal profit (zero economic profit)." }
+  ],
+  5: [
+    { q: "Statistics is defined as:", opts: ["Art of drawing", "Science of data collection and analysis", "Study of graphs", "Study of history"], ans: 1, exp: "Statistics is the science of collecting, organising, presenting, analysing and interpreting numerical data for decision-making." },
+    { q: "Which is NOT a limitation of statistics?", opts: ["Cannot study qualitative data directly", "Can be misused", "Studies aggregates not individuals", "Helps in economic planning"], ans: 3, exp: "Helping in economic planning is a USE, not a limitation. Limitations include: can't study individuals, can be misused, etc." },
+    { q: "Primary data is:", opts: ["Already collected data", "Data collected by investigator firsthand", "Government data", "Historical records"], ans: 1, exp: "Primary data is original data collected first-hand by the researcher for the specific purpose at hand." },
+    { q: "Which is a source of secondary data?", opts: ["Personal interview", "Survey questionnaire", "Government publications", "Direct observation"], ans: 2, exp: "Government publications (like census reports, RBI Bulletin) are secondary data — already collected and published by someone else." }
+  ],
+  6: [
+    { q: "In stratified sampling, the population is divided into:", opts: ["Random groups", "Geographic areas", "Homogeneous subgroups called strata", "Equal groups"], ans: 2, exp: "In stratified sampling, the population is divided into homogeneous subgroups (strata) and samples are drawn from each stratum." },
+    { q: "A pilot survey is conducted to:", opts: ["Collect final data", "Test the questionnaire on a small scale", "Publish results", "Train enumerators only"], ans: 1, exp: "A pilot survey is a preliminary test of the questionnaire on a small scale to identify and fix problems before the main survey." },
+    { q: "Sampling error is:", opts: ["Always zero", "Difference between sample statistic and population parameter", "Error due to wrong calculation", "Error in secondary data"], ans: 1, exp: "Sampling error = |Sample Statistic – Population Parameter|. It arises because only a part of the population is studied." }
+  ],
+  7: [
+    { q: "Class interval is calculated as:", opts: ["Upper limit × lower limit", "Upper limit – lower limit", "Upper limit + lower limit", "Upper limit / lower limit"], ans: 1, exp: "Class interval = Upper Class Limit – Lower Class Limit. It determines the width of each class in a frequency distribution." },
+    { q: "Cumulative frequency is:", opts: ["Frequency of a class", "Running total of frequencies", "Relative frequency", "Class midpoint"], ans: 1, exp: "Cumulative frequency is the running total — it adds up all frequencies up to and including the current class." },
+    { q: "In exclusive class intervals:", opts: ["Both limits are included", "Lower limit included, upper limit excluded", "Upper limit included only", "Neither limit included"], ans: 1, exp: "In exclusive class intervals, the lower limit is included but the upper limit is excluded. E.g., 10-20 means 10 ≤ x < 20." }
+  ],
+  8: [
+    { q: "In a histogram, the area of each bar represents:", opts: ["Class midpoint", "Class frequency", "Cumulative frequency", "Class interval"], ans: 1, exp: "In a histogram (for equal class intervals), the area of each bar is proportional to the class frequency." },
+    { q: "A frequency polygon is formed by connecting the:", opts: ["Lower limits of class intervals", "Upper limits of class intervals", "Midpoints of class intervals at their frequencies", "Cumulative frequencies"], ans: 2, exp: "A frequency polygon is drawn by joining the midpoints of the tops of each bar in a histogram." },
+    { q: "The intersection of less-than and more-than ogives gives the:", opts: ["Mean", "Mode", "Median", "Range"], ans: 2, exp: "The x-coordinate of the intersection point of the less-than and more-than ogive curves gives the MEDIAN." }
+  ],
+  9: [
+    { q: "For a symmetric distribution:", opts: ["Mean > Median > Mode", "Mean < Median < Mode", "Mean = Median = Mode", "Mode > Mean > Median"], ans: 2, exp: "For a perfectly symmetric distribution, all three measures of central tendency coincide: Mean = Median = Mode." },
+    { q: "The formula for Median in grouped data is:", opts: ["L + [(n/2 – cf) / f] × h", "L + [f1/(2f1–f0–f2)] × h", "Σfx / Σf", "√(Σ(x–x̄)²/n)"], ans: 0, exp: "Median (M) = L + [(n/2 – cf) / f] × h, where L = lower limit of median class, cf = cumulative frequency before, f = median class frequency, h = class width." },
+    { q: "Which measure of central tendency is best for open-ended distributions?", opts: ["Mean", "Mode", "Median", "Range"], ans: 2, exp: "Median is best for open-ended distributions (e.g., 'above 50,000') because it does not require the exact values of extreme classes." },
+    { q: "The empirical relationship between mean, median and mode is:", opts: ["Mean – Mode = 2(Mean – Median)", "Mean – Mode = 3(Mean – Median)", "Mode – Mean = 2(Median – Mean)", "Mean = Mode + 2(Median)"], ans: 1, exp: "Empirical Relationship: Mean – Mode = 3(Mean – Median). This is approximate and holds for moderately skewed distributions." },
+    { q: "Weighted mean is useful when:", opts: ["All items have equal importance", "Different items have different importance", "Data is discrete", "Data is qualitative"], ans: 1, exp: "Weighted mean assigns different weights to different values reflecting their relative importance. Useful in calculating average marks, price indices, etc." }
+  ],
+  10: [
+    { q: "Standard Deviation is the _____ of Variance:", opts: ["Square", "Square root", "Reciprocal", "Double"], ans: 1, exp: "Standard Deviation (σ) = √Variance. It is in the same units as the original data, making it more interpretable than variance." },
+    { q: "Coefficient of Variation (CV) is used to compare:", opts: ["Two sets of data with same units", "Two sets of data with different units or means", "Grouped and ungrouped data", "Primary and secondary data"], ans: 1, exp: "CV = (σ/Mean) × 100. Being unit-free, it allows comparison of variability across datasets with different units or means." },
+    { q: "If all values in a dataset are equal, the standard deviation is:", opts: ["1", "0", "Equal to mean", "Cannot be determined"], ans: 1, exp: "If all values are identical, there is NO variation from the mean. Hence, σ = 0." },
+    { q: "The most reliable measure of dispersion is:", opts: ["Range", "Quartile Deviation", "Mean Deviation", "Standard Deviation"], ans: 3, exp: "Standard Deviation is the most reliable measure — it uses all observations, is mathematically tractable, and is the basis for many statistical tests." }
+  ],
+  11: [
+    { q: "Karl Pearson's correlation coefficient (r) always lies between:", opts: ["0 and 1", "-1 and 0", "-1 and +1", "0 and 100"], ans: 2, exp: "r always lies between –1 and +1. r = +1: perfect positive; r = –1: perfect negative; r = 0: no linear correlation." },
+    { q: "In a scatter diagram, if points form a downward slope from left to right, the correlation is:", opts: ["Positive", "Negative", "Zero", "Perfect positive"], ans: 1, exp: "Points sloping downward from left to right indicate that as X increases, Y decreases — this is NEGATIVE correlation." },
+    { q: "Spearman's Rank Correlation formula uses:", opts: ["Actual values", "Squared deviations from mean", "Differences in ranks (D)", "Class frequencies"], ans: 2, exp: "rs = 1 – [6ΣD²/n(n²–1)], where D = difference in the ranks assigned to the two variables for each pair." },
+    { q: "A correlation coefficient of +0.9 indicates:", opts: ["Weak positive correlation", "Strong positive correlation", "No correlation", "Perfect correlation"], ans: 1, exp: "|r| > 0.8 indicates STRONG correlation. r = +0.9 means a strong positive linear relationship between the two variables." },
+    { q: "Correlation between height and weight of students is likely:", opts: ["Negative", "Zero", "Positive", "Perfect"], ans: 2, exp: "Generally, taller students tend to weigh more — this implies a positive correlation between height and weight." }
+  ],
+  12: [
+    { q: "In index numbers, the base year is assigned a value of:", opts: ["0", "50", "100", "1000"], ans: 2, exp: "The base period is given index value of 100. All subsequent values are expressed relative to this base." },
+    { q: "Consumer Price Index (CPI) measures changes in:", opts: ["Wholesale prices", "Retail prices paid by consumers", "Industrial output", "GDP growth"], ans: 1, exp: "CPI measures the average change in prices paid by consumers for a representative basket of goods and services at the retail level." },
+    { q: "Fisher's Ideal Index is the ___ mean of Laspeyres and Paasche:", opts: ["Arithmetic", "Harmonic", "Geometric", "Weighted"], ans: 2, exp: "Fisher's = √(Laspeyres × Paasche). The geometric mean of the two. It's 'ideal' because it satisfies time reversal and factor reversal tests." },
+    { q: "Laspeyres Index uses as weights:", opts: ["Current year quantities", "Base year quantities", "Average of both years", "Price ratios"], ans: 1, exp: "Laspeyres Price Index uses base year quantities (Q0) as weights: L = (ΣP1Q0/ΣP0Q0) × 100." },
+    { q: "If CPI rises from 120 to 132, the inflation rate is approximately:", opts: ["12%", "10%", "8%", "32%"], ans: 1, exp: "Inflation rate = (132–120)/120 × 100 = 12/120 × 100 = 10%. This is the percentage change in CPI." }
+  ]
+};
+
+// ============================================================
+// APP STATE
+// ============================================================
+const state = {
+  currentView: 'home',
+  currentChapter: null,
+  currentTab: 'concepts',
+  quiz: { chapter: null, questions: [], current: 0, score: 0, answered: false, selectedOpt: null },
+  progress: JSON.parse(localStorage.getItem('eco11_progress') || '{}'),
+  quizHistory: JSON.parse(localStorage.getItem('eco11_quiz') || '{}'),
+  viewHistory: []
+};
+
+function saveProgress() {
+  localStorage.setItem('eco11_progress', JSON.stringify(state.progress));
+  localStorage.setItem('eco11_quiz', JSON.stringify(state.quizHistory));
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function startApp() {
+  document.getElementById('splash').classList.remove('active');
+  const app = document.getElementById('app');
+  app.classList.add('active');
+  app.style.display = 'flex';
+  navigateTo('home');
+}
+
+function navigateTo(view, param) {
+  state.viewHistory.push(state.currentView);
+  state.currentView = view;
+
+  // Update bottom nav
+  ['home','chapters','lab','quiz','progress'].forEach(n => {
+    const btn = document.getElementById('nav-' + n);
+    if (btn) btn.classList.remove('active');
+  });
+
+  let navMap = {home:'home', chapters:'chapters', chapter:'chapters', lab:'lab', graphLab:'lab', statsLab:'lab', simLab:'lab', quizSelect:'quiz', quiz:'quiz', progress:'progress'};
+  const activeNav = navMap[view] || 'home';
+  const navBtn = document.getElementById('nav-' + activeNav);
+  if (navBtn) navBtn.classList.add('active');
+
+  switch(view) {
+    case 'home': renderHome(); break;
+    case 'chapters': renderChapters(); break;
+    case 'chapter': renderChapter(param); break;
+    case 'lab': renderLab(); break;
+    case 'graphLab': renderGraphLab(); break;
+    case 'statsLab': renderStatsLab(); break;
+    case 'simLab': renderSimLab(param); break;
+    case 'quizSelect': renderQuizSelect(); break;
+    case 'quiz': startQuiz(param); break;
+    case 'progress': renderProgress(); break;
+    default: renderHome();
+  }
+}
+
+function goBack() {
+  if (state.viewHistory.length > 0) {
+    const prev = state.viewHistory.pop();
+    state.currentView = prev;
+    navigateTo(prev);
+    state.viewHistory.pop(); // remove duplicate pushed by navigateTo
+  } else {
+    navigateTo('home');
+  }
+}
+
+function setTopbar(title, subtitle) {
+  document.getElementById('topbarTitle').textContent = title;
+  document.getElementById('topbarSubtitle').textContent = subtitle || 'Class 11 | JKBOSE';
+  updateProgressRing();
+}
+
+function updateProgressRing() {
+  const completed = Object.keys(state.progress).filter(k => state.progress[k]).length;
+  const total = CHAPTERS.length;
+  const pct = Math.round((completed / total) * 100);
+  const circumference = 94.2;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('progressRing').style.strokeDashoffset = offset;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// ============================================================
+// HOME SCREEN
+// ============================================================
+function renderHome() {
+  setTopbar('Economics Dashboard', 'Class 11 | JKBOSE');
+  const completed = Object.keys(state.progress).filter(k => state.progress[k]).length;
+  const quizzesDone = Object.keys(state.quizHistory).length;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="dashboard-hero">
+      <div class="hero-greeting">Welcome back, Scholar! 👋</div>
+      <div class="hero-title">Class 11 Economics</div>
+      <div class="hero-sub">JKBOSE • NEP 2020 • NCERT Aligned</div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">${completed}</div><div class="hero-stat-label">Chapters Done</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">${quizzesDone}</div><div class="hero-stat-label">Quizzes Taken</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">${CHAPTERS.length}</div><div class="hero-stat-label">Total Chapters</div></div>
+      </div>
+    </div>
+    <div class="section-heading">Quick Access</div>
+    <div class="nav-grid">
+      <div class="nav-card" style="--card-accent:#3b82f6" onclick="navigateTo('chapters')">
+        <div class="nav-card-icon">📚</div>
+        <div class="nav-card-title">Chapter Explorer</div>
+        <div class="nav-card-desc">All 12 chapters with concepts &amp; examples</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#f59e0b" onclick="navigateTo('quizSelect')">
+        <div class="nav-card-icon">🎯</div>
+        <div class="nav-card-title">Quiz Mode</div>
+        <div class="nav-card-desc">MCQs, numericals, graph questions</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#10b981" onclick="navigateTo('graphLab')">
+        <div class="nav-card-icon">📈</div>
+        <div class="nav-card-title">Graph Lab</div>
+        <div class="nav-card-desc">Interactive economic graphs</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#a855f7" onclick="navigateTo('statsLab')">
+        <div class="nav-card-icon">🔢</div>
+        <div class="nav-card-title">Statistics Lab</div>
+        <div class="nav-card-desc">Mean, Median, Mode calculator</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#ef4444" onclick="navigateTo('simLab')">
+        <div class="nav-card-icon">⚡</div>
+        <div class="nav-card-title">Simulations</div>
+        <div class="nav-card-desc">Demand, supply, correlation</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#06b6d4" onclick="navigateTo('progress')">
+        <div class="nav-card-icon">🏆</div>
+        <div class="nav-card-title">Progress</div>
+        <div class="nav-card-desc">Track your learning journey</div>
+      </div>
+    </div>
+    <div class="section-heading">Recent Chapters</div>
+    <div class="chapter-list">
+      ${CHAPTERS.slice(0,4).map(ch => `
+        <div class="chapter-item ${state.progress[ch.id] ? 'completed' : ''}" onclick="navigateTo('chapter', ${ch.id})">
+          <div class="chapter-num" style="background:${state.progress[ch.id] ? 'var(--green)' : ch.color}20; color:${state.progress[ch.id] ? 'var(--green)' : ch.color}">${state.progress[ch.id] ? '✓' : ch.id}</div>
+          <div class="chapter-info">
+            <div class="chapter-name">${ch.icon} ${ch.title}</div>
+            <div class="chapter-sub">${ch.tags.join(' • ')}</div>
+          </div>
+          <div class="chapter-arrow">›</div>
+        </div>`).join('')}
+    </div>
+    <br>
+    <div style="text-align:center; color:var(--text3); font-size:0.75rem; padding: 10px 0 20px;">
+      Created by Mateen Yousuf • School Education Department, J&K
+    </div>
+  `;
+}
+
+// ============================================================
+// CHAPTERS LIST
+// ============================================================
+function renderChapters() {
+  setTopbar('Chapter Explorer', 'All 12 Chapters');
+  const part1 = CHAPTERS.slice(0, 4);
+  const part2 = CHAPTERS.slice(4);
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-heading">Part A: Introductory Microeconomics</div>
+    <div class="chapter-list">
+      ${part1.map(ch => chapterItem(ch)).join('')}
+    </div>
+    <br>
+    <div class="section-heading">Part B: Statistics for Economics</div>
+    <div class="chapter-list">
+      ${part2.map(ch => chapterItem(ch)).join('')}
+    </div>
+    <br>
+  `;
+}
+
+function chapterItem(ch) {
+  return `<div class="chapter-item ${state.progress[ch.id] ? 'completed' : ''}" onclick="navigateTo('chapter', ${ch.id})">
+    <div class="chapter-num" style="background:${state.progress[ch.id] ? '' : ch.color + '20'}; color:${state.progress[ch.id] ? 'white' : ch.color}">${state.progress[ch.id] ? '✓' : ch.id}</div>
+    <div class="chapter-info">
+      <div class="chapter-name">${ch.icon} ${ch.title}</div>
+      <div class="chapter-sub">${ch.tags.join(' • ')}</div>
+    </div>
+    <div class="chapter-arrow">›</div>
+  </div>`;
+}
+
+// ============================================================
+// CHAPTER VIEW
+// ============================================================
+function renderChapter(chId) {
+  const ch = CHAPTERS.find(c => c.id === +chId);
+  if (!ch) return;
+  state.currentChapter = ch;
+  setTopbar(ch.title, `Chapter ${ch.id}`);
+  state.progress[ch.id] = true;
+  saveProgress();
+
+  const tabs = ['Concepts', 'Graphs', 'Quiz'];
+  if (ch.simId) tabs.push('Simulation');
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="chapter-header">
+      <div class="chapter-header-num">Chapter ${ch.id}</div>
+      <div class="chapter-header-title">${ch.icon} ${ch.title}</div>
+      <div class="chapter-header-tags">${ch.tags.map(t => `<span class="ch-badge">${t}</span>`).join('')}</div>
+    </div>
+    <div class="tab-bar" id="chTabBar">
+      ${tabs.map((t,i) => `<button class="tab-btn ${i===0?'active':''}" onclick="switchChapterTab('${t.toLowerCase()}', this)">${t}</button>`).join('')}
+    </div>
+    <div id="chTabContent"></div>
+  `;
+  renderChapterTab('concepts', ch);
+}
+
+function switchChapterTab(tab, btn) {
+  document.querySelectorAll('#chTabBar .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderChapterTab(tab, state.currentChapter);
+}
+
+function renderChapterTab(tab, ch) {
+  const el = document.getElementById('chTabContent');
+  if (!el) return;
+
+  if (tab === 'concepts') {
+    el.innerHTML = ch.concepts.map(c => `
+      <div class="content-card">
+        <h3>📖 ${c.title}</h3>
+        <p>${c.content}</p>
+        <div class="highlight-box">💡 ${c.highlight}</div>
+        ${c.formula ? `<div class="formula-box">📐 ${c.formula}</div>` : ''}
+        <div class="key-points">
+          <h4>🔑 Key Points</h4>
+          <ul>${c.points.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+      </div>
+    `).join('');
+  }
+  else if (tab === 'graphs') {
+    el.innerHTML = `<div id="graphTabArea"></div>`;
+    setTimeout(() => renderEconGraph(ch.graphType, 'graphTabArea', ch), 100);
+  }
+  else if (tab === 'quiz') {
+    el.innerHTML = '<div id="quizArea"></div>';
+    startQuizInline(ch.id, 'quizArea');
+  }
+  else if (tab === 'simulation') {
+    el.innerHTML = '<div id="simArea"></div>';
+    renderSimulation(ch.simId, 'simArea');
+  }
+}
+
+// ============================================================
+// ECONOMICS GRAPHS
+// ============================================================
+function renderEconGraph(type, containerId, ch) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const graphs = {
+    ppf: drawPPF,
+    demand: drawDemandSupply,
+    supply: drawDemandSupply,
+    equilibrium: drawEquilibrium,
+    bar: drawBarChart,
+    histogram: drawHistogram,
+    scatter: drawScatter
+  };
+
+  const draw = graphs[type] || drawBarChart;
+
+  container.innerHTML = `
+    <div class="content-card">
+      <h3>📊 Economic Graphs — ${ch.title}</h3>
+      <div class="graph-wrap">
+        <canvas id="econCanvas" width="340" height="280"></canvas>
+        <div class="graph-label" id="graphDesc">Interactive graph for ${ch.title}</div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <button class="stats-btn" onclick="drawPPF()">PPF</button>
+        <button class="stats-btn" onclick="drawDemandSupply()">D &amp; S</button>
+        <button class="stats-btn" onclick="drawEquilibrium()">Equilibrium</button>
+        <button class="stats-btn" onclick="drawCostCurves()">Cost Curves</button>
+        <button class="stats-btn" onclick="drawBarChart()">Bar Chart</button>
+      </div>
+    </div>
+  `;
+  setTimeout(() => draw(), 50);
+}
+
+function getCanvas() {
+  const c = document.getElementById('econCanvas');
+  if (!c) return null;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  return { c, ctx };
+}
+
+function drawAxes(ctx, width, height, margin, xLabel, yLabel) {
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(margin, margin/2);
+  ctx.lineTo(margin, height - margin);
+  ctx.lineTo(width - margin/2, height - margin);
+  ctx.stroke();
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(xLabel, width/2, height - 8);
+  ctx.save();
+  ctx.translate(14, height/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText(yLabel, 0, 0);
+  ctx.restore();
+}
+
+function drawPPF() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Good X (Consumer Goods)', 'Good Y (Capital Goods)');
+  // PPF curve
+  ctx.beginPath();
+  ctx.moveTo(m, m + 10);
+  for (let x = 0; x <= W - m*1.5; x += 2) {
+    const t = x / (W - m*1.5);
+    const y = (H - m) - (H - m*1.5) * Math.sqrt(1 - t * t);
+    if (x === 0) ctx.moveTo(m + x, y); else ctx.lineTo(m + x, y);
+  }
+  ctx.strokeStyle = '#f59e0b';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  // Point inside (inefficient)
+  ctx.beginPath(); ctx.arc(W*0.3, H*0.6, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#ef4444'; ctx.fill();
+  // Point on curve (efficient)
+  ctx.beginPath(); ctx.arc(W*0.55, H*0.42, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#10b981'; ctx.fill();
+  // Labels
+  ctx.fillStyle = '#e8f0fe'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('PPF', W - 90, m + 40);
+  ctx.fillStyle = '#ef4444'; ctx.fillText('Inefficient', W*0.3 - 10, H*0.6 + 20);
+  ctx.fillStyle = '#10b981'; ctx.fillText('Efficient', W*0.55, H*0.42 + 20);
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Production Possibility Frontier: shows max possible output combinations');
+}
+
+function drawDemandSupply() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Quantity', 'Price');
+  const usable_w = W - m*1.5;
+  const usable_h = H - m*1.5;
+  // Demand (downward)
+  ctx.beginPath();
+  ctx.moveTo(m, m + 20); ctx.lineTo(W - m*0.8, H - m - 10);
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#ef4444'; ctx.font = '13px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('D', W - m*0.8 + 4, H - m - 6);
+  // Supply (upward)
+  ctx.beginPath();
+  ctx.moveTo(m, H - m - 10); ctx.lineTo(W - m*0.8, m + 20);
+  ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#10b981';
+  ctx.fillText('S', W - m*0.8 + 4, m + 20);
+  // Equilibrium
+  const eq_x = m + usable_w * 0.5;
+  const eq_y = m + usable_h * 0.5;
+  ctx.beginPath(); ctx.arc(eq_x, eq_y, 8, 0, Math.PI*2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  // Dashed lines to axes
+  ctx.setLineDash([5,4]); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(eq_x, eq_y); ctx.lineTo(eq_x, H - m); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(eq_x, eq_y); ctx.lineTo(m, eq_y); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#f59e0b'; ctx.font = '11px sans-serif';
+  ctx.fillText('E (Equilibrium)', eq_x + 10, eq_y - 5);
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText('P*', m - 26, eq_y + 4);
+  ctx.fillText('Q*', eq_x - 5, H - m + 16);
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Demand & Supply curves intersecting at equilibrium point E (P*, Q*)');
+}
+
+function drawEquilibrium() { drawDemandSupply(); }
+
+function drawCostCurves() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Output (Q)', 'Cost (₹)');
+  const iW = W - m*1.5, iH = H - m*1.5;
+  function ptX(t) { return m + t * iW; }
+  function ptY(v, vMax) { return (H - m) - (v / vMax) * iH; }
+  const vMax = 120;
+  // ATC
+  ctx.beginPath();
+  for (let t = 0.05; t <= 0.95; t += 0.01) {
+    const q = t * 10;
+    const atc = 100/(q) + 4*q + 10;
+    const y = ptY(Math.min(atc, vMax), vMax);
+    if (t === 0.05) ctx.moveTo(ptX(t), y); else ctx.lineTo(ptX(t), y);
+  }
+  ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#3b82f6'; ctx.font = '12px sans-serif'; ctx.fillText('ATC', W - 70, H*0.35);
+  // AVC
+  ctx.beginPath();
+  for (let t = 0.05; t <= 0.95; t += 0.01) {
+    const q = t * 10;
+    const avc = 50/(q) + 3*q + 5;
+    const y = ptY(Math.min(avc, vMax), vMax);
+    if (t === 0.05) ctx.moveTo(ptX(t), y); else ctx.lineTo(ptX(t), y);
+  }
+  ctx.strokeStyle = '#8b5cf6'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#8b5cf6'; ctx.fillText('AVC', W - 70, H*0.55);
+  // MC
+  ctx.beginPath();
+  for (let t = 0.05; t <= 0.85; t += 0.01) {
+    const q = t * 10;
+    const mc = 8*q - 20 + 10/q;
+    const y = ptY(Math.min(mc, vMax), vMax);
+    if (t === 0.05) ctx.moveTo(ptX(t), y); else ctx.lineTo(ptX(t), y);
+  }
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#f59e0b'; ctx.fillText('MC', W - 55, m + 30);
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Cost curves: MC cuts ATC and AVC at their minimum points');
+}
+
+function drawBarChart() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Variables', 'Values');
+  const data = [
+    { label: 'Mean', val: 72, color: '#3b82f6' },
+    { label: 'Median', val: 68, color: '#10b981' },
+    { label: 'Mode', val: 65, color: '#f59e0b' },
+    { label: 'Range', val: 45, color: '#ef4444' },
+    { label: 'Std Dev', val: 12, color: '#8b5cf6' }
+  ];
+  const iW = W - m*1.5, iH = H - m*1.5;
+  const barW = iW / (data.length * 1.5);
+  const gap = barW * 0.5;
+  const maxVal = 100;
+  data.forEach((d, i) => {
+    const x = m + gap + i * (barW + gap);
+    const barH = (d.val / maxVal) * iH;
+    const y = H - m - barH;
+    ctx.fillStyle = d.color + '99';
+    ctx.fillRect(x, y, barW, barH);
+    ctx.strokeStyle = d.color;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, barW, barH);
+    ctx.fillStyle = '#e8f0fe';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.label, x + barW/2, H - m + 14);
+    ctx.fillText(d.val, x + barW/2, y - 5);
+  });
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Statistical measures comparison chart');
+}
+
+function drawHistogram() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Class Intervals (Marks)', 'Frequency');
+  const data = [
+    { label:'0-10', freq:3 }, { label:'10-20', freq:7 }, { label:'20-30', freq:12 },
+    { label:'30-40', freq:18 }, { label:'40-50', freq:15 }, { label:'50-60', freq:9 },
+    { label:'60-70', freq:5 }, { label:'70-80', freq:2 }
+  ];
+  const maxFreq = 20;
+  const iW = W - m*1.5, iH = H - m*1.5;
+  const barW = iW / data.length;
+  const colors = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#ec4899'];
+  const pts = [];
+  data.forEach((d, i) => {
+    const x = m + i * barW;
+    const barH = (d.freq / maxFreq) * iH;
+    const y = H - m - barH;
+    ctx.fillStyle = colors[i] + '80';
+    ctx.fillRect(x, y, barW - 1, barH);
+    ctx.strokeStyle = colors[i];
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(x, y, barW - 1, barH);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(d.label, x + barW/2, H - m + 13);
+    pts.push({ x: x + barW/2, y });
+  });
+  // Frequency polygon
+  ctx.beginPath();
+  pts.forEach((p,i) => i===0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.strokeStyle = '#f59e0b';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Frequency Histogram with Polygon overlay');
+}
+
+function drawScatter() {
+  const r = getCanvas(); if (!r) return;
+  const {c, ctx} = r;
+  const W = c.width, H = c.height, m = 50;
+  drawAxes(ctx, W, H, m, 'Variable X', 'Variable Y');
+  const pts = [
+    [1,2],[2,3.5],[3,3],[4,5.5],[5,4.8],[6,6.2],[7,7],[8,8.5],[9,9],[10,11],
+    [2,1.5],[4,4],[6,7],[8,9],[3,4.5],[7,8],[1,3],[5,6],[9,10],[10,9.5]
+  ];
+  const xMax = 11, yMax = 12;
+  const iW = W - m*1.5, iH = H - m*1.5;
+  pts.forEach(([x,y]) => {
+    const px = m + (x/xMax)*iW;
+    const py = (H-m) - (y/yMax)*iH;
+    ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#3b82f680'; ctx.fill();
+    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 1; ctx.stroke();
+  });
+  // Regression line
+  ctx.beginPath();
+  ctx.moveTo(m, (H-m) - (1/yMax)*iH);
+  ctx.lineTo(W-m*0.8, (H-m) - (11/yMax)*iH);
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#f59e0b'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('r ≈ +0.97 (Strong +ve)', m+5, m+20);
+  document.getElementById('graphDesc') && (document.getElementById('graphDesc').textContent = 'Scatter diagram showing strong positive correlation (r ≈ +0.97)');
+}
+
+// ============================================================
+// GRAPH LAB
+// ============================================================
+function renderGraphLab() {
+  setTopbar('Graph Lab', 'Interactive Economic Graphs');
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-heading">Graph Lab</div>
+    <div class="graph-selector">
+      <button class="graph-select-btn active" onclick="selectGraph('demand',this)">Demand & Supply</button>
+      <button class="graph-select-btn" onclick="selectGraph('ppf',this)">PPF</button>
+      <button class="graph-select-btn" onclick="selectGraph('cost',this)">Cost Curves</button>
+      <button class="graph-select-btn" onclick="selectGraph('histogram',this)">Histogram</button>
+      <button class="graph-select-btn" onclick="selectGraph('scatter',this)">Scatter Plot</button>
+    </div>
+    <div class="graph-canvas-wrap">
+      <canvas id="labCanvas" width="340" height="300"></canvas>
+      <div class="graph-label" id="labDesc">Select a graph above</div>
+    </div>
+    <div id="graphControls"></div>
+  `;
+  setTimeout(() => { selectGraph('demand'); }, 50);
+}
+
+function selectGraph(type, btn) {
+  document.querySelectorAll('.graph-select-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const c = document.getElementById('labCanvas');
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  const controlsEl = document.getElementById('graphControls');
+
+  if (type === 'demand') {
+    controlsEl.innerHTML = `
+      <div class="content-card" style="margin-top:12px;">
+        <h3>🎛️ Demand & Supply Simulator</h3>
+        <div class="slider-group">
+          <div class="slider-label">Demand Shift <span id="dShift">0</span></div>
+          <input type="range" min="-3" max="3" value="0" step="1" oninput="document.getElementById('dShift').textContent=this.value; drawLabDemandSupply(+this.value, +document.getElementById('sShiftVal').value)">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label">Supply Shift <span id="sShift">0</span></div>
+          <input type="range" min="-3" max="3" value="0" step="1" id="sShiftVal" oninput="document.getElementById('sShift').textContent=this.value; drawLabDemandSupply(+document.getElementById('dShift').textContent, +this.value)">
+        </div>
+        <div class="sim-output">
+          <div class="sim-metric"><div class="sim-metric-val" id="eqPrice">₹50</div><div class="sim-metric-label">Equilibrium Price</div></div>
+          <div class="sim-metric"><div class="sim-metric-val" id="eqQty">100</div><div class="sim-metric-label">Equilibrium Qty</div></div>
+        </div>
+      </div>`;
+    drawLabDemandSupply(0, 0);
+  } else if (type === 'ppf') {
+    controlsEl.innerHTML = '';
+    drawLabPPF();
+  } else if (type === 'cost') {
+    controlsEl.innerHTML = '';
+    drawLabCost();
+  } else if (type === 'histogram') {
+    controlsEl.innerHTML = '';
+    drawLabHistogram();
+  } else if (type === 'scatter') {
+    controlsEl.innerHTML = '';
+    drawLabScatter();
+  }
+}
+
+function drawLabDemandSupply(dShift, sShift) {
+  const c = document.getElementById('labCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 50;
+  // Axes
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m, 20); ctx.lineTo(m, H-m); ctx.lineTo(W-20, H-m); ctx.stroke();
+  // Demand
+  const d1x = m + 10 + dShift * 25;
+  const d2x = W - 20 + dShift * 25;
+  ctx.beginPath(); ctx.moveTo(d1x, m+10); ctx.lineTo(d2x, H-m-10);
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#ef4444'; ctx.font = '13px bold sans-serif';
+  ctx.fillText(dShift !== 0 ? (dShift > 0 ? 'D₁' : 'D₂') : 'D', d2x+3, H-m-6);
+  // Supply
+  const s1x = m + 10 + sShift * 25;
+  const s2x = W - 20 + sShift * 25;
+  ctx.beginPath(); ctx.moveTo(s1x, H-m-10); ctx.lineTo(s2x, m+10);
+  ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#10b981';
+  ctx.fillText(sShift !== 0 ? (sShift > 0 ? 'S₁' : 'S₂') : 'S', s2x+3, m+10);
+  // Equilibrium
+  const eqX = (d1x + s1x) / 2 + (W - m) / 2 + (dShift - sShift) * 10;
+  const eqY = H/2 + (sShift - dShift) * 15;
+  ctx.beginPath(); ctx.arc(eqX, eqY, 8, 0, Math.PI*2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  ctx.setLineDash([4,3]); ctx.strokeStyle = '#f59e0b88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(eqX, eqY); ctx.lineTo(eqX, H-m); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(eqX, eqY); ctx.lineTo(m, eqY); ctx.stroke();
+  ctx.setLineDash([]);
+  const price = 50 + (dShift - sShift) * 8;
+  const qty = 100 + (dShift - sShift) * 10;
+  const pEl = document.getElementById('eqPrice');
+  const qEl = document.getElementById('eqQty');
+  if (pEl) pEl.textContent = '₹' + price;
+  if (qEl) qEl.textContent = qty + ' units';
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px sans-serif';
+  ctx.fillText('Quantity', W/2, H-m+18);
+  ctx.save(); ctx.translate(14, H/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Price', 0, 0); ctx.restore();
+  const labDesc = document.getElementById('labDesc');
+  if (labDesc) labDesc.textContent = 'Adjust sliders to shift demand/supply curves and see new equilibrium';
+}
+
+function drawLabPPF() {
+  const c = document.getElementById('labCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 50;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m, 20); ctx.lineTo(m, H-m); ctx.lineTo(W-20, H-m); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(m, m+10);
+  for (let x = 0; x <= W - m*1.4; x++) {
+    const t = x / (W - m*1.4);
+    const y = (H-m) - (H-m*1.4) * Math.sqrt(1 - t*t);
+    x===0 ? ctx.moveTo(m+x, y) : ctx.lineTo(m+x, y);
+  }
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.stroke();
+  ctx.fillStyle = '#f59e0b'; ctx.font = '13px sans-serif'; ctx.fillText('PPF', W-70, m+30);
+  ctx.beginPath(); ctx.arc(W*0.28, H*0.65, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#ef4444'; ctx.fill();
+  ctx.beginPath(); ctx.arc(W*0.52, H*0.44, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#10b981'; ctx.fill();
+  ctx.fillStyle = '#ef4444'; ctx.font = '10px sans-serif'; ctx.fillText('Inefficient (A)', W*0.28-10, H*0.65+20);
+  ctx.fillStyle = '#10b981'; ctx.fillText('Efficient (B)', W*0.52, H*0.44+20);
+  ctx.fillStyle = '#94a3b8'; ctx.fillText('Consumer Goods (X)', W/2, H-m+18);
+  ctx.save(); ctx.translate(14, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Capital Goods (Y)', 0, 0); ctx.restore();
+  document.getElementById('labDesc').textContent = 'PPF shows maximum output combinations — B is efficient, A is inefficient';
+}
+
+function drawLabCost() {
+  const c = document.getElementById('labCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 50;
+  const iW = W - m*1.4, iH = H - m*1.4;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m, 20); ctx.lineTo(m, H-m); ctx.lineTo(W-20, H-m); ctx.stroke();
+  function drawCurve(formula, color, label, labelOffX, labelOffY) {
+    ctx.beginPath();
+    for (let t = 0.06; t <= 0.88; t += 0.01) {
+      const q = t * 8;
+      const v = Math.min(formula(q), 110);
+      const px = m + t * iW;
+      const py = (H-m) - (v/110) * iH;
+      t === 0.06 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.stroke();
+    const lt = 0.8;
+    const lq = lt * 8;
+    const lv = Math.min(formula(lq), 110);
+    ctx.fillStyle = color; ctx.font = '12px sans-serif';
+    ctx.fillText(label, m + lt*iW + labelOffX, (H-m) - (lv/110)*iH + labelOffY);
+  }
+  drawCurve(q => 60/q + 3*q + 8, '#3b82f6', 'ATC', 5, -5);
+  drawCurve(q => 40/q + 2.5*q + 4, '#8b5cf6', 'AVC', 5, -5);
+  drawCurve(q => 5*q - 12 + 8/q, '#f59e0b', 'MC', 5, -5);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px sans-serif';
+  ctx.fillText('Output (Q)', W/2, H-m+18);
+  ctx.save(); ctx.translate(14, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Cost (₹)', 0, 0); ctx.restore();
+  document.getElementById('labDesc').textContent = 'Cost Curves: MC cuts ATC and AVC at their minimum points (U-shaped)';
+}
+
+function drawLabHistogram() {
+  const c = document.getElementById('labCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 50;
+  const iW = W - m*1.4, iH = H - m*1.4;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m, 20); ctx.lineTo(m, H-m); ctx.lineTo(W-20, H-m); ctx.stroke();
+  const data = [3,8,14,20,17,12,6,2];
+  const labels = ['0','10','20','30','40','50','60','70','80'];
+  const maxF = 22;
+  const barW = iW / data.length;
+  const midPts = [];
+  data.forEach((f,i) => {
+    const x = m + i*barW;
+    const h = (f/maxF)*iH;
+    const y = H-m-h;
+    ctx.fillStyle = `hsl(${200+i*20},70%,55%)`;
+    ctx.fillRect(x, y, barW-1, h);
+    ctx.strokeStyle = '#1e2d40'; ctx.lineWidth = 1; ctx.strokeRect(x, y, barW-1, h);
+    midPts.push({ x: x+barW/2, y });
+    ctx.fillStyle = '#94a3b8'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(labels[i], x+barW/2, H-m+13);
+    ctx.fillText(f, x+barW/2, y-4);
+  });
+  ctx.beginPath();
+  midPts.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke();
+  midPts.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fillStyle='#f59e0b'; ctx.fill(); });
+  ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center'; ctx.font = '11px sans-serif';
+  ctx.fillText('Marks (Class Intervals)', W/2, H-m+25);
+  ctx.save(); ctx.translate(14, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Frequency', 0, 0); ctx.restore();
+  document.getElementById('labDesc').textContent = 'Frequency Histogram with Polygon — showing marks distribution';
+}
+
+function drawLabScatter() {
+  const c = document.getElementById('labCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 50;
+  const iW = W - m*1.4, iH = H - m*1.4;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m, 20); ctx.lineTo(m, H-m); ctx.lineTo(W-20, H-m); ctx.stroke();
+  const pts = [[1,2.1],[2,3.8],[3,3.2],[4,5.8],[5,5.1],[6,6.5],[7,7.2],[8,8.8],[9,9.3],[10,11.1],
+    [1.5,1.8],[3.5,4.2],[5.5,6.1],[7.5,8.3],[2.5,2.9],[6.5,7.8],[4.5,5.5],[8.5,9.7],[9.5,10.3],[2,3]];
+  const xMax = 11, yMax = 12;
+  pts.forEach(([x,y]) => {
+    const px = m + (x/xMax)*iW;
+    const py = (H-m) - (y/yMax)*iH;
+    ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(59,130,246,0.6)'; ctx.fill();
+    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+  ctx.beginPath();
+  ctx.moveTo(m + (0/xMax)*iW, (H-m) - (0.5/yMax)*iH);
+  ctx.lineTo(m + (11/xMax)*iW, (H-m) - (12/yMax)*iH);
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#f59e0b'; ctx.font = '11px sans-serif';
+  ctx.fillText('r ≈ +0.98', m+5, m+25);
+  ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+  ctx.fillText('Study Hours (X)', W/2, H-m+18);
+  ctx.save(); ctx.translate(14, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Exam Score (Y)', 0, 0); ctx.restore();
+  document.getElementById('labDesc').textContent = 'Scatter plot showing strong positive correlation between study hours and exam scores';
+}
+
+// ============================================================
+// STATISTICS LAB
+// ============================================================
+function renderStatsLab() {
+  setTopbar('Statistics Lab', 'Central Tendency & Dispersion');
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-heading">Statistics Calculator</div>
+    <div class="stats-input-area">
+      <div style="font-size:0.85rem; color:var(--text2); margin-bottom:8px;">Enter comma-separated numbers:</div>
+      <textarea id="statsData" placeholder="e.g. 12, 18, 23, 25, 28, 30, 35, 40, 45, 50">12, 18, 23, 25, 28, 30, 35, 40, 45, 50</textarea>
+      <div class="stats-btn-row">
+        <button class="stats-btn" onclick="calcStats()">📊 Calculate All</button>
+        <button class="stats-btn" onclick="calcMean()">Mean</button>
+        <button class="stats-btn" onclick="calcMedian()">Median</button>
+        <button class="stats-btn" onclick="calcMode()">Mode</button>
+        <button class="stats-btn" onclick="calcSD()">Std Dev</button>
+      </div>
+    </div>
+    <div id="statsOutput"></div>
+    <div class="content-card" style="margin-top:16px;">
+      <h3>📐 Formulas Reference</h3>
+      <div class="formula-box">Mean (x̄) = Σx / n</div>
+      <div class="formula-box">Median = L + [(n/2 – cf) / f] × h</div>
+      <div class="formula-box">Mode = L + [f₁–f₀ / 2f₁–f₀–f₂] × h</div>
+      <div class="formula-box">σ = √[Σ(x – x̄)² / n]</div>
+      <div class="formula-box">CV = (σ / x̄) × 100</div>
+    </div>
+    <div class="content-card" style="margin-top:16px;">
+      <h3>📊 Correlation Calculator</h3>
+      <div style="font-size:0.82rem; color:var(--text2); margin-bottom:8px;">Enter X values:</div>
+      <textarea id="corrX" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem;height:50px;outline:none;font-family:monospace;" placeholder="1,2,3,4,5">1,2,3,4,5</textarea>
+      <div style="font-size:0.82rem; color:var(--text2); margin:8px 0 4px;">Enter Y values:</div>
+      <textarea id="corrY" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem;height:50px;outline:none;font-family:monospace;" placeholder="2,4,5,4,5">2,4,5,4,5</textarea>
+      <button class="stats-btn" style="margin-top:10px;" onclick="calcCorrelation()">Calculate Pearson's r</button>
+      <div id="corrOutput" style="margin-top:10px;"></div>
+    </div>
+  `;
+}
+
+function parseNums(id) {
+  return document.getElementById(id).value.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+}
+
+function calcStats() {
+  const data = parseNums('statsData');
+  if (!data.length) return;
+  const n = data.length;
+  const mean = data.reduce((a,b) => a+b,0) / n;
+  const sorted = [...data].sort((a,b) => a-b);
+  const median = n%2===0 ? (sorted[n/2-1]+sorted[n/2])/2 : sorted[Math.floor(n/2)];
+  const freq = {};
+  data.forEach(v => freq[v] = (freq[v]||0)+1);
+  const maxF = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k => freq[k]===maxF).map(Number);
+  const variance = data.reduce((a,v) => a+(v-mean)**2,0)/n;
+  const sd = Math.sqrt(variance);
+  const cv = (sd/mean*100).toFixed(2);
+  const range = sorted[n-1] - sorted[0];
+  document.getElementById('statsOutput').innerHTML = `
+    <div class="stats-result">
+      <div style="font-size:0.85rem; color:var(--text2); margin-bottom:12px;">Results for: [${data.join(', ')}]</div>
+      <div class="stats-result-grid">
+        <div class="stats-result-item"><div class="stats-result-val">${mean.toFixed(2)}</div><div class="stats-result-label">Mean (x̄)</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${median.toFixed(2)}</div><div class="stats-result-label">Median (M)</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${modes.join(', ')}</div><div class="stats-result-label">Mode (Z)</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${sd.toFixed(3)}</div><div class="stats-result-label">Std Dev (σ)</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${variance.toFixed(2)}</div><div class="stats-result-label">Variance (σ²)</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${range}</div><div class="stats-result-label">Range</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${cv}%</div><div class="stats-result-label">Coeff. of Variation</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${n}</div><div class="stats-result-label">Count (n)</div></div>
+      </div>
+      <div class="highlight-box" style="margin-top:12px;">
+        Empirical Check: Mean – Mode = ${(mean-modes[0]).toFixed(2)} ≈ 3 × (Mean – Median) = ${(3*(mean-median)).toFixed(2)}
+      </div>
+    </div>
+  `;
+}
+
+function calcMean() {
+  const d = parseNums('statsData'); if(!d.length) return;
+  const m = (d.reduce((a,b)=>a+b,0)/d.length).toFixed(4);
+  document.getElementById('statsOutput').innerHTML = `<div class="stats-result"><div class="stats-result-item" style="display:block;text-align:center;padding:20px;"><div class="stats-result-val">${m}</div><div class="stats-result-label">Arithmetic Mean (x̄) = Σx / n = ${d.reduce((a,b)=>a+b,0)} / ${d.length}</div></div></div>`;
+}
+
+function calcMedian() {
+  const d = parseNums('statsData'); if(!d.length) return;
+  const s = [...d].sort((a,b)=>a-b);
+  const n = s.length;
+  const m = n%2===0?(s[n/2-1]+s[n/2])/2:s[Math.floor(n/2)];
+  document.getElementById('statsOutput').innerHTML = `<div class="stats-result"><div class="stats-result-item" style="display:block;text-align:center;padding:20px;"><div class="stats-result-val">${m.toFixed(4)}</div><div class="stats-result-label">Median (M) — middle value of sorted data: [${s.join(', ')}]</div></div></div>`;
+}
+
+function calcMode() {
+  const d = parseNums('statsData'); if(!d.length) return;
+  const freq = {}; d.forEach(v => freq[v]=(freq[v]||0)+1);
+  const maxF = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxF).map(Number);
+  document.getElementById('statsOutput').innerHTML = `<div class="stats-result"><div class="stats-result-item" style="display:block;text-align:center;padding:20px;"><div class="stats-result-val">${modes.join(', ')}</div><div class="stats-result-label">Mode — most frequent value(s). Frequency: ${maxF}</div></div></div>`;
+}
+
+function calcSD() {
+  const d = parseNums('statsData'); if(!d.length) return;
+  const mean = d.reduce((a,b)=>a+b,0)/d.length;
+  const v = d.reduce((a,x)=>a+(x-mean)**2,0)/d.length;
+  document.getElementById('statsOutput').innerHTML = `<div class="stats-result"><div class="stats-result-grid">
+    <div class="stats-result-item"><div class="stats-result-val">${Math.sqrt(v).toFixed(4)}</div><div class="stats-result-label">Std Dev (σ)</div></div>
+    <div class="stats-result-item"><div class="stats-result-val">${v.toFixed(4)}</div><div class="stats-result-label">Variance (σ²)</div></div>
+    <div class="stats-result-item"><div class="stats-result-val">${mean.toFixed(4)}</div><div class="stats-result-label">Mean (x̄)</div></div>
+    <div class="stats-result-item"><div class="stats-result-val">${(Math.sqrt(v)/mean*100).toFixed(2)}%</div><div class="stats-result-label">CV</div></div>
+  </div></div>`;
+}
+
+function calcCorrelation() {
+  const xs = parseNums('corrX');
+  const ys = parseNums('corrY');
+  if (xs.length !== ys.length || xs.length < 2) {
+    document.getElementById('corrOutput').innerHTML = '<div style="color:var(--red);font-size:0.85rem;">⚠️ Please enter equal number of X and Y values (at least 2 pairs)</div>';
+    return;
+  }
+  const n = xs.length;
+  const mx = xs.reduce((a,b)=>a+b)/n;
+  const my = ys.reduce((a,b)=>a+b)/n;
+  let sxy=0, sxx=0, syy=0;
+  for(let i=0;i<n;i++){
+    const dx=xs[i]-mx, dy=ys[i]-my;
+    sxy+=dx*dy; sxx+=dx*dx; syy+=dy*dy;
+  }
+  const r = sxy/Math.sqrt(sxx*syy);
+  const interp = Math.abs(r)>=0.9?'Very Strong':Math.abs(r)>=0.7?'Strong':Math.abs(r)>=0.5?'Moderate':Math.abs(r)>=0.3?'Weak':'Very Weak';
+  const dir = r>0?'Positive':r<0?'Negative':'Zero';
+  document.getElementById('corrOutput').innerHTML = `
+    <div class="stats-result">
+      <div class="stats-result-grid">
+        <div class="stats-result-item"><div class="stats-result-val">${r.toFixed(4)}</div><div class="stats-result-label">Pearson's r</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${interp}</div><div class="stats-result-label">Strength</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${dir}</div><div class="stats-result-label">Direction</div></div>
+        <div class="stats-result-item"><div class="stats-result-val">${(r*r*100).toFixed(1)}%</div><div class="stats-result-label">r² (Explained)</div></div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SIMULATIONS LAB
+// ============================================================
+function renderLab() {
+  setTopbar('Economics Lab', 'Simulations & Analysis');
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-heading">Choose a Lab</div>
+    <div class="nav-grid">
+      <div class="nav-card" style="--card-accent:#3b82f6" onclick="navigateTo('graphLab')">
+        <div class="nav-card-icon">📈</div>
+        <div class="nav-card-title">Graph Lab</div>
+        <div class="nav-card-desc">Interactive economic graphs with controls</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#a855f7" onclick="navigateTo('statsLab')">
+        <div class="nav-card-icon">🔢</div>
+        <div class="nav-card-title">Statistics Lab</div>
+        <div class="nav-card-desc">Calculate mean, median, mode, SD, correlation</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#ef4444" onclick="navigateTo('simLab','demand')">
+        <div class="nav-card-icon">⚡</div>
+        <div class="nav-card-title">Demand Simulator</div>
+        <div class="nav-card-desc">Price-quantity interaction</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#10b981" onclick="navigateTo('simLab','market')">
+        <div class="nav-card-icon">⚖️</div>
+        <div class="nav-card-title">Market Equilibrium</div>
+        <div class="nav-card-desc">Shift curves, see new equilibrium</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#f59e0b" onclick="navigateTo('simLab','production')">
+        <div class="nav-card-icon">🏭</div>
+        <div class="nav-card-title">Production Simulator</div>
+        <div class="nav-card-desc">Cost and output analysis</div>
+      </div>
+      <div class="nav-card" style="--card-accent:#ec4899" onclick="navigateTo('simLab','correlation')">
+        <div class="nav-card-icon">🔗</div>
+        <div class="nav-card-title">Correlation Simulator</div>
+        <div class="nav-card-desc">Scatter plot and r calculation</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSimLab(type) {
+  setTopbar('Simulation Lab', type || 'Interactive');
+  document.getElementById('mainContent').innerHTML = `<div id="simArea"></div>`;
+  renderSimulation(type || 'demand', 'simArea');
+}
+
+function renderSimulation(simId, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (simId === 'demand') renderDemandSim(el);
+  else if (simId === 'supply' || simId === 'market') renderMarketSim(el);
+  else if (simId === 'production') renderProductionSim(el);
+  else if (simId === 'stats') renderStatsSimple(el);
+  else if (simId === 'equilibrium') renderMarketSim(el);
+  else if (simId === 'correlation') renderCorrelationSim(el);
+  else renderDemandSim(el);
+}
+
+function renderDemandSim(el) {
+  el.innerHTML = `
+    <div class="sim-container">
+      <div class="sim-title">⚡ Demand Simulator</div>
+      <div class="sim-desc">Adjust price and income to see how demand changes</div>
+      <div class="slider-group">
+        <div class="slider-label">Price (₹) <span id="simPrice">50</span></div>
+        <input type="range" min="10" max="100" value="50" oninput="document.getElementById('simPrice').textContent=this.value; updateDemandSim()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Consumer Income (₹000) <span id="simIncome">30</span></div>
+        <input type="range" min="10" max="60" value="30" oninput="document.getElementById('simIncome').textContent=this.value; updateDemandSim()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Price of Substitute (₹) <span id="simSubst">40</span></div>
+        <input type="range" min="10" max="80" value="40" oninput="document.getElementById('simSubst').textContent=this.value; updateDemandSim()">
+      </div>
+      <canvas id="demCanvas" width="320" height="200" style="background:var(--bg3);border-radius:10px;margin-top:12px;max-width:100%;"></canvas>
+      <div class="sim-output">
+        <div class="sim-metric"><div class="sim-metric-val" id="simQd">60</div><div class="sim-metric-label">Quantity Demanded</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simPED">1.2</div><div class="sim-metric-label">Price Elasticity</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simTR">₹3000</div><div class="sim-metric-label">Total Revenue</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simDemType">Elastic</div><div class="sim-metric-label">Demand Type</div></div>
+      </div>
+    </div>
+  `;
+  updateDemandSim();
+}
+
+function updateDemandSim() {
+  const P = parseFloat(document.getElementById('simPrice')?.textContent || 50);
+  const I = parseFloat(document.getElementById('simIncome')?.textContent || 30);
+  const Ps = parseFloat(document.getElementById('simSubst')?.textContent || 40);
+  const Qd = Math.max(5, Math.round(200 - 2*P + 0.5*I + 0.8*Ps));
+  const PED = (2*P/Qd).toFixed(2);
+  const TR = P * Qd;
+  const demType = PED > 1 ? 'Elastic' : PED < 1 ? 'Inelastic' : 'Unitary';
+  document.getElementById('simQd') && (document.getElementById('simQd').textContent = Qd + ' units');
+  document.getElementById('simPED') && (document.getElementById('simPED').textContent = PED);
+  document.getElementById('simTR') && (document.getElementById('simTR').textContent = '₹' + TR.toLocaleString());
+  document.getElementById('simDemType') && (document.getElementById('simDemType').textContent = demType);
+  drawDemandSimGraph(P, Qd);
+}
+
+function drawDemandSimGraph(currentP, currentQ) {
+  const c = document.getElementById('demCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 40;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(m, 10); ctx.lineTo(m, H-m); ctx.lineTo(W-10, H-m); ctx.stroke();
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(m+10, m); ctx.lineTo(W-20, H-m-10); ctx.stroke();
+  const px = m + (currentQ/300) * (W-m-10);
+  const py = (H-m) - (currentP/120) * (H-m-10);
+  ctx.setLineDash([4,3]); ctx.strokeStyle = '#f59e0b88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, H-m); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(m, py); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Q = ' + currentQ, W/2, H-5);
+  ctx.save(); ctx.translate(12, H/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('P = ₹' + currentP, 0, 0); ctx.restore();
+}
+
+function renderMarketSim(el) {
+  el.innerHTML = `
+    <div class="sim-container">
+      <div class="sim-title">⚖️ Market Equilibrium Simulator</div>
+      <div class="sim-desc">Shift demand and supply curves to find new equilibrium</div>
+      <div class="slider-group">
+        <div class="slider-label">Demand Shift <span id="mDShift">0</span></div>
+        <input type="range" min="-40" max="40" value="0" oninput="document.getElementById('mDShift').textContent=this.value; updateMarketSim()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Supply Shift <span id="mSShift">0</span></div>
+        <input type="range" min="-40" max="40" value="0" oninput="document.getElementById('mSShift').textContent=this.value; updateMarketSim()">
+      </div>
+      <canvas id="mktCanvas" width="320" height="200" style="background:var(--bg3);border-radius:10px;margin-top:12px;max-width:100%;"></canvas>
+      <div class="sim-output">
+        <div class="sim-metric"><div class="sim-metric-val" id="mktP">₹50</div><div class="sim-metric-label">Eq. Price</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="mktQ">100</div><div class="sim-metric-label">Eq. Quantity</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="mktCS">₹2500</div><div class="sim-metric-label">Consumer Surplus</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="mktPS">₹2500</div><div class="sim-metric-label">Producer Surplus</div></div>
+      </div>
+    </div>
+  `;
+  updateMarketSim();
+}
+
+function updateMarketSim() {
+  const dS = parseFloat(document.getElementById('mDShift')?.textContent || 0);
+  const sS = parseFloat(document.getElementById('mSShift')?.textContent || 0);
+  const eqP = Math.max(10, 50 + dS*0.5 - sS*0.5);
+  const eqQ = Math.max(10, 100 + dS - sS);
+  document.getElementById('mktP') && (document.getElementById('mktP').textContent = '₹' + eqP.toFixed(0));
+  document.getElementById('mktQ') && (document.getElementById('mktQ').textContent = eqQ.toFixed(0) + ' units');
+  document.getElementById('mktCS') && (document.getElementById('mktCS').textContent = '₹' + (eqP*eqQ/2).toFixed(0));
+  document.getElementById('mktPS') && (document.getElementById('mktPS').textContent = '₹' + (eqP*eqQ/2).toFixed(0));
+  drawMarketGraph(dS, sS, eqP, eqQ);
+}
+
+function drawMarketGraph(dS, sS, eqP, eqQ) {
+  const c = document.getElementById('mktCanvas'); if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const W = c.width, H = c.height, m = 40;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(m, 10); ctx.lineTo(m, H-m); ctx.lineTo(W-10, H-m); ctx.stroke();
+  const dOff = dS * 0.5;
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(m+10+dOff, m); ctx.lineTo(W-20+dOff, H-m-10); ctx.stroke();
+  ctx.fillStyle = '#ef4444'; ctx.font = '12px sans-serif';
+  ctx.fillText(dS!==0?(dS>0?'D₁':'D₂'):'D', W-18+dOff, H-m-6);
+  const sOff = sS * 0.5;
+  ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(m+10+sOff, H-m-10); ctx.lineTo(W-20+sOff, m); ctx.stroke();
+  ctx.fillStyle = '#10b981';
+  ctx.fillText(sS!==0?(sS>0?'S₁':'S₂'):'S', W-18+sOff, m+10);
+  const ex = m + (eqQ/200)*(W-m-10);
+  const ey = (H-m) - (eqP/120)*(H-m-10);
+  ctx.beginPath(); ctx.arc(ex, ey, 8, 0, Math.PI*2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  ctx.fillStyle = '#e8f0fe'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('E', ex, ey-12);
+}
+
+function renderProductionSim(el) {
+  el.innerHTML = `
+    <div class="sim-container">
+      <div class="sim-title">🏭 Production & Cost Simulator</div>
+      <div class="sim-desc">Adjust labour input to see production and cost effects</div>
+      <div class="slider-group">
+        <div class="slider-label">Labour Units (L) <span id="simL">5</span></div>
+        <input type="range" min="1" max="12" value="5" oninput="document.getElementById('simL').textContent=this.value; updateProdSim()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Wage Rate (₹) <span id="simW">100</span></div>
+        <input type="range" min="50" max="200" value="100" oninput="document.getElementById('simW').textContent=this.value; updateProdSim()">
+      </div>
+      <div class="sim-output">
+        <div class="sim-metric"><div class="sim-metric-val" id="simTP">85</div><div class="sim-metric-label">Total Product</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simMP">14</div><div class="sim-metric-label">Marginal Product</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simAP">17</div><div class="sim-metric-label">Average Product</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simTVC">₹500</div><div class="sim-metric-label">Total Variable Cost</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simMC">₹7.1</div><div class="sim-metric-label">Marginal Cost</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="simStage">Stage II</div><div class="sim-metric-label">Production Stage</div></div>
+      </div>
+    </div>
+  `;
+  updateProdSim();
+}
+
+function updateProdSim() {
+  const L = parseInt(document.getElementById('simL')?.textContent || 5);
+  const W = parseInt(document.getElementById('simW')?.textContent || 100);
+  // TP function: peaks around L=8
+  function tp(l) { return Math.max(0, -l*l*l/6 + 4*l*l - 2*l); }
+  const TP = Math.round(tp(L));
+  const TP_prev = Math.round(tp(L-1));
+  const MP = Math.max(-5, TP - TP_prev);
+  const AP = L > 0 ? (TP/L).toFixed(1) : 0;
+  const TVC = L * W;
+  const MC = MP > 0 ? (W/MP).toFixed(1) : '∞';
+  const stage = MP > AP ? 'Stage I' : MP > 0 ? 'Stage II' : 'Stage III';
+  document.getElementById('simTP') && (document.getElementById('simTP').textContent = TP + ' units');
+  document.getElementById('simMP') && (document.getElementById('simMP').textContent = MP);
+  document.getElementById('simAP') && (document.getElementById('simAP').textContent = AP);
+  document.getElementById('simTVC') && (document.getElementById('simTVC').textContent = '₹' + TVC);
+  document.getElementById('simMC') && (document.getElementById('simMC').textContent = '₹' + MC);
+  document.getElementById('simStage') && (document.getElementById('simStage').textContent = stage);
+}
+
+function renderStatsSimple(el) {
+  el.innerHTML = `
+    <div class="sim-container">
+      <div class="sim-title">📊 Statistics Visualizer</div>
+      <div class="sim-desc">See how mean, median, mode shift with data</div>
+      <button class="sim-btn" onclick="navigateTo('statsLab')">Open Full Statistics Lab →</button>
+    </div>
+  `;
+}
+
+function renderCorrelationSim(el) {
+  el.innerHTML = `
+    <div class="sim-container">
+      <div class="sim-title">🔗 Correlation Simulator</div>
+      <div class="sim-desc">Click on the plot to add data points</div>
+      <canvas id="corrCanvas" width="320" height="220" style="background:var(--bg3);border-radius:10px;cursor:crosshair;max-width:100%;"></canvas>
+      <div class="sim-output">
+        <div class="sim-metric"><div class="sim-metric-val" id="corrR">–</div><div class="sim-metric-label">Pearson's r</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="corrType">–</div><div class="sim-metric-label">Type</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="corrN">0</div><div class="sim-metric-label">Data Points</div></div>
+        <div class="sim-metric"><div class="sim-metric-val" id="corrR2">–</div><div class="sim-metric-label">r² (r-squared)</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="sim-btn" style="flex:1" onclick="clearCorrPlot()">Clear Plot</button>
+        <button class="sim-btn" style="flex:1;background:var(--green)" onclick="addRandomCorrData(0.9)">Add +ve Data</button>
+        <button class="sim-btn" style="flex:1;background:var(--red)" onclick="addRandomCorrData(-0.9)">Add –ve Data</button>
+      </div>
+    </div>
+  `;
+  const c = document.getElementById('corrCanvas');
+  let corrPts = [];
+  window._corrPts = corrPts;
+  drawCorrPlot(c, corrPts);
+  c.addEventListener('click', (e) => {
+    const rect = c.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width * c.width - 35) / (c.width - 50);
+    const y = 1 - ((e.clientY - rect.top) / rect.height * c.height - 10) / (c.height - 45);
+    if (x >= 0 && x <= 1 && y >= 0 && y <= 1) {
+      window._corrPts.push([x, y]);
+      drawCorrPlot(c, window._corrPts);
+      updateCorrStats();
+    }
+  });
+}
+
+function drawCorrPlot(c, pts) {
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height, m = 35;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(m, 10); ctx.lineTo(m, H-m); ctx.lineTo(W-10, H-m); ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Variable X', W/2, H-5);
+  ctx.save(); ctx.translate(12, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Variable Y', 0, 0); ctx.restore();
+  const iW = W - m - 10, iH = H - m - 10;
+  pts.forEach(([x,y]) => {
+    const px = m + x*iW;
+    const py = (H-m) - y*iH;
+    ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(59,130,246,0.7)'; ctx.fill();
+    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+  if (pts.length >= 3) {
+    const n = pts.length;
+    const mx = pts.reduce((a,[x])=>a+x,0)/n;
+    const my = pts.reduce((a,[,y])=>a+y,0)/n;
+    let sxy=0, sxx=0;
+    pts.forEach(([x,y]) => { sxy+=(x-mx)*(y-my); sxx+=(x-mx)**2; });
+    if (sxx > 0) {
+      const b = sxy/sxx;
+      const a = my - b*mx;
+      ctx.beginPath();
+      ctx.moveTo(m, (H-m) - (a)*iH);
+      ctx.lineTo(m+iW, (H-m) - (b+a)*iH);
+      ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke();
+    }
+  }
+}
+
+function updateCorrStats() {
+  const pts = window._corrPts || [];
+  document.getElementById('corrN') && (document.getElementById('corrN').textContent = pts.length);
+  if (pts.length < 2) return;
+  const n = pts.length;
+  const mx = pts.reduce((a,[x])=>a+x,0)/n;
+  const my = pts.reduce((a,[,y])=>a+y,0)/n;
+  let sxy=0,sxx=0,syy=0;
+  pts.forEach(([x,y])=>{ sxy+=(x-mx)*(y-my); sxx+=(x-mx)**2; syy+=(y-my)**2; });
+  if (sxx*syy === 0) return;
+  const r = sxy/Math.sqrt(sxx*syy);
+  const type = Math.abs(r)>=0.8 ? (r>0?'Strong +ve':'Strong –ve') : Math.abs(r)>=0.5 ? (r>0?'Moderate +ve':'Moderate –ve') : 'Weak';
+  document.getElementById('corrR') && (document.getElementById('corrR').textContent = r.toFixed(3));
+  document.getElementById('corrType') && (document.getElementById('corrType').textContent = type);
+  document.getElementById('corrR2') && (document.getElementById('corrR2').textContent = (r*r).toFixed(3));
+}
+
+function clearCorrPlot() {
+  window._corrPts = [];
+  const c = document.getElementById('corrCanvas');
+  if (c) drawCorrPlot(c, []);
+  ['corrR','corrType','corrN','corrR2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='–'; });
+  document.getElementById('corrN') && (document.getElementById('corrN').textContent = '0');
+}
+
+function addRandomCorrData(targetR) {
+  const pts = window._corrPts || [];
+  window._corrPts = pts;
+  for (let i = 0; i < 10; i++) {
+    const x = Math.random();
+    const y = Math.max(0, Math.min(1, targetR * x + (1 - Math.abs(targetR)) * Math.random() + 0.1));
+    pts.push([x, y]);
+  }
+  const c = document.getElementById('corrCanvas');
+  if (c) drawCorrPlot(c, pts);
+  updateCorrStats();
+}
+
+// ============================================================
+// QUIZ SYSTEM
+// ============================================================
+function renderQuizSelect() {
+  setTopbar('Quiz Mode', 'Test Your Knowledge');
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-heading">Select Chapter for Quiz</div>
+    <div class="chapter-list">
+      <div class="chapter-item" onclick="navigateTo('quiz', 'all')">
+        <div class="chapter-num" style="background:var(--gold)20;color:var(--gold)">🎯</div>
+        <div class="chapter-info">
+          <div class="chapter-name">🏆 Full Mixed Quiz (All Chapters)</div>
+          <div class="chapter-sub">Random questions from all 12 chapters</div>
+        </div>
+        <div class="chapter-arrow">›</div>
+      </div>
+      ${CHAPTERS.map(ch => `
+        <div class="chapter-item ${state.quizHistory[ch.id] ? 'completed' : ''}" onclick="navigateTo('quiz', ${ch.id})">
+          <div class="chapter-num" style="background:${ch.color}20;color:${ch.color}">${ch.id}</div>
+          <div class="chapter-info">
+            <div class="chapter-name">${ch.icon} ${ch.title}</div>
+            <div class="chapter-sub">${(QUIZ_DB[ch.id]||[]).length} questions${state.quizHistory[ch.id] ? ' • Best: '+state.quizHistory[ch.id]+'%' : ''}</div>
+          </div>
+          <div class="chapter-arrow">›</div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function startQuiz(chapterId) {
+  let questions = [];
+  if (chapterId === 'all') {
+    Object.values(QUIZ_DB).forEach(qs => questions.push(...qs));
+    questions = questions.sort(() => Math.random() - 0.5).slice(0, 20);
+  } else {
+    questions = [...(QUIZ_DB[+chapterId] || [])];
+  }
+  if (!questions.length) { showToast('No quiz available for this chapter yet!'); return; }
+  state.quiz = { chapter: chapterId, questions, current: 0, score: 0, answered: false, selectedOpt: null };
+  setTopbar('Quiz', chapterId === 'all' ? 'All Chapters' : `Chapter ${chapterId}`);
+  renderQuizQuestion();
+}
+
+function startQuizInline(chapterId, containerId) {
+  const questions = [...(QUIZ_DB[+chapterId] || [])].slice(0, 3);
+  if (!questions.length) {
+    document.getElementById(containerId).innerHTML = '<div class="content-card"><p style="text-align:center; color:var(--text2);">Quiz coming soon for this chapter!</p></div>';
+    return;
+  }
+  state.quiz = { chapter: chapterId, questions, current: 0, score: 0, answered: false, selectedOpt: null, inlineId: containerId };
+  renderQuizQInline(containerId);
+}
+
+function renderQuizQInline(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const q = state.quiz;
+  if (q.current >= q.questions.length) {
+    el.innerHTML = `
+      <div class="quiz-result" style="padding:24px 16px;">
+        <div class="result-emoji">${q.score >= q.questions.length*0.7 ? '🎉' : '💪'}</div>
+        <div class="result-score">${q.score}/${q.questions.length}</div>
+        <div class="result-label">${q.score >= q.questions.length*0.7 ? 'Great Work!' : 'Keep Practising!'}</div>
+        <button class="btn-retry" onclick="startQuizInline(${q.chapter}, '${containerId}')">Try Again</button>
+        <button class="btn-retry" style="background:linear-gradient(135deg,var(--green),var(--accent2));" onclick="navigateTo('quiz',${q.chapter})">Full Quiz →</button>
+      </div>`;
+    return;
+  }
+  const question = q.questions[q.current];
+  el.innerHTML = `
+    <div class="question-card">
+      <div class="quiz-header">
+        <div class="quiz-counter">Q ${q.current+1} of ${q.questions.length}</div>
+        <div class="quiz-score-badge">Score: ${q.score}</div>
+      </div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${((q.current)/q.questions.length)*100}%"></div></div>
+      <div class="question-text">${question.q}</div>
+      <div class="options-list">
+        ${question.opts.map((opt,i) => `<button class="option-btn" id="inopt${i}" onclick="selectInlineOpt(${i},'${containerId}')">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
+      </div>
+      <div id="inFeedback"></div>
+      <div class="quiz-nav" id="inQuizNav" style="display:none;">
+        <button class="btn-next" onclick="nextInlineQ('${containerId}')">Next Question →</button>
+      </div>
+    </div>`;
+}
+
+function selectInlineOpt(idx, cid) {
+  if (state.quiz.answered) return;
+  state.quiz.answered = true;
+  state.quiz.selectedOpt = idx;
+  const q = state.quiz.questions[state.quiz.current];
+  if (idx === q.ans) state.quiz.score++;
+  for (let i = 0; i < q.opts.length; i++) {
+    const btn = document.getElementById('inopt' + i);
+    if (!btn) continue;
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === idx) btn.classList.add('wrong');
+  }
+  const fb = document.getElementById('inFeedback');
+  if (fb) fb.innerHTML = `<div class="feedback-box ${idx===q.ans?'correct':'wrong'}">${idx===q.ans?'✅ Correct! ':'❌ Incorrect. '}${q.exp}</div>`;
+  const nav = document.getElementById('inQuizNav');
+  if (nav) nav.style.display = 'flex';
+}
+
+function nextInlineQ(cid) {
+  state.quiz.current++;
+  state.quiz.answered = false;
+  renderQuizQInline(cid);
+}
+
+function renderQuizQuestion() {
+  const q = state.quiz;
+  if (q.current >= q.questions.length) {
+    renderQuizResult();
+    return;
+  }
+  const question = q.questions[q.current];
+  const pct = (q.current / q.questions.length) * 100;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-counter">Question ${q.current+1} of ${q.questions.length}</div>
+        <div class="quiz-score-badge">Score: ${q.score}</div>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="question-card">
+        <div class="question-type">Multiple Choice Question</div>
+        <div class="question-text">${question.q}</div>
+        <div class="options-list">
+          ${question.opts.map((opt,i) => `<button class="option-btn" id="opt${i}" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
+        </div>
+        <div id="feedback"></div>
+      </div>
+      <div class="quiz-nav" id="quizNav" style="display:none;">
+        <button class="btn-skip" onclick="nextQuestion()">Skip</button>
+        <button class="btn-next" onclick="nextQuestion()">Next Question →</button>
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(idx) {
+  if (state.quiz.answered) return;
+  state.quiz.answered = true;
+  const q = state.quiz.questions[state.quiz.current];
+  if (idx === q.ans) state.quiz.score++;
+  for (let i = 0; i < q.opts.length; i++) {
+    const btn = document.getElementById('opt' + i);
+    if (!btn) continue;
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === idx) btn.classList.add('wrong');
+  }
+  const fb = document.getElementById('feedback');
+  if (fb) fb.innerHTML = `<div class="feedback-box ${idx===q.ans?'correct':'wrong'}">${idx===q.ans?'✅ Correct! ':'❌ Incorrect. '}${q.exp}</div>`;
+  const nav = document.getElementById('quizNav');
+  if (nav) nav.style.display = 'flex';
+}
+
+function nextQuestion() {
+  state.quiz.current++;
+  state.quiz.answered = false;
+  renderQuizQuestion();
+}
+
+function renderQuizResult() {
+  const q = state.quiz;
+  const total = q.questions.length;
+  const pct = Math.round((q.score / total) * 100);
+  const grade = pct >= 90 ? '🏆 Excellent!' : pct >= 75 ? '⭐ Very Good!' : pct >= 60 ? '👍 Good' : pct >= 40 ? '💪 Keep Trying' : '📚 Needs More Practice';
+  if (q.chapter !== 'all' && pct > (state.quizHistory[q.chapter] || 0)) {
+    state.quizHistory[q.chapter] = pct;
+    saveProgress();
+  }
+  document.getElementById('mainContent').innerHTML = `
+    <div class="quiz-result">
+      <div class="result-emoji">${pct >= 75 ? '🎉' : pct >= 50 ? '💪' : '📚'}</div>
+      <div class="result-score">${q.score}/${total}</div>
+      <div style="font-size:1.5rem;margin-bottom:4px;">${grade}</div>
+      <div class="result-label">${pct}% Correct</div>
+      <div class="result-breakdown">
+        <div class="breakdown-item"><div class="breakdown-num" style="color:var(--green)">${q.score}</div><div class="breakdown-label">Correct</div></div>
+        <div class="breakdown-item"><div class="breakdown-num" style="color:var(--red)">${total-q.score}</div><div class="breakdown-label">Wrong</div></div>
+        <div class="breakdown-item"><div class="breakdown-num" style="color:var(--blue)">${pct}%</div><div class="breakdown-label">Score</div></div>
+      </div>
+      <button class="btn-retry" onclick="startQuiz(${JSON.stringify(q.chapter)})">Retry Quiz</button>
+      <button class="btn-retry" style="background:linear-gradient(135deg,var(--green),var(--primary-light))" onclick="navigateTo('quizSelect')">Other Quizzes</button>
+      <button class="btn-retry" style="background:var(--card);color:var(--text2);" onclick="navigateTo('home')">Back to Home</button>
+    </div>
+  `;
+}
+
+// ============================================================
+// PROGRESS TRACKER
+// ============================================================
+function renderProgress() {
+  setTopbar('Progress Tracker', 'Your Learning Journey');
+  const completed = Object.keys(state.progress).filter(k => state.progress[k]).length;
+  const total = CHAPTERS.length;
+  const pct = Math.round((completed / total) * 100);
+  const circumference = 2 * Math.PI * 48;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="progress-overall">
+      <div class="progress-circle-big">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="${pct>=70?'#10b981':pct>=40?'#f59e0b':'#3b82f6'}" stroke-width="10"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+        </svg>
+        <div class="progress-pct">${pct}%</div>
+      </div>
+      <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">${completed} of ${total} Chapters Completed</div>
+      <div style="font-size:0.82rem;color:var(--text2);">${pct >= 100 ? '🎉 Amazing! All chapters done!' : pct >= 70 ? '⭐ Great progress! Keep going!' : '💪 Keep learning!'}</div>
+    </div>
+    <div class="section-heading">Chapter Progress</div>
+    ${CHAPTERS.map(ch => `
+      <div class="progress-chapter-row">
+        <div style="font-size:1.2rem;">${ch.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.85rem;font-weight:600;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ch.title}</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:${state.progress[ch.id]?'100':'0'}%"></div>
+          </div>
+        </div>
+        <div class="progress-pct-small">${state.progress[ch.id]?'100%':'0%'}</div>
+      </div>
+    `).join('')}
+    <div class="section-heading" style="margin-top:20px;">Quiz History</div>
+    ${CHAPTERS.map(ch => state.quizHistory[ch.id] ? `
+      <div class="progress-chapter-row">
+        <div style="font-size:1.1rem;">${ch.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.82rem;font-weight:600;">Ch.${ch.id}: ${ch.title}</div>
+          <div class="progress-bar-wrap" style="margin-top:4px;">
+            <div class="progress-bar-fill" style="width:${state.quizHistory[ch.id]}%;background:${state.quizHistory[ch.id]>=75?'var(--green)':'var(--gold)'}"></div>
+          </div>
+        </div>
+        <div class="progress-pct-small" style="color:${state.quizHistory[ch.id]>=75?'var(--green)':'var(--gold)'}">${state.quizHistory[ch.id]}%</div>
+      </div>
+    ` : '').join('')}
+    ${Object.keys(state.quizHistory).length === 0 ? '<div style="text-align:center;color:var(--text3);padding:20px;font-size:0.85rem;">No quizzes taken yet. Head to Quiz Mode!</div>' : ''}
+    <br>
+    <button class="sim-btn" style="background:var(--red);margin-bottom:20px;" onclick="if(confirm('Reset all progress?')){state.progress={};state.quizHistory={};saveProgress();renderProgress();}">
+      Reset All Progress
+    </button>
+  `;
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// PWA Install
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('visible');
+});
+document.getElementById('installBtn') && document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    if (result.outcome === 'accepted') showToast('App installed! 🎉');
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('visible');
+  }
+});
+
+// Service Worker Registration — only when running on a real HTTP/HTTPS server
+if ('serviceWorker' in navigator && location.protocol !== 'blob:' && location.hostname !== 'www.claudeusercontent.com') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registered ✓'))
+      .catch(() => {}); // silently ignore — SW only works when self-hosted
+  });
+}
+
+// Load author image if present
+window.addEventListener('load', () => {
+  const img = new Image();
+  img.onload = () => {
+    const av = document.getElementById('authorAvatar');
+    if (av) av.innerHTML = `<img src="author.jpg" alt="Mateen Yousuf">`;
+  };
+  img.src = 'author.jpg';
+});
+</script>
+</body>
+</html>

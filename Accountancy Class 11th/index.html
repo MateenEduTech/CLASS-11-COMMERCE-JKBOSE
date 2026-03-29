@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a237e">
+<meta name="description" content="JKBOSE Class 11 Accountancy Interactive Learning App by Mateen Yousuf">
+<title>Class 11 Accountancy – JKBOSE</title>
+<link rel="manifest" href="manifest.json">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary: #1a237e;
+  --primary-light: #3949ab;
+  --accent: #f9a825;
+  --accent2: #00897b;
+  --danger: #c62828;
+  --success: #2e7d32;
+  --bg: #f0f4ff;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7a99;
+  --border: #dde3f8;
+  --shadow: 0 4px 24px rgba(26,35,126,0.12);
+  --radius: 16px;
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; min-height: 100vh; animation: fadeIn 0.4s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== SPLASH / TITLE SCREEN ===== */
+#splash {
+  background: linear-gradient(135deg, #0d1b6e 0%, #1a237e 40%, #283593 70%, #1565c0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+#splash.active { display: flex; }
+
+/* Animated background shapes */
+.splash-bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.07;
+  animation: pulse 4s ease-in-out infinite;
+}
+.splash-bg-shape:nth-child(1) { width: 400px; height: 400px; background: #f9a825; top: -100px; left: -100px; animation-delay: 0s; }
+.splash-bg-shape:nth-child(2) { width: 300px; height: 300px; background: #00bcd4; bottom: -80px; right: -80px; animation-delay: 1.5s; }
+.splash-bg-shape:nth-child(3) { width: 200px; height: 200px; background: #ffffff; top: 50%; left: 80%; animation-delay: 3s; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+.splash-content { position: relative; z-index: 2; text-align: center; max-width: 500px; width: 100%; }
+
+/* Accounting SVG Icon */
+.splash-icon {
+  width: 100px; height: 100px;
+  margin: 0 auto 20px;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.splash-badge {
+  display: inline-block;
+  background: rgba(249,168,37,0.2);
+  border: 1px solid rgba(249,168,37,0.5);
+  color: #f9a825;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.splash-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 6vw, 40px);
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.splash-subtitle { color: rgba(255,255,255,0.75); font-size: 15px; margin-bottom: 28px; }
+
+.splash-features {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.splash-feature-tag {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* Author card on splash */
+.author-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+.author-avatar {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+}
+.author-avatar-placeholder {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #3949ab, #1a237e);
+  display: flex; align-items: center; justify-content: center;
+  color: #f9a825; font-size: 22px; font-weight: bold;
+}
+.author-info { flex: 1; }
+.author-name { color: #fff; font-size: 16px; font-weight: 700; }
+.author-designation { color: rgba(255,255,255,0.65); font-size: 12px; line-height: 1.5; }
+
+.btn-start {
+  background: linear-gradient(135deg, var(--accent), #f57f17);
+  color: #1a1a2e;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(249,168,37,0.4);
+  transition: all 0.3s;
+  letter-spacing: 0.5px;
+}
+.btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(249,168,37,0.5); }
+.btn-start:active { transform: translateY(0); }
+
+/* ===== NAV BAR ===== */
+.navbar {
+  background: var(--primary);
+  color: #fff;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.3);
+}
+.navbar-brand { font-family: var(--font-display); font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+.btn-back { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: background 0.2s; }
+.btn-back:hover { background: rgba(255,255,255,0.15); }
+.nav-actions { display: flex; gap: 8px; }
+.nav-btn { background: rgba(255,255,255,0.12); border: none; color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+.nav-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* ===== HOME SCREEN ===== */
+#home { padding-bottom: 24px; }
+.home-hero {
+  background: linear-gradient(135deg, #1a237e, #283593, #1565c0);
+  padding: 28px 20px;
+  color: #fff;
+  text-align: center;
+}
+.hero-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 4px; }
+.hero-subtitle { color: rgba(255,255,255,0.75); font-size: 14px; }
+.progress-ring-wrap {
+  width: 80px; height: 80px; margin: 16px auto 0;
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+.progress-ring-text { color: #fff; font-size: 18px; font-weight: bold; z-index: 1; }
+
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  padding: 20px 16px 8px;
+  font-weight: 700;
+}
+
+/* ===== QUICK ACCESS GRID ===== */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 16px;
+}
+.quick-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.25s;
+  text-align: center;
+}
+.quick-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(26,35,126,0.18); }
+.quick-card-icon { font-size: 32px; }
+.quick-card-label { font-size: 13px; font-weight: 700; color: var(--text); }
+.quick-card-desc { font-size: 11px; color: var(--muted); }
+
+/* ===== CHAPTERS SCREEN ===== */
+#chapters { padding-bottom: 24px; }
+.chapter-list { padding: 0 16px; }
+.chapter-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.25s;
+}
+.chapter-card:hover { transform: translateX(4px); border-color: var(--primary-light); }
+.chapter-num {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800;
+  flex-shrink: 0;
+}
+.chapter-info { flex: 1; }
+.chapter-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.chapter-meta { font-size: 11px; color: var(--muted); }
+.chapter-arrow { color: var(--muted); font-size: 18px; }
+.chapter-status {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.chapter-status.done { background: var(--success); }
+.chapter-status.partial { background: var(--accent); }
+
+/* ===== CHAPTER DETAIL ===== */
+#chapter-detail { padding-bottom: 32px; }
+.detail-hero {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 24px 20px;
+  color: #fff;
+}
+.detail-hero-num { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.75; margin-bottom: 6px; }
+.detail-hero-title { font-family: var(--font-display); font-size: 20px; margin-bottom: 8px; }
+.detail-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 12px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+}
+.detail-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab-content { display: none; padding: 16px; }
+.tab-content.active { display: block; }
+
+/* ===== CONTENT CARDS ===== */
+.content-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(26,35,126,0.06);
+}
+.content-card h3 { color: var(--primary); font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.content-card p, .content-card li { font-size: 14px; line-height: 1.7; color: var(--text); }
+.content-card ul { padding-left: 20px; }
+.content-card ul li { margin-bottom: 6px; }
+
+/* Accounting Rules Table */
+.rules-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+.rules-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+}
+.rules-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+.rules-table tr:nth-child(even) td { background: #f5f7ff; }
+.rules-table tr:hover td { background: #eef0ff; }
+.debit-col { color: var(--success); font-weight: 700; }
+.credit-col { color: var(--danger); font-weight: 700; }
+
+/* Journal Entry */
+.journal-entry {
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+.je-header {
+  background: #f0f4ff;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--primary);
+  display: flex; justify-content: space-between;
+}
+.je-row { display: flex; justify-content: space-between; padding: 8px 12px; border-top: 1px solid var(--border); }
+.je-account { flex: 1; }
+.je-account.indent { padding-left: 20px; color: var(--muted); }
+.je-dr { color: var(--success); font-weight: 700; min-width: 80px; text-align: right; }
+.je-cr { color: var(--danger); font-weight: 700; min-width: 80px; text-align: right; }
+.je-narr { font-style: italic; color: var(--muted); font-size: 12px; padding: 6px 12px 8px; background: #fafbff; }
+
+/* T-Account / Ledger */
+.t-account {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.t-account-header {
+  grid-column: span 2;
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  font-weight: 700;
+}
+.t-dr-header, .t-cr-header {
+  padding: 6px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.t-dr-header { color: var(--success); background: #f0fff4; border-right: 1px solid var(--border); }
+.t-cr-header { color: var(--danger); background: #fff0f0; }
+.t-dr-items, .t-cr-items { padding: 8px 10px; border-right: 1px solid var(--border); min-height: 60px; }
+.t-cr-items { border-right: none; }
+.t-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dashed #eee; }
+.t-item:last-child { border-bottom: none; }
+.t-total { font-weight: 700; padding: 6px 10px; background: #f8f9fe; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+
+/* ===== SIMULATIONS ===== */
+#simulations { padding: 16px 16px 32px; }
+.sim-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.sim-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.sim-card h3 { font-size: 16px; color: var(--primary); margin-bottom: 4px; }
+.sim-card p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.sim-form { display: flex; flex-direction: column; gap: 10px; }
+.sim-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 100px; }
+.sim-group label { font-size: 12px; font-weight: 700; color: var(--muted); }
+.sim-input {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f9fe;
+  outline: none;
+  transition: border 0.2s;
+}
+.sim-input:focus { border-color: var(--primary-light); background: #fff; }
+.sim-select {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: #f8f9fe;
+  outline: none;
+}
+.btn-sim {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-sim:hover { background: var(--primary-light); }
+.sim-result {
+  background: #f0f4ff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  display: none;
+}
+.sim-result.show { display: block; }
+.eq-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.eq-box {
+  background: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 80px;
+}
+.eq-box span { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+.eq-sign { color: var(--primary-light); font-size: 20px; }
+.eq-balanced { text-align: center; margin-top: 8px; font-size: 13px; }
+.eq-balanced.ok { color: var(--success); }
+.eq-balanced.err { color: var(--danger); }
+
+/* ===== QUIZ ===== */
+#quiz-screen { padding: 16px 16px 32px; }
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.quiz-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+.quiz-score-badge { background: var(--primary); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.quiz-progress-bar { background: var(--border); border-radius: 4px; height: 6px; margin-bottom: 20px; }
+.quiz-progress-fill { background: linear-gradient(90deg, var(--primary), var(--accent2)); height: 100%; border-radius: 4px; transition: width 0.4s; }
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.q-number { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+.q-text { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 16px; line-height: 1.5; }
+.q-options { display: flex; flex-direction: column; gap: 10px; }
+.q-option {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  background: #fff;
+}
+.q-option:hover { border-color: var(--primary-light); background: #f0f4ff; }
+.q-option.selected { border-color: var(--primary); background: #e8ecff; color: var(--primary); font-weight: 600; }
+.q-option.correct { border-color: var(--success); background: #f0fff4; color: var(--success); }
+.q-option.wrong { border-color: var(--danger); background: #fff5f5; color: var(--danger); }
+.q-feedback {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-top: 10px;
+  display: none;
+}
+.q-feedback.show { display: block; }
+.q-feedback.correct { background: #f0fff4; color: var(--success); border: 1px solid #c3e6cb; }
+.q-feedback.wrong { background: #fff5f5; color: var(--danger); border: 1px solid #f5c6cb; }
+.btn-next { background: var(--primary); color: #fff; border: none; padding: 12px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 12px; transition: background 0.2s; display: none; }
+.btn-next.show { display: block; }
+.btn-next:hover { background: var(--primary-light); }
+
+/* Quiz Result */
+.quiz-result-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+}
+.result-score { font-size: 64px; font-weight: 800; line-height: 1; margin-bottom: 8px; color: var(--accent); }
+.result-label { font-size: 16px; opacity: 0.85; margin-bottom: 20px; }
+.result-grade { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+.btn-retry { background: var(--accent); color: #1a1a2e; border: none; padding: 12px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin: 6px; }
+.btn-home-q { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 12px 32px; border-radius: 10px; font-size: 15px; cursor: pointer; margin: 6px; }
+
+/* ===== FINANCIAL STATEMENT BUILDER ===== */
+#fsb-screen { padding: 16px 16px 32px; }
+.fsb-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.fsb-tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: #fff; font-size: 13px; cursor: pointer; color: var(--muted); transition: all 0.2s; }
+.fsb-tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.fsb-panel { display: none; }
+.fsb-panel.active { display: block; }
+.fs-table { width: 100%; font-size: 13px; margin-top: 10px; }
+.fs-table th { background: var(--primary); color: #fff; padding: 10px 12px; text-align: left; }
+.fs-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+.fs-table .total-row td { background: #f0f4ff; font-weight: 700; }
+.fs-table .grand-total-row td { background: var(--primary); color: #fff; font-weight: 700; }
+.fs-input { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+
+/* ===== PROGRESS TRACKER ===== */
+#progress-screen { padding: 16px 16px 32px; }
+.progress-overview {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.progress-stat { display: flex; justify-content: space-around; margin-top: 16px; }
+.p-stat-val { font-size: 28px; font-weight: 800; }
+.p-stat-lbl { font-size: 11px; opacity: 0.75; }
+.progress-chapter-item {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.p-ch-bar-wrap { flex: 1; background: var(--border); height: 6px; border-radius: 3px; }
+.p-ch-bar { background: linear-gradient(90deg, var(--primary), var(--accent2)); height: 100%; border-radius: 3px; }
+.p-ch-pct { font-size: 12px; font-weight: 700; color: var(--primary); min-width: 36px; text-align: right; }
+
+/* ===== CHIPS / TAGS ===== */
+.formula-box {
+  background: linear-gradient(135deg, #e8f4fd, #dce8ff);
+  border: 1px solid #b3c6f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--primary);
+  margin: 10px 0;
+  text-align: center;
+  font-weight: 700;
+}
+.highlight-box {
+  background: linear-gradient(135deg, #fff8e1, #fffde7);
+  border-left: 4px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 0 10px 10px 0;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.tip-box {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border-left: 4px solid var(--success);
+  padding: 12px 16px;
+  border-radius: 0 10px 10px 0;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 600px) {
+  .quick-grid { grid-template-columns: repeat(3, 1fr); }
+  .sim-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  #splash, .screen { max-width: 480px; margin: 0 auto; }
+  body { background: #d0d8f0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH SCREEN ===== -->
+<div id="splash" class="screen active">
+  <div class="splash-bg-shape"></div>
+  <div class="splash-bg-shape"></div>
+  <div class="splash-bg-shape"></div>
+  <div class="splash-content">
+    <!-- Accounting SVG Icon -->
+    <svg class="splash-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <rect x="20" y="25" width="60" height="6" rx="3" fill="#f9a825"/>
+      <rect x="20" y="38" width="35" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <rect x="20" y="47" width="28" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <rect x="20" y="56" width="40" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <line x1="60" y1="35" x2="60" y2="75" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <rect x="63" y="38" width="15" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <rect x="63" y="47" width="12" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <rect x="63" y="56" width="14" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+      <rect x="20" y="65" width="55" height="1.5" rx="1" fill="rgba(249,168,37,0.6)"/>
+      <rect x="20" y="70" width="55" height="4" rx="2" fill="#f9a825" opacity="0.9"/>
+    </svg>
+
+    <div class="splash-badge">✦ JKBOSE Class 11 ✦</div>
+    <h1 class="splash-title">Accountancy<br>Learning App</h1>
+    <p class="splash-subtitle">Complete Interactive Course • NEP 2020 Aligned</p>
+
+    <div class="splash-features">
+      <span class="splash-feature-tag">📚 11 Chapters</span>
+      <span class="splash-feature-tag">🧮 Simulations</span>
+      <span class="splash-feature-tag">📝 Quizzes</span>
+      <span class="splash-feature-tag">📊 Statements</span>
+      <span class="splash-feature-tag">📶 Offline</span>
+    </div>
+
+    <div class="author-card">
+      <img src="author.jpg" class="author-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="Mateen Yousuf">
+      <div class="author-avatar-placeholder" style="display:none;">MY</div>
+      <div class="author-info">
+        <div class="author-name">Mateen Yousuf</div>
+        <div class="author-designation">Teacher<br>School Education Department<br>Jammu & Kashmir</div>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="showScreen('home')">Start Learning →</button>
+  </div>
+</div>
+
+<!-- ===== HOME SCREEN ===== -->
+<div id="home" class="screen">
+  <div class="navbar">
+    <div class="navbar-brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" fill="white" opacity="0.2"/><rect x="6" y="7" width="12" height="2" rx="1" fill="white"/><rect x="6" y="11" width="8" height="2" rx="1" fill="white"/><rect x="6" y="15" width="10" height="2" rx="1" fill="white"/></svg>
+      Accountancy App
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="showScreen('progress-screen')">📊 Progress</button>
+    </div>
+  </div>
+
+  <div class="home-hero">
+    <div class="hero-title">Class 11 Accountancy</div>
+    <div class="hero-subtitle">JKBOSE • NEP 2020 Aligned</div>
+    <div class="progress-ring-wrap">
+      <svg width="80" height="80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="6"/><circle cx="40" cy="40" r="30" fill="none" stroke="#f9a825" stroke-width="6" stroke-dasharray="188" stroke-dashoffset="188" id="hero-ring" style="transition:stroke-dashoffset 1s;"/></svg>
+      <span class="progress-ring-text" id="hero-pct">0%</span>
+    </div>
+  </div>
+
+  <div class="section-label">Quick Access</div>
+  <div class="quick-grid">
+    <div class="quick-card" onclick="showScreen('chapters')">
+      <div class="quick-card-icon">📚</div>
+      <div class="quick-card-label">Chapters</div>
+      <div class="quick-card-desc">All 11 topics</div>
+    </div>
+    <div class="quick-card" onclick="showScreen('simulations')">
+      <div class="quick-card-icon">🧮</div>
+      <div class="quick-card-label">Lab</div>
+      <div class="quick-card-desc">Interactive tools</div>
+    </div>
+    <div class="quick-card" onclick="startQuiz(-1)">
+      <div class="quick-card-icon">📝</div>
+      <div class="quick-card-label">Quiz</div>
+      <div class="quick-card-desc">Test yourself</div>
+    </div>
+    <div class="quick-card" onclick="showScreen('fsb-screen')">
+      <div class="quick-card-icon">📊</div>
+      <div class="quick-card-label">Statements</div>
+      <div class="quick-card-desc">Build P&L, Balance Sheet</div>
+    </div>
+    <div class="quick-card" onclick="showScreen('progress-screen')">
+      <div class="quick-card-icon">🏆</div>
+      <div class="quick-card-label">Progress</div>
+      <div class="quick-card-desc">Your scores</div>
+    </div>
+    <div class="quick-card" onclick="showScreen('splash')">
+      <div class="quick-card-icon">ℹ️</div>
+      <div class="quick-card-label">About</div>
+      <div class="quick-card-desc">App info</div>
+    </div>
+  </div>
+
+  <div class="section-label">Chapters Overview</div>
+  <div id="home-chapter-list" class="chapter-list"></div>
+</div>
+
+<!-- ===== CHAPTERS SCREEN ===== -->
+<div id="chapters" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('home')">←</button>
+    <div class="navbar-brand">All Chapters</div>
+    <div></div>
+  </div>
+  <div class="section-label" style="padding-top:12px;">JKBOSE Class 11 Accountancy</div>
+  <div id="chapter-list-main" class="chapter-list"></div>
+</div>
+
+<!-- ===== CHAPTER DETAIL SCREEN ===== -->
+<div id="chapter-detail" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('chapters')">←</button>
+    <div class="navbar-brand" id="ch-nav-title">Chapter</div>
+    <button class="nav-btn" id="ch-quiz-btn">Quiz</button>
+  </div>
+  <div class="detail-hero">
+    <div class="detail-hero-num" id="ch-hero-num">Chapter 1</div>
+    <div class="detail-hero-title" id="ch-hero-title">Title</div>
+  </div>
+  <div class="detail-tabs" id="ch-tabs"></div>
+  <div id="ch-tab-contents"></div>
+</div>
+
+<!-- ===== SIMULATIONS SCREEN ===== -->
+<div id="simulations" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('home')">←</button>
+    <div class="navbar-brand">🧮 Accounting Lab</div>
+    <div></div>
+  </div>
+  <div class="section-label" style="padding-top:12px;">Interactive Simulations</div>
+  <div class="sim-grid" id="sim-grid"></div>
+</div>
+
+<!-- ===== QUIZ SCREEN ===== -->
+<div id="quiz-screen" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('chapters')">←</button>
+    <div class="navbar-brand">📝 Quiz Mode</div>
+    <div></div>
+  </div>
+  <div id="quiz-content" style="padding:16px 16px 32px;"></div>
+</div>
+
+<!-- ===== FINANCIAL STATEMENT BUILDER ===== -->
+<div id="fsb-screen" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('home')">←</button>
+    <div class="navbar-brand">📊 Statement Builder</div>
+    <div></div>
+  </div>
+  <div style="padding:16px 16px 32px;">
+    <div class="fsb-tabs">
+      <button class="fsb-tab-btn active" onclick="showFSBTab('trading',this)">Trading A/c</button>
+      <button class="fsb-tab-btn" onclick="showFSBTab('pl',this)">P&L A/c</button>
+      <button class="fsb-tab-btn" onclick="showFSBTab('bs',this)">Balance Sheet</button>
+    </div>
+    <div id="fsb-trading" class="fsb-panel active"></div>
+    <div id="fsb-pl" class="fsb-panel"></div>
+    <div id="fsb-bs" class="fsb-panel"></div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS SCREEN ===== -->
+<div id="progress-screen" class="screen">
+  <div class="navbar">
+    <button class="btn-back" onclick="showScreen('home')">←</button>
+    <div class="navbar-brand">🏆 My Progress</div>
+    <button class="nav-btn" onclick="resetProgress()">Reset</button>
+  </div>
+  <div style="padding:16px 16px 32px;" id="progress-content"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA: JKBOSE CLASS 11 ACCOUNTANCY CHAPTERS
+// ============================================================
+const CHAPTERS = [
+  {
+    id: 1,
+    title: "Introduction to Accounting",
+    icon: "📖",
+    topics: ["Meaning & Definition", "Objectives", "Advantages & Limitations", "Accounting Process", "Users of Accounting Information"],
+    concept: `<div class="content-card">
+      <h3>📖 What is Accounting?</h3>
+      <p>Accounting is the process of <strong>recording, classifying, summarising, analysing and interpreting</strong> financial transactions and communicating the results to users.</p>
+      <div class="highlight-box">💡 <strong>Definition (AICPA):</strong> "Accounting is the art of recording, classifying and summarising in a significant manner and in terms of money, transactions and events which are, in part at least, of a financial character, and interpreting the results thereof."</div>
+      <h3>🎯 Objectives of Accounting</h3>
+      <ul>
+        <li>Systematic recording of financial transactions</li>
+        <li>Determining profit or loss for a period</li>
+        <li>Ascertaining the financial position (Balance Sheet)</li>
+        <li>Providing information to stakeholders</li>
+        <li>Meeting legal requirements</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h3>🔄 The Accounting Process</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        ${['Identification of Transactions','Recording in Journal','Posting to Ledger','Trial Balance','Financial Statements','Analysis & Interpretation'].map((s,i)=>`<div style="display:flex;align-items:center;gap:10px;background:#f0f4ff;padding:10px 14px;border-radius:8px;"><div style="width:28px;height:28px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">${i+1}</div><span style="font-size:13px;font-weight:600;">${s}</span></div>`).join('<div style="text-align:center;color:var(--muted);font-size:18px;">↓</div>')}
+      </div>
+    </div>
+    <div class="content-card">
+      <h3>👥 Users of Accounting Information</h3>
+      <table class="rules-table">
+        <tr><th>Internal Users</th><th>External Users</th></tr>
+        <tr><td>Owners/Shareholders</td><td>Banks & Creditors</td></tr>
+        <tr><td>Managers</td><td>Government & Tax Authorities</td></tr>
+        <tr><td>Employees</td><td>Investors & Analysts</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>⚖️ Branches of Accounting</h3>
+      <table class="rules-table">
+        <tr><th>Branch</th><th>Focus</th></tr>
+        <tr><td>Financial Accounting</td><td>Recording transactions, preparing final accounts</td></tr>
+        <tr><td>Cost Accounting</td><td>Determining cost of production</td></tr>
+        <tr><td>Management Accounting</td><td>Decision-making information for managers</td></tr>
+      </table>
+    </div>
+    <div class="content-card">
+      <h3>✅ Advantages of Accounting</h3>
+      <ul>
+        <li>Provides complete & systematic record</li>
+        <li>Helps in comparison of results</li>
+        <li>Provides information for decision-making</li>
+        <li>Evidence in legal disputes</li>
+        <li>Facilitates preparation of tax returns</li>
+      </ul>
+      <h3 style="margin-top:14px;">❌ Limitations of Accounting</h3>
+      <ul>
+        <li>Records only monetary transactions</li>
+        <li>Ignores price level changes</li>
+        <li>Based on historical cost</li>
+        <li>Permits window dressing</li>
+      </ul>
+    </div>`
+  },
+  {
+    id: 2,
+    title: "Theory Base of Accounting",
+    icon: "🏛️",
+    topics: ["Accounting Concepts", "Accounting Conventions", "Accounting Standards", "GAAP"],
+    concept: `<div class="content-card">
+      <h3>🏛️ Accounting Concepts (Assumptions)</h3>
+      <table class="rules-table">
+        <tr><th>Concept</th><th>Meaning</th></tr>
+        <tr><td><strong>Business Entity</strong></td><td>Business is separate from owner</td></tr>
+        <tr><td><strong>Money Measurement</strong></td><td>Only monetary transactions recorded</td></tr>
+        <tr><td><strong>Going Concern</strong></td><td>Business will continue indefinitely</td></tr>
+        <tr><td><strong>Accounting Period</strong></td><td>Life divided into periods (usually 1 year)</td></tr>
+        <tr><td><strong>Cost Concept</strong></td><td>Assets recorded at cost price</td></tr>
+        <tr><td><strong>Dual Aspect</strong></td><td>Every transaction has two sides</td></tr>
+        <tr><td><strong>Revenue Recognition</strong></td><td>Revenue recorded when earned</td></tr>
+        <tr><td><strong>Matching Concept</strong></td><td>Expenses matched with revenue</td></tr>
+        <tr><td><strong>Full Disclosure</strong></td><td>All material info to be disclosed</td></tr>
+        <tr><td><strong>Objectivity</strong></td><td>Records based on verifiable evidence</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>📋 Accounting Conventions</h3>
+      <ul>
+        <li><strong>Conservatism:</strong> Anticipate no profits, provide for all losses</li>
+        <li><strong>Consistency:</strong> Same methods year after year</li>
+        <li><strong>Materiality:</strong> Disclose only significant information</li>
+        <li><strong>Full Disclosure:</strong> All relevant facts should be disclosed</li>
+      </ul>
+      <div class="tip-box">💡 <strong>Tip:</strong> Remember concepts using "BM-GAP-CRF-MO" mnemonic</div>
+    </div>
+    <div class="content-card">
+      <h3>📐 Accounting Standards</h3>
+      <p>Accounting Standards (AS) are written policy documents issued by <strong>ICAI</strong> that standardize accounting practices across India.</p>
+      <div class="formula-box">GAAP = Generally Accepted Accounting Principles</div>
+    </div>`
+  },
+  {
+    id: 3,
+    title: "Recording of Transactions – I",
+    icon: "✏️",
+    topics: ["Source Documents", "Accounting Equation", "Double Entry System", "Journal", "Rules of Debit & Credit"],
+    concept: `<div class="content-card">
+      <h3>⚖️ The Accounting Equation</h3>
+      <div class="formula-box">Assets = Liabilities + Capital (Owner's Equity)</div>
+      <p>Every business transaction affects two or more sides of this equation but keeps it balanced.</p>
+      <div class="highlight-box">🔑 Example: Started business with ₹1,00,000 cash<br>→ Cash (Asset) ↑ ₹1,00,000 | Capital ↑ ₹1,00,000</div>
+    </div>
+    <div class="content-card">
+      <h3>📋 Rules of Debit and Credit (Modern Approach)</h3>
+      <table class="rules-table">
+        <tr><th>Account Type</th><th>Debit</th><th>Credit</th></tr>
+        <tr><td>Asset Account</td><td class="debit-col">Increase ↑</td><td class="credit-col">Decrease ↓</td></tr>
+        <tr><td>Liability Account</td><td class="debit-col">Decrease ↓</td><td class="credit-col">Increase ↑</td></tr>
+        <tr><td>Capital Account</td><td class="debit-col">Decrease ↓</td><td class="credit-col">Increase ↑</td></tr>
+        <tr><td>Revenue/Income</td><td class="debit-col">Decrease ↓</td><td class="credit-col">Increase ↑</td></tr>
+        <tr><td>Expense Account</td><td class="debit-col">Increase ↑</td><td class="credit-col">Decrease ↓</td></tr>
+      </table>
+      <div class="tip-box">📌 Traditional Rules: Personal A/c → Debit the Receiver, Credit the Giver<br>Real A/c → Debit what comes in, Credit what goes out<br>Nominal A/c → Debit all expenses/losses, Credit all incomes/gains</div>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>📔 Journal Entry Format</h3>
+      <p>The journal is the book of <strong>original/prime entry</strong>. Format:</p>
+      <div class="journal-entry">
+        <div class="je-header"><span>Date</span><span>Particulars</span><span>Dr (₹)</span><span>Cr (₹)</span></div>
+        <div class="je-row"><span class="je-account">Cash A/c</span><span class="je-dr">Dr</span><span>1,00,000</span></div>
+        <div class="je-row"><span class="je-account indent">  To Capital A/c</span><span></span><span class="je-cr">1,00,000</span></div>
+        <div class="je-narr">(Being business started with cash)</div>
+      </div>
+    </div>
+    <div class="content-card">
+      <h3>📃 Source Documents</h3>
+      <ul>
+        <li>Cash Memo (Cash sales/purchases)</li>
+        <li>Invoice / Bill (Credit transactions)</li>
+        <li>Receipt (Payment received)</li>
+        <li>Cheque (Bank payments)</li>
+        <li>Debit Note / Credit Note</li>
+        <li>Pay-in Slip (Deposit in bank)</li>
+      </ul>
+    </div>`
+  },
+  {
+    id: 4,
+    title: "Recording of Transactions – II",
+    icon: "📒",
+    topics: ["Ledger", "Posting", "Balancing Accounts", "Subsidiary Books", "Cash Book"],
+    concept: `<div class="content-card">
+      <h3>📒 The Ledger</h3>
+      <p>A ledger is the <strong>principal book of accounts</strong>. It contains all accounts: personal, real and nominal. Each page is called a <em>Folio</em>.</p>
+      <div class="formula-box">Ledger Balance = Total Debit Side − Total Credit Side</div>
+    </div>
+    <div class="content-card">
+      <h3>T-Account Example: Cash Account</h3>
+      <div class="t-account">
+        <div class="t-account-header">Cash Account</div>
+        <div class="t-dr-header">Dr Side</div><div class="t-cr-header">Cr Side</div>
+        <div class="t-dr-items">
+          <div class="t-item"><span>Capital A/c</span><span>₹1,00,000</span></div>
+          <div class="t-item"><span>Sales A/c</span><span>₹20,000</span></div>
+        </div>
+        <div class="t-cr-items">
+          <div class="t-item"><span>Purchases A/c</span><span>₹40,000</span></div>
+          <div class="t-item"><span>Rent A/c</span><span>₹5,000</span></div>
+          <div class="t-item"><span>Balance c/d</span><span>₹75,000</span></div>
+        </div>
+        <div class="t-total"><span>Total</span><span>₹1,20,000</span></div>
+        <div class="t-total"><span>Total</span><span>₹1,20,000</span></div>
+      </div>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>📚 Subsidiary Books</h3>
+      <table class="rules-table">
+        <tr><th>Book</th><th>Records</th></tr>
+        <tr><td>Purchases Book</td><td>Credit purchases of goods</td></tr>
+        <tr><td>Sales Book</td><td>Credit sales of goods</td></tr>
+        <tr><td>Purchase Returns Book</td><td>Returns to suppliers</td></tr>
+        <tr><td>Sales Returns Book</td><td>Returns from customers</td></tr>
+        <tr><td>Bills Receivable Book</td><td>Bills received from debtors</td></tr>
+        <tr><td>Bills Payable Book</td><td>Bills accepted to creditors</td></tr>
+        <tr><td>Cash Book</td><td>All cash & bank transactions</td></tr>
+        <tr><td>Petty Cash Book</td><td>Small expenses</td></tr>
+      </table>
+    </div>
+    <div class="content-card">
+      <h3>💰 Types of Cash Book</h3>
+      <ul>
+        <li><strong>Simple Cash Book:</strong> Only cash column</li>
+        <li><strong>Double Column Cash Book:</strong> Cash + Discount</li>
+        <li><strong>Triple Column Cash Book:</strong> Cash + Bank + Discount</li>
+        <li><strong>Petty Cash Book:</strong> Imprest system for small expenses</li>
+      </ul>
+    </div>`
+  },
+  {
+    id: 5,
+    title: "Bank Reconciliation Statement",
+    icon: "🏦",
+    topics: ["Meaning & Need", "Causes of Difference", "Preparation of BRS", "Adjusted Cash Book"],
+    concept: `<div class="content-card">
+      <h3>🏦 Bank Reconciliation Statement (BRS)</h3>
+      <p>BRS is a statement prepared to reconcile the <strong>difference between the balance as per Cash Book (Bank column)</strong> and <strong>balance as per Pass Book (Bank Statement)</strong> on a particular date.</p>
+      <div class="highlight-box">📌 BRS is prepared by the business, not the bank.</div>
+    </div>
+    <div class="content-card">
+      <h3>⚡ Causes of Difference</h3>
+      <table class="rules-table">
+        <tr><th>Cause</th><th>Effect</th></tr>
+        <tr><td>Cheques issued but not presented</td><td>Cash Book shows less balance</td></tr>
+        <tr><td>Cheques deposited but not cleared</td><td>Cash Book shows more balance</td></tr>
+        <tr><td>Bank charges debited by bank</td><td>Pass Book shows less balance</td></tr>
+        <tr><td>Interest credited by bank</td><td>Pass Book shows more balance</td></tr>
+        <tr><td>Direct payments by bank</td><td>Pass Book shows less balance</td></tr>
+        <tr><td>Direct deposits by customers</td><td>Pass Book shows more balance</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>📝 BRS Preparation Steps</h3>
+      <ol style="padding-left:20px;font-size:14px;line-height:2;">
+        <li>Start with balance as per Cash Book</li>
+        <li>Add: Cheques issued but not presented</li>
+        <li>Add: Bank charges not entered in CB</li>
+        <li>Less: Cheques deposited but not cleared</li>
+        <li>Less: Interest credited by bank not entered</li>
+        <li>Result = Balance as per Pass Book</li>
+      </ol>
+      <div class="formula-box">Balance as per Pass Book = Balance as per Cash Book ± Adjustments</div>
+    </div>`
+  },
+  {
+    id: 6,
+    title: "Trial Balance & Rectification of Errors",
+    icon: "⚖️",
+    topics: ["Trial Balance", "Objectives", "Methods", "Types of Errors", "Rectification", "Suspense Account"],
+    concept: `<div class="content-card">
+      <h3>⚖️ Trial Balance</h3>
+      <p>A trial balance is a <strong>statement listing all ledger accounts</strong> with their debit or credit balances to verify the arithmetical accuracy of books.</p>
+      <div class="formula-box">Total Debit Balances = Total Credit Balances</div>
+      <div class="tip-box">✅ A balanced Trial Balance proves arithmetical accuracy but does NOT guarantee absence of all errors.</div>
+    </div>
+    <div class="content-card">
+      <h3>🔍 Types of Errors</h3>
+      <table class="rules-table">
+        <tr><th>Type</th><th>Example</th><th>Detected by TB?</th></tr>
+        <tr><td>Error of Omission</td><td>Transaction not recorded</td><td>No</td></tr>
+        <tr><td>Error of Commission</td><td>Wrong amount posted</td><td>No</td></tr>
+        <tr><td>Error of Principle</td><td>Capital/Revenue confusion</td><td>No</td></tr>
+        <tr><td>Compensating Errors</td><td>Two errors cancel out</td><td>No</td></tr>
+        <tr><td>Wrong Totalling</td><td>Incorrect addition</td><td>Yes</td></tr>
+        <tr><td>Posting to wrong side</td><td>Dr entry in Cr column</td><td>Yes</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>🔧 Suspense Account</h3>
+      <p>When trial balance does not agree, the difference is placed in a <strong>Suspense Account</strong> temporarily until errors are located and rectified.</p>
+      <div class="journal-entry">
+        <div class="je-header"><span>If Dr > Cr:</span></div>
+        <div class="je-row"><span class="je-account">Suspense A/c</span><span class="je-dr">Dr</span><span></span></div>
+        <div class="je-row"><span class="je-account indent">To Difference in Suspense</span><span></span><span class="je-cr"></span></div>
+      </div>
+    </div>
+    <div class="content-card">
+      <h3>📋 Methods of Preparing Trial Balance</h3>
+      <ul>
+        <li><strong>Balance Method:</strong> Only balances (most common)</li>
+        <li><strong>Total Method:</strong> Gross totals of Dr & Cr</li>
+        <li><strong>Total-cum-Balance Method:</strong> Both totals & balances</li>
+      </ul>
+    </div>`
+  },
+  {
+    id: 7,
+    title: "Depreciation, Provisions & Reserves",
+    icon: "📉",
+    topics: ["Depreciation", "Causes", "Methods of Depreciation", "Provisions", "Reserves"],
+    concept: `<div class="content-card">
+      <h3>📉 Depreciation</h3>
+      <p>Depreciation is the <strong>permanent decrease in the value of fixed assets</strong> due to use, wear and tear, passage of time, or obsolescence.</p>
+      <div class="highlight-box">🎯 Purpose: Match expense with revenue (Matching Concept) and show true value of assets.</div>
+    </div>
+    <div class="content-card">
+      <h3>🔢 Methods of Depreciation</h3>
+      <div class="formula-box">SLM: Annual Depreciation = (Cost − Residual Value) ÷ Useful Life</div>
+      <div class="formula-box">WDV: Depreciation = Book Value × Rate%</div>
+      <table class="rules-table">
+        <tr><th></th><th>SLM</th><th>WDV</th></tr>
+        <tr><td>Amount</td><td>Fixed each year</td><td>Decreases each year</td></tr>
+        <tr><td>Book Value</td><td>Reduces uniformly</td><td>Never becomes zero</td></tr>
+        <tr><td>Suitable for</td><td>Buildings, Furniture</td><td>Machinery, Plant</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>📦 Provisions vs Reserves</h3>
+      <table class="rules-table">
+        <tr><th>Provisions</th><th>Reserves</th></tr>
+        <tr><td>Charge against profit</td><td>Appropriation of profit</td></tr>
+        <tr><td>Created for specific liability</td><td>Created to strengthen financial position</td></tr>
+        <tr><td>Cannot be distributed as dividend</td><td>General reserve can be distributed</td></tr>
+        <tr><td>E.g., Provision for Bad Debts</td><td>E.g., General Reserve, Sinking Fund</td></tr>
+      </table>
+    </div>
+    <div class="content-card">
+      <h3>🧮 Depreciation Journal Entries</h3>
+      <div class="journal-entry">
+        <div class="je-header"><span>On charging depreciation:</span></div>
+        <div class="je-row"><span class="je-account">Depreciation A/c</span><span class="je-dr">Dr</span><span>₹XXXX</span></div>
+        <div class="je-row"><span class="je-account indent">To Asset A/c</span><span></span><span class="je-cr">₹XXXX</span></div>
+        <div class="je-narr">(Being depreciation charged on asset)</div>
+      </div>
+    </div>`
+  },
+  {
+    id: 8,
+    title: "Bills of Exchange",
+    icon: "📜",
+    topics: ["Definition", "Parties", "Types", "Noting & Protesting", "Accommodation Bills", "Discounting"],
+    concept: `<div class="content-card">
+      <h3>📜 Bill of Exchange</h3>
+      <p>A bill of exchange is an <strong>unconditional order in writing</strong> addressed by one person (Drawer) to another (Drawee) requiring him to pay a certain sum of money at a fixed or determinable future date.</p>
+      <div class="highlight-box">
+        <strong>Parties:</strong><br>
+        🖊️ <strong>Drawer:</strong> Seller / Creditor (who draws the bill)<br>
+        ✍️ <strong>Drawee/Acceptor:</strong> Buyer / Debtor (who accepts)<br>
+        💰 <strong>Payee:</strong> Person to whom payment is made
+      </div>
+    </div>
+    <div class="content-card">
+      <h3>📋 Features of Bill of Exchange</h3>
+      <ul>
+        <li>Must be in writing</li>
+        <li>Unconditional order to pay</li>
+        <li>Fixed/determinable future date</li>
+        <li>Specific amount in money</li>
+        <li>Signed by the drawer</li>
+        <li>Must be accepted by drawee</li>
+      </ul>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>🔄 Journal Entries for Bills</h3>
+      <div class="journal-entry">
+        <div class="je-header"><span>Drawer's Books (On receiving acceptance):</span></div>
+        <div class="je-row"><span class="je-account">Bills Receivable A/c</span><span class="je-dr">Dr</span><span>₹X</span></div>
+        <div class="je-row"><span class="je-account indent">To Debtor's A/c</span><span></span><span class="je-cr">₹X</span></div>
+      </div>
+      <div class="journal-entry">
+        <div class="je-header"><span>Drawee's Books (On accepting the bill):</span></div>
+        <div class="je-row"><span class="je-account">Creditor's A/c</span><span class="je-dr">Dr</span><span>₹X</span></div>
+        <div class="je-row"><span class="je-account indent">To Bills Payable A/c</span><span></span><span class="je-cr">₹X</span></div>
+      </div>
+    </div>
+    <div class="content-card">
+      <h3>💱 Discounting a Bill</h3>
+      <p>The drawer endorses the bill with bank before maturity to get immediate cash (at a discount).</p>
+      <div class="formula-box">Discounting Charges = Amount × Rate × Days/365</div>
+    </div>`
+  },
+  {
+    id: 9,
+    title: "Financial Statements – I",
+    icon: "📊",
+    topics: ["Meaning & Types", "Trading Account", "Profit & Loss Account", "Adjustments"],
+    concept: `<div class="content-card">
+      <h3>📊 Financial Statements</h3>
+      <p>Financial statements are formal records of financial activities of a business. For sole proprietors/partnerships, they include:</p>
+      <ul>
+        <li>📈 <strong>Trading Account:</strong> Gross Profit/Loss</li>
+        <li>📉 <strong>Profit & Loss Account:</strong> Net Profit/Loss</li>
+        <li>⚖️ <strong>Balance Sheet:</strong> Financial Position</li>
+      </ul>
+      <div class="formula-box">Gross Profit = Net Sales − Cost of Goods Sold</div>
+      <div class="formula-box">Net Profit = Gross Profit + Other Income − Indirect Expenses</div>
+    </div>
+    <div class="content-card">
+      <h3>📈 Trading Account Structure</h3>
+      <table class="rules-table">
+        <tr><th>Dr Side</th><th>Cr Side</th></tr>
+        <tr><td>Opening Stock</td><td>Sales (Net)</td></tr>
+        <tr><td>Purchases (Net)</td><td>Closing Stock</td></tr>
+        <tr><td>Direct Expenses</td><td><strong>Gross Profit c/d</strong></td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>⚙️ Common Adjustments</h3>
+      <table class="rules-table">
+        <tr><th>Adjustment</th><th>Trading A/c</th><th>Balance Sheet</th></tr>
+        <tr><td>Closing Stock</td><td>Credit</td><td>Current Asset</td></tr>
+        <tr><td>Outstanding Exp.</td><td>Add to expense</td><td>Current Liability</td></tr>
+        <tr><td>Prepaid Expense</td><td>Deduct from expense</td><td>Current Asset</td></tr>
+        <tr><td>Accrued Income</td><td>Add to income</td><td>Current Asset</td></tr>
+        <tr><td>Income Received in Advance</td><td>Deduct from income</td><td>Current Liability</td></tr>
+        <tr><td>Depreciation</td><td>P&L (indirect exp)</td><td>Deduct from asset</td></tr>
+        <tr><td>Bad Debts</td><td>P&L (debit)</td><td>Deduct from debtors</td></tr>
+      </table>
+    </div>`
+  },
+  {
+    id: 10,
+    title: "Financial Statements – II",
+    icon: "📋",
+    topics: ["Balance Sheet", "Marshalling of Assets & Liabilities", "Grouping", "Significance"],
+    concept: `<div class="content-card">
+      <h3>📋 Balance Sheet</h3>
+      <p>A Balance Sheet is a <strong>statement of assets, liabilities and capital</strong> of a business on a specific date. It shows the financial position of the business.</p>
+      <div class="highlight-box">⚖️ <strong>Fundamental Equation:</strong> Assets = Liabilities + Capital</div>
+    </div>
+    <div class="content-card">
+      <h3>📐 Marshalling of Balance Sheet</h3>
+      <table class="rules-table">
+        <tr><th>Order of Liquidity</th><th>Order of Permanence</th></tr>
+        <tr><td>Most liquid assets first</td><td>Permanent assets first</td></tr>
+        <tr><td>Cash → Bank → Debtors...</td><td>Fixed Assets → Long-term → Current</td></tr>
+        <tr><td>Used by sole traders</td><td>Used by companies</td></tr>
+      </table>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>🗂️ Balance Sheet Format (Liquidity Order)</h3>
+      <table class="rules-table">
+        <tr><th>Liabilities</th><th>₹</th><th>Assets</th><th>₹</th></tr>
+        <tr><td>Capital</td><td></td><td>Fixed Assets</td><td></td></tr>
+        <tr><td>Add: Net Profit</td><td></td><td>Investments</td><td></td></tr>
+        <tr><td>Less: Drawings</td><td></td><td>Current Assets:</td><td></td></tr>
+        <tr><td>Long-term Liabilities</td><td></td><td>Stock</td><td></td></tr>
+        <tr><td>Current Liabilities</td><td></td><td>Debtors</td><td></td></tr>
+        <tr><td></td><td></td><td>Cash/Bank</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>XX</strong></td><td><strong>Total</strong></td><td><strong>XX</strong></td></tr>
+      </table>
+    </div>`
+  },
+  {
+    id: 11,
+    title: "Accounts from Incomplete Records",
+    icon: "🔍",
+    topics: ["Meaning", "Statement of Affairs", "Ascertaining Profit/Loss", "Conversion Method"],
+    concept: `<div class="content-card">
+      <h3>🔍 Incomplete Records (Single Entry System)</h3>
+      <p>Incomplete records refer to an <strong>unsystematic method of recording transactions</strong> where only one aspect of each transaction is recorded. Mostly used by small traders.</p>
+      <div class="highlight-box">⚠️ Not a scientific method. Cannot prepare proper Trial Balance. Based on guesswork for some items.</div>
+    </div>
+    <div class="content-card">
+      <h3>📝 Statement of Affairs</h3>
+      <p>Since a proper Balance Sheet cannot be prepared, a <strong>Statement of Affairs</strong> is prepared to ascertain capital.</p>
+      <div class="formula-box">Capital = Total Assets − Total Liabilities</div>
+      <div class="formula-box">Profit = Closing Capital − Opening Capital + Drawings − Additional Capital</div>
+    </div>`,
+    rules: `<div class="content-card">
+      <h3>🧮 Steps to Find Profit</h3>
+      <ol style="padding-left:20px;font-size:14px;line-height:2.2;">
+        <li>Prepare Opening Statement of Affairs → Find Opening Capital</li>
+        <li>Prepare Closing Statement of Affairs → Find Closing Capital</li>
+        <li>Calculate: Profit = Closing Capital − Opening Capital + Drawings − Additional Capital</li>
+      </ol>
+    </div>
+    <div class="content-card">
+      <h3>🔢 Example Calculation</h3>
+      <table class="rules-table">
+        <tr><th>Item</th><th>₹</th></tr>
+        <tr><td>Closing Capital</td><td>2,50,000</td></tr>
+        <tr><td>Less: Opening Capital</td><td>(1,80,000)</td></tr>
+        <tr><td>Add: Drawings</td><td>30,000</td></tr>
+        <tr><td>Less: Fresh Capital</td><td>(0)</td></tr>
+        <tr><td><strong>Net Profit</strong></td><td><strong>₹1,00,000</strong></td></tr>
+      </table>
+    </div>`
+  }
+];
+
+// ============================================================
+// QUIZ QUESTIONS DATABASE
+// ============================================================
+const ALL_QUESTIONS = [
+  // Chapter 1
+  { ch: 1, q: "Who defined accounting as 'the art of recording, classifying and summarising financial transactions'?", opts: ["ICAI", "AICPA", "NCERT", "SEBI"], ans: 1, exp: "The AICPA (American Institute of Certified Public Accountants) gave this definition." },
+  { ch: 1, q: "Which of the following is an internal user of accounting information?", opts: ["Bank", "Creditor", "Manager", "Government"], ans: 2, exp: "Managers are internal users who use accounting info for decision-making." },
+  { ch: 1, q: "What is the last step in the accounting process?", opts: ["Posting", "Trial Balance", "Analysis & Interpretation", "Journal Entry"], ans: 2, exp: "Analysis and Interpretation is the final step in the accounting cycle." },
+  { ch: 1, q: "Recording in the Journal is also known as:", opts: ["Posting", "Journalising", "Balancing", "Casting"], ans: 1, exp: "Writing transactions in the Journal is called Journalising." },
+  // Chapter 2
+  { ch: 2, q: "Which accounting concept assumes a business will continue to operate indefinitely?", opts: ["Cost Concept", "Going Concern", "Money Measurement", "Matching Concept"], ans: 1, exp: "Going Concern concept assumes business will continue for the foreseeable future." },
+  { ch: 2, q: "Recording only those transactions that can be expressed in money is based on which concept?", opts: ["Business Entity", "Money Measurement", "Objectivity", "Periodicity"], ans: 1, exp: "Money Measurement concept states only monetary transactions are recorded." },
+  { ch: 2, q: "'Anticipate no profit, provide for all losses' is related to which convention?", opts: ["Consistency", "Materiality", "Conservatism", "Full Disclosure"], ans: 2, exp: "This is the Conservatism / Prudence convention." },
+  // Chapter 3
+  { ch: 3, q: "The accounting equation is:", opts: ["Assets = Capital + Liabilities", "Assets = Capital - Liabilities", "Liabilities = Assets + Capital", "Capital = Assets × Liabilities"], ans: 0, exp: "Assets = Capital + Liabilities is the basic accounting equation." },
+  { ch: 3, q: "Which account type is debited when an expense increases?", opts: ["Liability Account", "Capital Account", "Expense Account", "Revenue Account"], ans: 2, exp: "Under modern approach, expense accounts are debited when they increase." },
+  { ch: 3, q: "A journal is also called the book of:", opts: ["Final Entry", "Prime Entry", "Secondary Entry", "Double Entry"], ans: 1, exp: "Journal is the book of original (prime) entry." },
+  { ch: 3, q: "Debit the receiver, Credit the giver applies to which account?", opts: ["Real Account", "Nominal Account", "Personal Account", "Capital Account"], ans: 2, exp: "This is the traditional rule for Personal Accounts." },
+  // Chapter 4
+  { ch: 4, q: "The ledger is the book of:", opts: ["Original Entry", "Secondary Entry", "Principal Entry", "Subsidiary Entry"], ans: 2, exp: "The ledger is the book of principal/final entry." },
+  { ch: 4, q: "Which cash book has columns for cash, bank, and discount?", opts: ["Simple Cash Book", "Double Column", "Triple Column", "Petty Cash Book"], ans: 2, exp: "Triple/Three-column cash book has cash, bank, and discount columns." },
+  { ch: 4, q: "Petty Cash Book is maintained on which system?", opts: ["Double Entry System", "Imprest System", "Single Entry", "Cash System"], ans: 1, exp: "Petty Cash Book is maintained on the Imprest System." },
+  // Chapter 5
+  { ch: 5, q: "A Bank Reconciliation Statement is prepared by:", opts: ["The Bank", "The Business", "The Auditor", "The Government"], ans: 1, exp: "BRS is prepared by the business/accountant, not the bank." },
+  { ch: 5, q: "If cheques deposited are not yet cleared, Cash Book balance will be:", opts: ["More than Pass Book", "Less than Pass Book", "Equal to Pass Book", "Cannot determine"], ans: 0, exp: "Uncleared cheques are in CB but not in Pass Book, so CB shows higher balance." },
+  // Chapter 6
+  { ch: 6, q: "A trial balance proves:", opts: ["Complete accuracy", "Arithmetical accuracy", "No errors", "All transactions recorded"], ans: 1, exp: "Trial balance proves only arithmetical accuracy of books." },
+  { ch: 6, q: "Error of principle occurs when:", opts: ["A transaction is omitted", "Wrong amount is posted", "Capital/Revenue items are confused", "Two errors cancel each other"], ans: 2, exp: "Error of principle = treating capital expenditure as revenue or vice versa." },
+  { ch: 6, q: "A Suspense Account is used to:", opts: ["Record bad debts", "Temporarily accommodate difference in TB", "Record depreciation", "Record capital"], ans: 1, exp: "Suspense Account temporarily holds the difference until errors are found." },
+  // Chapter 7
+  { ch: 7, q: "Under Straight Line Method, depreciation amount is:", opts: ["Increasing", "Decreasing", "Fixed/Constant", "Zero"], ans: 2, exp: "Under SLM, same amount of depreciation is charged every year." },
+  { ch: 7, q: "A Provision is a:", opts: ["Appropriation of profit", "Charge against profit", "Part of reserves", "Capital expenditure"], ans: 1, exp: "Provision is a charge against profit (shown before arriving at net profit)." },
+  { ch: 7, q: "Which method of depreciation is suitable for plant and machinery?", opts: ["SLM", "WDV", "Both equally", "Neither"], ans: 1, exp: "WDV (Written Down Value) method is generally preferred for machinery." },
+  // Chapter 8
+  { ch: 8, q: "In a bill of exchange, who draws the bill?", opts: ["Drawee", "Payee", "Drawer", "Endorsee"], ans: 2, exp: "The Drawer (creditor/seller) draws/writes the bill." },
+  { ch: 8, q: "When a bill is discounted with the bank, the bank charges are called:", opts: ["Discount", "Interest", "Commission", "Service Charge"], ans: 0, exp: "Charges deducted by bank for paying before maturity are called Discounting Charges." },
+  // Chapter 9
+  { ch: 9, q: "Gross Profit is calculated in which account?", opts: ["Balance Sheet", "P&L Account", "Trading Account", "Capital Account"], ans: 2, exp: "Gross Profit is the result of the Trading Account." },
+  { ch: 9, q: "Closing stock in financial statements appears:", opts: ["Only in Trading A/c (Credit)", "Only in Balance Sheet", "In Trading A/c (Cr) and Balance Sheet (Asset)", "In P&L Account"], ans: 2, exp: "Closing stock appears on credit side of Trading A/c and as current asset in Balance Sheet." },
+  { ch: 9, q: "Outstanding expenses in Balance Sheet are shown as:", opts: ["Current Asset", "Fixed Asset", "Current Liability", "Long-term Liability"], ans: 2, exp: "Outstanding (accrued) expenses are current liabilities." },
+  // Chapter 10
+  { ch: 10, q: "Balance Sheet is prepared to show:", opts: ["Profit or Loss", "Cash Position", "Financial Position", "Stock Position"], ans: 2, exp: "Balance Sheet shows the financial position of a business on a specific date." },
+  { ch: 10, q: "In order of liquidity, assets are arranged with:", opts: ["Fixed assets first", "Most liquid assets first", "Least liquid assets first", "Alphabetical order"], ans: 1, exp: "Order of Liquidity starts with most liquid (cash) first." },
+  // Chapter 11
+  { ch: 11, q: "Profit under single entry system is calculated as:", opts: ["Sales − Purchases", "Closing Capital − Opening Capital + Drawings − Additional Capital", "Revenue − Expenses", "Assets − Liabilities"], ans: 1, exp: "Profit = Closing Capital − Opening Capital + Drawings − Additional Capital introduced." },
+  { ch: 11, q: "A Statement of Affairs is similar to:", opts: ["Profit & Loss Account", "Trading Account", "Balance Sheet", "Cash Book"], ans: 2, exp: "Statement of Affairs resembles a Balance Sheet and helps find capital." },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentChapter = 0;
+let quizState = { questions: [], current: 0, score: 0, answered: false, chapterId: -1 };
+let progress = JSON.parse(localStorage.getItem('acct_progress') || '{}');
+let quizScores = JSON.parse(localStorage.getItem('acct_quiz_scores') || '{}');
+
+// ============================================================
+// SCREEN NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'home') renderHome();
+  if (id === 'chapters') renderChapterList();
+  if (id === 'simulations') renderSimulations();
+  if (id === 'progress-screen') renderProgress();
+  if (id === 'fsb-screen') renderFSB();
+}
+
+// ============================================================
+// HOME RENDER
+// ============================================================
+function renderHome() {
+  // Progress ring
+  const total = CHAPTERS.length;
+  const done = Object.values(progress).filter(v => v >= 1).length;
+  const pct = Math.round((done / total) * 100);
+  const circ = 2 * Math.PI * 30;
+  const offset = circ - (pct / 100) * circ;
+  const ring = document.getElementById('hero-ring');
+  const pctEl = document.getElementById('hero-pct');
+  if (ring) { setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100); }
+  if (pctEl) pctEl.textContent = pct + '%';
+
+  // Chapter mini list on home
+  const el = document.getElementById('home-chapter-list');
+  if (!el) return;
+  el.innerHTML = CHAPTERS.slice(0, 4).map(ch => `
+    <div class="chapter-card" onclick="openChapter(${ch.id-1})">
+      <div class="chapter-num">${ch.id}</div>
+      <div class="chapter-info">
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-meta">${ch.topics.length} topics</div>
+      </div>
+      <div class="chapter-status ${getChapterStatus(ch.id)}"></div>
+      <div class="chapter-arrow">›</div>
+    </div>
+  `).join('') + `<div style="padding:8px 0 4px;text-align:center;"><button onclick="showScreen('chapters')" style="background:none;border:1px solid var(--border);color:var(--primary);padding:10px 24px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:700;">View All Chapters →</button></div>`;
+}
+
+function getChapterStatus(id) {
+  const p = progress[id] || 0;
+  if (p >= 1) return 'done';
+  if (p > 0) return 'partial';
+  return '';
+}
+
+// ============================================================
+// CHAPTERS LIST
+// ============================================================
+function renderChapterList() {
+  const el = document.getElementById('chapter-list-main');
+  if (!el) return;
+  el.innerHTML = CHAPTERS.map(ch => `
+    <div class="chapter-card" onclick="openChapter(${ch.id-1})">
+      <div class="chapter-num">${ch.id}</div>
+      <div class="chapter-info">
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-meta">${ch.icon} ${ch.topics.slice(0,2).join(' • ')}</div>
+      </div>
+      <div class="chapter-status ${getChapterStatus(ch.id)}"></div>
+      <div class="chapter-arrow">›</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// CHAPTER DETAIL
+// ============================================================
+function openChapter(idx) {
+  currentChapter = idx;
+  const ch = CHAPTERS[idx];
+
+  document.getElementById('ch-nav-title').textContent = `Ch ${ch.id}`;
+  document.getElementById('ch-hero-num').textContent = `Chapter ${ch.id}`;
+  document.getElementById('ch-hero-title').textContent = ch.title;
+  document.getElementById('ch-quiz-btn').onclick = () => startQuiz(ch.id);
+
+  // Mark partial progress
+  if (!progress[ch.id]) { progress[ch.id] = 0.3; saveProgress(); }
+
+  const tabLabels = ['📖 Concepts', '📏 Rules & Format', '📝 Examples', '❓ Quiz'];
+  const tabsEl = document.getElementById('ch-tabs');
+  const contentsEl = document.getElementById('ch-tab-contents');
+
+  tabsEl.innerHTML = tabLabels.map((lbl, i) => `
+    <button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="switchTab(${i}, this)">${lbl}</button>
+  `).join('');
+
+  contentsEl.innerHTML = `
+    <div class="tab-content active" id="tab-0">${ch.concept}</div>
+    <div class="tab-content" id="tab-1">${ch.rules}</div>
+    <div class="tab-content" id="tab-2">${buildExamples(ch)}</div>
+    <div class="tab-content" id="tab-3">${buildMiniQuiz(ch.id)}</div>
+  `;
+
+  showScreen('chapter-detail');
+
+  // Mark as fully read after 2s
+  setTimeout(() => {
+    if (progress[ch.id] < 1) { progress[ch.id] = 0.8; saveProgress(); }
+  }, 2000);
+}
+
+function switchTab(idx, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + idx).classList.add('active');
+}
+
+function buildExamples(ch) {
+  const examples = {
+    1: `<div class="content-card"><h3>📝 Identify Accounting Transactions</h3>
+      <p>Which of the following is an accounting transaction?</p>
+      <ul>
+        <li>✅ Purchased goods for ₹10,000 cash <em>(Recordable - monetary)</em></li>
+        <li>✅ Sold goods for ₹15,000 on credit <em>(Recordable)</em></li>
+        <li>❌ A customer expressed interest in buying <em>(Not recordable - no financial effect yet)</em></li>
+        <li>✅ Paid rent ₹5,000 <em>(Recordable)</em></li>
+      </ul></div>`,
+    2: `<div class="content-card"><h3>🔍 Apply Accounting Concepts</h3>
+      <table class="rules-table">
+        <tr><th>Situation</th><th>Relevant Concept</th></tr>
+        <tr><td>Owner's personal expenses not recorded in business books</td><td>Business Entity</td></tr>
+        <tr><td>Business records machinery at ₹5,00,000 (purchase price), though market value is ₹7,00,000</td><td>Cost Concept</td></tr>
+        <tr><td>Business records sales only when goods are delivered</td><td>Revenue Recognition</td></tr>
+        <tr><td>Company uses same depreciation method every year</td><td>Consistency</td></tr>
+      </table></div>`,
+    3: `<div class="content-card"><h3>📔 Journal Entry Examples</h3>
+      <div class="journal-entry">
+        <div class="je-header"><span>Transaction: Started business with ₹50,000 cash</span></div>
+        <div class="je-row"><span class="je-account">Cash A/c</span><span class="je-dr">Dr</span><span>50,000</span></div>
+        <div class="je-row"><span class="je-account indent">To Capital A/c</span><span></span><span class="je-cr">50,000</span></div>
+        <div class="je-narr">(Being business commenced with cash)</div>
+      </div>
+      <div class="journal-entry">
+        <div class="je-header"><span>Transaction: Purchased goods for ₹20,000 on credit from Ram</span></div>
+        <div class="je-row"><span class="je-account">Purchases A/c</span><span class="je-dr">Dr</span><span>20,000</span></div>
+        <div class="je-row"><span class="je-account indent">To Ram's A/c</span><span></span><span class="je-cr">20,000</span></div>
+        <div class="je-narr">(Being goods purchased on credit from Ram)</div>
+      </div>
+      <div class="journal-entry">
+        <div class="je-header"><span>Transaction: Paid salaries ₹8,000</span></div>
+        <div class="je-row"><span class="je-account">Salaries A/c</span><span class="je-dr">Dr</span><span>8,000</span></div>
+        <div class="je-row"><span class="je-account indent">To Cash A/c</span><span></span><span class="je-cr">8,000</span></div>
+        <div class="je-narr">(Being salaries paid for the month)</div>
+      </div></div>`,
+    7: `<div class="content-card"><h3>🔢 Depreciation Calculation</h3>
+      <div class="highlight-box">A machine is purchased for ₹1,00,000. Residual value = ₹10,000. Life = 9 years.<br>
+      <strong>SLM:</strong> Depreciation = (1,00,000 − 10,000) ÷ 9 = <strong>₹10,000 per year</strong></div>
+      <div class="highlight-box">Same machine, WDV rate = 20%:<br>
+      Year 1: 1,00,000 × 20% = <strong>₹20,000</strong><br>
+      Year 2: 80,000 × 20% = <strong>₹16,000</strong><br>
+      Year 3: 64,000 × 20% = <strong>₹12,800</strong></div></div>`,
+    9: `<div class="content-card"><h3>📊 Trading & P&L Example</h3>
+      <table class="rules-table">
+        <tr><th colspan="2">Trading Account (Dr)</th><th colspan="2">Trading Account (Cr)</th></tr>
+        <tr><td>Opening Stock</td><td>30,000</td><td>Sales</td><td>2,00,000</td></tr>
+        <tr><td>Purchases</td><td>1,20,000</td><td>Closing Stock</td><td>20,000</td></tr>
+        <tr><td>Carriage Inward</td><td>5,000</td><td></td><td></td></tr>
+        <tr><td><strong>Gross Profit c/d</strong></td><td><strong>65,000</strong></td><td></td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>2,20,000</strong></td><td><strong>Total</strong></td><td><strong>2,20,000</strong></td></tr>
+      </table></div>`
+  };
+  return examples[ch.id] || `<div class="content-card"><h3>📝 Practice Problems</h3><p>Work through the concepts from the Concepts tab and apply them to the following:</p><ul>${ch.topics.map(t=>`<li>Practice questions on <strong>${t}</strong></li>`).join('')}</ul><div class="tip-box">💡 Use the Quiz tab to test your understanding of this chapter!</div></div>`;
+}
+
+function buildMiniQuiz(chId) {
+  return `<div class="content-card"><h3>📝 Chapter Quiz</h3><p>Ready to test your knowledge on this chapter?</p><br>
+    <button onclick="startQuiz(${chId})" style="background:var(--primary);color:#fff;border:none;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%;">Start Chapter Quiz →</button></div>`;
+}
+
+// ============================================================
+// SIMULATIONS
+// ============================================================
+function renderSimulations() {
+  const el = document.getElementById('sim-grid');
+  if (!el) return;
+  el.innerHTML = `
+    <!-- Accounting Equation Simulator -->
+    <div class="sim-card">
+      <h3>⚖️ Accounting Equation Simulator</h3>
+      <p>Enter values to verify: Assets = Liabilities + Capital</p>
+      <div class="sim-form">
+        <div class="sim-row">
+          <div class="sim-group"><label>Assets (₹)</label><input class="sim-input" id="eq-assets" type="number" placeholder="e.g. 150000" oninput="calcEquation()"></div>
+          <div class="sim-group"><label>Liabilities (₹)</label><input class="sim-input" id="eq-liab" type="number" placeholder="e.g. 50000" oninput="calcEquation()"></div>
+          <div class="sim-group"><label>Capital (₹)</label><input class="sim-input" id="eq-cap" type="number" placeholder="e.g. 100000" oninput="calcEquation()"></div>
+        </div>
+        <div class="sim-result show" id="eq-result">
+          <div class="eq-display">
+            <div class="eq-box"><strong id="eq-a-val">₹0</strong><span>Assets</span></div>
+            <span class="eq-sign">=</span>
+            <div class="eq-box"><strong id="eq-l-val">₹0</strong><span>Liabilities</span></div>
+            <span class="eq-sign">+</span>
+            <div class="eq-box"><strong id="eq-c-val">₹0</strong><span>Capital</span></div>
+          </div>
+          <div class="eq-balanced" id="eq-status">Enter values above ↑</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Journal Entry Simulator -->
+    <div class="sim-card">
+      <h3>📔 Journal Entry Simulator</h3>
+      <p>Record a transaction step by step</p>
+      <div class="sim-form">
+        <div class="sim-group"><label>Transaction Description</label>
+          <select class="sim-select" id="je-txn" onchange="updateJE()">
+            <option value="">-- Select Transaction --</option>
+            <option value="0">Started business with ₹1,00,000 cash</option>
+            <option value="1">Purchased goods ₹30,000 on credit</option>
+            <option value="2">Sold goods ₹20,000 for cash</option>
+            <option value="3">Paid rent ₹5,000 cash</option>
+            <option value="4">Received commission ₹2,000</option>
+            <option value="5">Purchased furniture ₹15,000 cash</option>
+            <option value="6">Paid salaries ₹8,000</option>
+            <option value="7">Drawings by owner ₹5,000</option>
+          </select>
+        </div>
+        <div class="sim-result" id="je-result"></div>
+      </div>
+    </div>
+
+    <!-- Depreciation Calculator -->
+    <div class="sim-card">
+      <h3>📉 Depreciation Calculator</h3>
+      <p>Calculate SLM and WDV depreciation</p>
+      <div class="sim-form">
+        <div class="sim-row">
+          <div class="sim-group"><label>Cost Price (₹)</label><input class="sim-input" id="dep-cost" type="number" placeholder="100000"></div>
+          <div class="sim-group"><label>Residual Value (₹)</label><input class="sim-input" id="dep-res" type="number" placeholder="10000"></div>
+        </div>
+        <div class="sim-row">
+          <div class="sim-group"><label>Useful Life (yrs)</label><input class="sim-input" id="dep-life" type="number" placeholder="5"></div>
+          <div class="sim-group"><label>WDV Rate (%)</label><input class="sim-input" id="dep-rate" type="number" placeholder="20"></div>
+        </div>
+        <button class="btn-sim" onclick="calcDepreciation()">Calculate →</button>
+        <div class="sim-result" id="dep-result"></div>
+      </div>
+    </div>
+
+    <!-- Trial Balance Builder -->
+    <div class="sim-card">
+      <h3>📋 Trial Balance Checker</h3>
+      <p>Enter account balances to verify Trial Balance</p>
+      <div id="tb-entries">
+        <div class="sim-row" style="font-size:12px;font-weight:700;color:var(--muted);padding-bottom:4px;">
+          <span style="flex:2">Account Name</span><span style="flex:1">Dr (₹)</span><span style="flex:1">Cr (₹)</span>
+        </div>
+        ${[['Capital A/c','','50000'],['Cash A/c','30000',''],['Purchases A/c','20000',''],['Sales A/c','','20000'],['Rent A/c','5000',''],['Sundry Debtors','15000','']].map((r,i)=>`
+          <div class="sim-row" style="margin-bottom:6px;">
+            <input class="sim-input" style="flex:2;font-size:12px;" id="tb-name-${i}" value="${r[0]}">
+            <input class="sim-input" style="flex:1;font-size:12px;" id="tb-dr-${i}" type="number" value="${r[1]}" oninput="checkTB()">
+            <input class="sim-input" style="flex:1;font-size:12px;" id="tb-cr-${i}" type="number" value="${r[2]}" oninput="checkTB()">
+          </div>`).join('')}
+      </div>
+      <button class="btn-sim" onclick="checkTB()">Verify Balance →</button>
+      <div class="sim-result" id="tb-result"></div>
+    </div>
+
+    <!-- BRS Simulator -->
+    <div class="sim-card">
+      <h3>🏦 BRS Calculator</h3>
+      <p>Reconcile Cash Book and Pass Book balances</p>
+      <div class="sim-form">
+        <div class="sim-group"><label>Balance as per Cash Book (₹)</label><input class="sim-input" id="brs-cb" type="number" placeholder="25000"></div>
+        <div class="sim-group"><label>Cheques issued but not presented (₹)</label><input class="sim-input" id="brs-chq-out" type="number" placeholder="5000"></div>
+        <div class="sim-group"><label>Cheques deposited but not cleared (₹)</label><input class="sim-input" id="brs-chq-dep" type="number" placeholder="3000"></div>
+        <div class="sim-group"><label>Bank charges (₹)</label><input class="sim-input" id="brs-charges" type="number" placeholder="500"></div>
+        <div class="sim-group"><label>Interest credited by bank (₹)</label><input class="sim-input" id="brs-int" type="number" placeholder="1000"></div>
+        <button class="btn-sim" onclick="calcBRS()">Prepare BRS →</button>
+        <div class="sim-result" id="brs-result"></div>
+      </div>
+    </div>
+
+    <!-- Profit Calculator (Single Entry) -->
+    <div class="sim-card">
+      <h3>🔍 Profit Calculator (Single Entry)</h3>
+      <p>Calculate profit from incomplete records</p>
+      <div class="sim-form">
+        <div class="sim-row">
+          <div class="sim-group"><label>Opening Capital (₹)</label><input class="sim-input" id="se-open" type="number" placeholder="80000"></div>
+          <div class="sim-group"><label>Closing Capital (₹)</label><input class="sim-input" id="se-close" type="number" placeholder="120000"></div>
+        </div>
+        <div class="sim-row">
+          <div class="sim-group"><label>Drawings (₹)</label><input class="sim-input" id="se-draw" type="number" placeholder="15000"></div>
+          <div class="sim-group"><label>Fresh Capital (₹)</label><input class="sim-input" id="se-fresh" type="number" placeholder="0"></div>
+        </div>
+        <button class="btn-sim" onclick="calcSingleEntry()">Calculate Profit →</button>
+        <div class="sim-result" id="se-result"></div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- Simulation Functions ----
+function calcEquation() {
+  const a = parseFloat(document.getElementById('eq-assets').value) || 0;
+  const l = parseFloat(document.getElementById('eq-liab').value) || 0;
+  const c = parseFloat(document.getElementById('eq-cap').value) || 0;
+  document.getElementById('eq-a-val').textContent = '₹' + a.toLocaleString('en-IN');
+  document.getElementById('eq-l-val').textContent = '₹' + l.toLocaleString('en-IN');
+  document.getElementById('eq-c-val').textContent = '₹' + c.toLocaleString('en-IN');
+  const stat = document.getElementById('eq-status');
+  if (a === l + c) {
+    stat.textContent = '✅ Equation is BALANCED! A = L + C';
+    stat.className = 'eq-balanced ok';
+  } else {
+    stat.textContent = `❌ Not balanced. Difference: ₹${Math.abs(a - (l+c)).toLocaleString('en-IN')}`;
+    stat.className = 'eq-balanced err';
+  }
+}
+
+const JE_DATA = [
+  { dr: 'Cash A/c', cr: 'Capital A/c', amt: '1,00,000', narr: 'Business commenced with cash' },
+  { dr: 'Purchases A/c', cr: "Creditor's A/c", amt: '30,000', narr: 'Goods purchased on credit' },
+  { dr: 'Cash A/c', cr: 'Sales A/c', amt: '20,000', narr: 'Goods sold for cash' },
+  { dr: 'Rent A/c', cr: 'Cash A/c', amt: '5,000', narr: 'Rent paid for the month' },
+  { dr: 'Cash A/c', cr: 'Commission A/c', amt: '2,000', narr: 'Commission received' },
+  { dr: 'Furniture A/c', cr: 'Cash A/c', amt: '15,000', narr: 'Furniture purchased for office' },
+  { dr: 'Salaries A/c', cr: 'Cash A/c', amt: '8,000', narr: 'Salaries paid to staff' },
+  { dr: "Drawings A/c", cr: 'Cash A/c', amt: '5,000', narr: 'Cash withdrawn by owner for personal use' },
+];
+function updateJE() {
+  const idx = document.getElementById('je-txn').value;
+  const res = document.getElementById('je-result');
+  if (idx === '') { res.classList.remove('show'); return; }
+  const j = JE_DATA[parseInt(idx)];
+  res.innerHTML = `<div class="journal-entry">
+    <div class="je-header"><span>Journal Entry:</span></div>
+    <div class="je-row"><span class="je-account">${j.dr}</span><span class="je-dr">Dr</span><span>₹${j.amt}</span></div>
+    <div class="je-row"><span class="je-account indent">  To ${j.cr}</span><span></span><span class="je-cr">₹${j.amt}</span></div>
+    <div class="je-narr">(Being ${j.narr})</div>
+  </div>
+  <div class="tip-box" style="margin-top:8px;">🔍 Dr Account increases. Cr Account decreases (or liability/income increases).</div>`;
+  res.classList.add('show');
+}
+
+function calcDepreciation() {
+  const cost = parseFloat(document.getElementById('dep-cost').value) || 0;
+  const res = parseFloat(document.getElementById('dep-res').value) || 0;
+  const life = parseFloat(document.getElementById('dep-life').value) || 1;
+  const rate = parseFloat(document.getElementById('dep-rate').value) || 0;
+  const slm = (cost - res) / life;
+  const result = document.getElementById('dep-result');
+  let rows = '';
+  let wdv = cost;
+  for (let y = 1; y <= Math.min(life, 5); y++) {
+    const wdvDep = wdv * rate / 100;
+    rows += `<tr><td>${y}</td><td>₹${slm.toLocaleString('en-IN',{maximumFractionDigits:0})}</td><td>₹${wdvDep.toLocaleString('en-IN',{maximumFractionDigits:0})}</td><td>₹${(wdv-wdvDep).toLocaleString('en-IN',{maximumFractionDigits:0})}</td></tr>`;
+    wdv -= wdvDep;
+  }
+  result.innerHTML = `<table class="rules-table"><tr><th>Year</th><th>SLM (₹)</th><th>WDV (₹)</th><th>WDV Book Val</th></tr>${rows}</table>`;
+  result.classList.add('show');
+}
+
+function checkTB() {
+  let totalDr = 0, totalCr = 0;
+  for (let i = 0; i < 6; i++) {
+    totalDr += parseFloat(document.getElementById('tb-dr-'+i).value) || 0;
+    totalCr += parseFloat(document.getElementById('tb-cr-'+i).value) || 0;
+  }
+  const result = document.getElementById('tb-result');
+  const balanced = Math.abs(totalDr - totalCr) < 0.01;
+  result.innerHTML = `<table class="rules-table">
+    <tr><th></th><th>Debit (₹)</th><th>Credit (₹)</th></tr>
+    <tr><td><strong>Total</strong></td><td><strong>₹${totalDr.toLocaleString('en-IN')}</strong></td><td><strong>₹${totalCr.toLocaleString('en-IN')}</strong></td></tr>
+  </table>
+  <div style="margin-top:10px;padding:10px;border-radius:8px;background:${balanced?'#f0fff4':'#fff5f5'};color:${balanced?'var(--success)':'var(--danger)'}; font-weight:700; text-align:center;">
+    ${balanced ? '✅ Trial Balance AGREES!' : `❌ Difference: ₹${Math.abs(totalDr-totalCr).toLocaleString('en-IN')} – Check for errors`}
+  </div>`;
+  result.classList.add('show');
+}
+
+function calcBRS() {
+  const cb = parseFloat(document.getElementById('brs-cb').value) || 0;
+  const chqOut = parseFloat(document.getElementById('brs-chq-out').value) || 0;
+  const chqDep = parseFloat(document.getElementById('brs-chq-dep').value) || 0;
+  const charges = parseFloat(document.getElementById('brs-charges').value) || 0;
+  const interest = parseFloat(document.getElementById('brs-int').value) || 0;
+  const pb = cb + chqOut - chqDep - charges + interest;
+  const result = document.getElementById('brs-result');
+  result.innerHTML = `<table class="rules-table">
+    <tr><th colspan="2">Bank Reconciliation Statement</th></tr>
+    <tr><td>Balance as per Cash Book</td><td>₹${cb.toLocaleString('en-IN')}</td></tr>
+    <tr><td>Add: Cheques issued but not presented</td><td style="color:var(--success)">+ ₹${chqOut.toLocaleString('en-IN')}</td></tr>
+    <tr><td>Less: Cheques deposited but not cleared</td><td style="color:var(--danger)">− ₹${chqDep.toLocaleString('en-IN')}</td></tr>
+    <tr><td>Less: Bank charges</td><td style="color:var(--danger)">− ₹${charges.toLocaleString('en-IN')}</td></tr>
+    <tr><td>Add: Interest credited by bank</td><td style="color:var(--success)">+ ₹${interest.toLocaleString('en-IN')}</td></tr>
+    <tr class="total-row"><td><strong>Balance as per Pass Book</strong></td><td><strong>₹${pb.toLocaleString('en-IN')}</strong></td></tr>
+  </table>`;
+  result.classList.add('show');
+}
+
+function calcSingleEntry() {
+  const open = parseFloat(document.getElementById('se-open').value) || 0;
+  const close = parseFloat(document.getElementById('se-close').value) || 0;
+  const draw = parseFloat(document.getElementById('se-draw').value) || 0;
+  const fresh = parseFloat(document.getElementById('se-fresh').value) || 0;
+  const profit = close - open + draw - fresh;
+  const result = document.getElementById('se-result');
+  result.innerHTML = `<div class="formula-box" style="font-size:13px;text-align:left;padding:14px;">
+    Closing Capital: ₹${close.toLocaleString('en-IN')}<br>
+    Less: Opening Capital: (₹${open.toLocaleString('en-IN')})<br>
+    Add: Drawings: ₹${draw.toLocaleString('en-IN')}<br>
+    Less: Fresh Capital: (₹${fresh.toLocaleString('en-IN')})<br>
+    <hr style="margin:8px 0;border-color:var(--primary);">
+    <strong>${profit >= 0 ? '✅ Net Profit' : '❌ Net Loss'}: ₹${Math.abs(profit).toLocaleString('en-IN')}</strong>
+  </div>`;
+  result.classList.add('show');
+}
+
+// ============================================================
+// QUIZ ENGINE
+// ============================================================
+function startQuiz(chapterId) {
+  let pool = chapterId === -1 ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q => q.ch === chapterId);
+  if (pool.length === 0) pool = ALL_QUESTIONS;
+  // Shuffle and take up to 10
+  const shuffled = pool.sort(() => Math.random() - 0.5).slice(0, Math.min(10, pool.length));
+  quizState = { questions: shuffled, current: 0, score: 0, answered: false, chapterId };
+  showScreen('quiz-screen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const { questions, current, score } = quizState;
+  if (current >= questions.length) { renderQuizResult(); return; }
+
+  const q = questions[current];
+  const progress_pct = ((current) / questions.length) * 100;
+
+  document.getElementById('quiz-content').innerHTML = `
+    <div class="quiz-header">
+      <div class="quiz-title">${quizState.chapterId === -1 ? 'Mixed Quiz' : 'Chapter Quiz'}</div>
+      <div class="quiz-score-badge">Score: ${score}/${current}</div>
+    </div>
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${progress_pct}%"></div></div>
+    <div class="question-card">
+      <div class="q-number">Question ${current + 1} of ${questions.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-options">
+        ${q.opts.map((opt, i) => `<div class="q-option" onclick="selectAnswer(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
+      </div>
+      <div class="q-feedback" id="qfb"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question →</button>
+  `;
+  quizState.answered = false;
+}
+
+function selectAnswer(idx) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  const q = quizState.questions[quizState.current];
+  const opts = document.querySelectorAll('.q-option');
+  const fb = document.getElementById('qfb');
+
+  opts.forEach((opt, i) => {
+    if (i === q.ans) opt.classList.add('correct');
+    else if (i === idx && i !== q.ans) opt.classList.add('wrong');
+    opt.style.pointerEvents = 'none';
+  });
+  opts[idx].classList.add('selected');
+
+  if (idx === q.ans) {
+    quizState.score++;
+    fb.textContent = '✅ Correct! ' + q.exp;
+    fb.className = 'q-feedback show correct';
+  } else {
+    fb.textContent = '❌ Incorrect. ' + q.exp;
+    fb.className = 'q-feedback show wrong';
+  }
+  document.getElementById('btn-next').classList.add('show');
+
+  // Update score display
+  document.querySelector('.quiz-score-badge').textContent = `Score: ${quizState.score}/${quizState.current + 1}`;
+}
+
+function nextQuestion() {
+  quizState.current++;
+  renderQuestion();
+}
+
+function renderQuizResult() {
+  const { score, questions, chapterId } = quizState;
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+  let grade = 'Keep Practising 📚';
+  if (pct >= 90) grade = 'Outstanding! 🏆';
+  else if (pct >= 75) grade = 'Excellent! ⭐';
+  else if (pct >= 60) grade = 'Good Work! 👍';
+  else if (pct >= 40) grade = 'Fair – Review concepts 📖';
+
+  // Save score
+  const key = chapterId === -1 ? 'mixed' : 'ch_' + chapterId;
+  quizScores[key] = Math.max(quizScores[key] || 0, pct);
+  localStorage.setItem('acct_quiz_scores', JSON.stringify(quizScores));
+
+  // Mark chapter as complete
+  if (chapterId > 0) { progress[chapterId] = 1; saveProgress(); }
+
+  document.getElementById('quiz-content').innerHTML = `
+    <div class="quiz-result-card">
+      <div class="result-score">${score}/${total}</div>
+      <div class="result-label">${pct}% Correct</div>
+      <div class="result-grade">${grade}</div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:20px;">
+        ${[...Array(total)].map((_,i)=>`<span style="font-size:20px;">${i < score ? '✅' : '❌'}</span>`).join(' ')}
+      </div>
+      <button class="btn-retry" onclick="startQuiz(${chapterId})">Retry Quiz</button>
+      <button class="btn-home-q" onclick="showScreen('home')">Home</button>
+    </div>
+  `;
+}
+
+// ============================================================
+// FINANCIAL STATEMENT BUILDER
+// ============================================================
+function renderFSB() {
+  document.getElementById('fsb-trading').innerHTML = `
+    <div class="content-card">
+      <h3>📈 Trading Account</h3>
+      <table class="fs-table">
+        <tr><th>Dr Side</th><th>₹</th><th>Cr Side</th><th>₹</th></tr>
+        <tr><td>Opening Stock</td><td><input class="fs-input" id="t-os" type="number" placeholder="0" oninput="calcTrading()"></td><td>Sales</td><td><input class="fs-input" id="t-sales" type="number" placeholder="0" oninput="calcTrading()"></td></tr>
+        <tr><td>Purchases</td><td><input class="fs-input" id="t-pur" type="number" placeholder="0" oninput="calcTrading()"></td><td>Sales Returns</td><td><input class="fs-input" id="t-sr" type="number" placeholder="0" oninput="calcTrading()"></td></tr>
+        <tr><td>Purchase Returns</td><td><input class="fs-input" id="t-pr" type="number" placeholder="0" oninput="calcTrading()"></td><td>Closing Stock</td><td><input class="fs-input" id="t-cs" type="number" placeholder="0" oninput="calcTrading()"></td></tr>
+        <tr><td>Carriage Inward</td><td><input class="fs-input" id="t-ci" type="number" placeholder="0" oninput="calcTrading()"></td><td></td><td></td></tr>
+        <tr><td>Wages</td><td><input class="fs-input" id="t-wages" type="number" placeholder="0" oninput="calcTrading()"></td><td></td><td></td></tr>
+        <tr class="total-row"><td colspan="2" id="t-gp-label"><strong>Gross Profit c/d: ₹0</strong></td><td colspan="2" id="t-gl-label"></td></tr>
+        <tr class="grand-total-row"><td><strong>Total</strong></td><td id="t-dr-total"><strong>₹0</strong></td><td><strong>Total</strong></td><td id="t-cr-total"><strong>₹0</strong></td></tr>
+      </table>
+    </div>
+  `;
+  document.getElementById('fsb-pl').innerHTML = `
+    <div class="content-card">
+      <h3>📉 Profit & Loss Account</h3>
+      <div class="highlight-box" id="pl-gp-display">Gross Profit from Trading A/c: ₹0 (Calculate Trading A/c first)</div>
+      <table class="fs-table" style="margin-top:10px;">
+        <tr><th>Dr (Expenses)</th><th>₹</th><th>Cr (Income)</th><th>₹</th></tr>
+        <tr><td>Salaries</td><td><input class="fs-input" id="pl-sal" type="number" placeholder="0" oninput="calcPL()"></td><td>Gross Profit b/d</td><td id="pl-gp-val" style="padding:7px 10px;font-weight:700;color:var(--success);">₹0</td></tr>
+        <tr><td>Rent</td><td><input class="fs-input" id="pl-rent" type="number" placeholder="0" oninput="calcPL()"></td><td>Discount Received</td><td><input class="fs-input" id="pl-disc-r" type="number" placeholder="0" oninput="calcPL()"></td></tr>
+        <tr><td>Depreciation</td><td><input class="fs-input" id="pl-dep" type="number" placeholder="0" oninput="calcPL()"></td><td>Commission Received</td><td><input class="fs-input" id="pl-comm-r" type="number" placeholder="0" oninput="calcPL()"></td></tr>
+        <tr><td>Bad Debts</td><td><input class="fs-input" id="pl-bd" type="number" placeholder="0" oninput="calcPL()"></td><td></td><td></td></tr>
+        <tr><td>Carriage Outward</td><td><input class="fs-input" id="pl-co" type="number" placeholder="0" oninput="calcPL()"></td><td></td><td></td></tr>
+        <tr class="total-row" id="pl-np-row"><td colspan="4" style="text-align:center;"><strong>Net Profit/Loss: ₹0</strong></td></tr>
+      </table>
+    </div>
+  `;
+  document.getElementById('fsb-bs').innerHTML = `
+    <div class="content-card">
+      <h3>⚖️ Balance Sheet</h3>
+      <table class="fs-table">
+        <tr><th>Liabilities</th><th>₹</th><th>Assets</th><th>₹</th></tr>
+        <tr><td>Capital</td><td><input class="fs-input" id="bs-cap" type="number" placeholder="0" oninput="calcBS()"></td><td>Fixed Assets</td><td><input class="fs-input" id="bs-fa" type="number" placeholder="0" oninput="calcBS()"></td></tr>
+        <tr><td>Add: Net Profit</td><td id="bs-np-val" style="padding:7px 10px;font-weight:700;color:var(--success);">₹0</td><td>Stock (Closing)</td><td><input class="fs-input" id="bs-stock" type="number" placeholder="0" oninput="calcBS()"></td></tr>
+        <tr><td>Less: Drawings</td><td><input class="fs-input" id="bs-draw" type="number" placeholder="0" oninput="calcBS()"></td><td>Debtors</td><td><input class="fs-input" id="bs-deb" type="number" placeholder="0" oninput="calcBS()"></td></tr>
+        <tr><td>Long-term Loans</td><td><input class="fs-input" id="bs-ltl" type="number" placeholder="0" oninput="calcBS()"></td><td>Cash & Bank</td><td><input class="fs-input" id="bs-cash" type="number" placeholder="0" oninput="calcBS()"></td></tr>
+        <tr><td>Creditors</td><td><input class="fs-input" id="bs-cred" type="number" placeholder="0" oninput="calcBS()"></td><td>Prepaid Expenses</td><td><input class="fs-input" id="bs-pre" type="number" placeholder="0" oninput="calcBS()"></td></tr>
+        <tr class="grand-total-row"><td><strong>Total</strong></td><td id="bs-l-total"><strong>₹0</strong></td><td><strong>Total</strong></td><td id="bs-a-total"><strong>₹0</strong></td></tr>
+      </table>
+      <div id="bs-status" style="margin-top:12px;padding:10px;border-radius:8px;text-align:center;background:#f8f9fe;color:var(--muted);font-size:13px;">Enter values to check balance</div>
+    </div>
+  `;
+}
+
+let globalGP = 0, globalNP = 0;
+function calcTrading() {
+  const os = parseFloat(document.getElementById('t-os').value) || 0;
+  const pur = parseFloat(document.getElementById('t-pur').value) || 0;
+  const pr = parseFloat(document.getElementById('t-pr').value) || 0;
+  const ci = parseFloat(document.getElementById('t-ci').value) || 0;
+  const wages = parseFloat(document.getElementById('t-wages').value) || 0;
+  const sales = parseFloat(document.getElementById('t-sales').value) || 0;
+  const sr = parseFloat(document.getElementById('t-sr').value) || 0;
+  const cs = parseFloat(document.getElementById('t-cs').value) || 0;
+  const netPur = pur - pr;
+  const cogs = os + netPur + ci + wages;
+  const netSales = sales - sr;
+  const crTotal = netSales + cs;
+  const gp = crTotal - cogs;
+  globalGP = gp > 0 ? gp : 0;
+  const gl = gp < 0 ? Math.abs(gp) : 0;
+  const drTotal = cogs + globalGP;
+  document.getElementById('t-gp-label').innerHTML = gp >= 0 ? `<strong>Gross Profit c/d: ₹${gp.toLocaleString('en-IN')}</strong>` : '';
+  document.getElementById('t-gl-label').innerHTML = gp < 0 ? `<strong>Gross Loss c/d: ₹${gl.toLocaleString('en-IN')}</strong>` : '';
+  document.getElementById('t-dr-total').innerHTML = `<strong>₹${drTotal.toLocaleString('en-IN')}</strong>`;
+  document.getElementById('t-cr-total').innerHTML = `<strong>₹${drTotal.toLocaleString('en-IN')}</strong>`;
+  // Update PL
+  if (document.getElementById('pl-gp-val')) {
+    document.getElementById('pl-gp-val').textContent = '₹' + globalGP.toLocaleString('en-IN');
+    document.getElementById('pl-gp-display').textContent = `Gross Profit from Trading A/c: ₹${globalGP.toLocaleString('en-IN')}`;
+  }
+}
+
+function calcPL() {
+  const sal = parseFloat(document.getElementById('pl-sal').value) || 0;
+  const rent = parseFloat(document.getElementById('pl-rent').value) || 0;
+  const dep = parseFloat(document.getElementById('pl-dep').value) || 0;
+  const bd = parseFloat(document.getElementById('pl-bd').value) || 0;
+  const co = parseFloat(document.getElementById('pl-co').value) || 0;
+  const discR = parseFloat(document.getElementById('pl-disc-r').value) || 0;
+  const commR = parseFloat(document.getElementById('pl-comm-r').value) || 0;
+  const totalExp = sal + rent + dep + bd + co;
+  const totalInc = globalGP + discR + commR;
+  const np = totalInc - totalExp;
+  globalNP = np;
+  const row = document.getElementById('pl-np-row');
+  row.innerHTML = np >= 0
+    ? `<td colspan="4" style="text-align:center;color:var(--success);"><strong>✅ Net Profit: ₹${np.toLocaleString('en-IN')}</strong></td>`
+    : `<td colspan="4" style="text-align:center;color:var(--danger);"><strong>❌ Net Loss: ₹${Math.abs(np).toLocaleString('en-IN')}</strong></td>`;
+  if (document.getElementById('bs-np-val')) {
+    document.getElementById('bs-np-val').textContent = np >= 0 ? '₹' + np.toLocaleString('en-IN') : '(Loss)';
+  }
+}
+
+function showFSBTab(id, btn) {
+  document.querySelectorAll('.fsb-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.fsb-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fsb-' + id).classList.add('active');
+}
+
+function calcBS() {
+  const cap = parseFloat(document.getElementById('bs-cap').value) || 0;
+  const draw = parseFloat(document.getElementById('bs-draw').value) || 0;
+  const ltl = parseFloat(document.getElementById('bs-ltl').value) || 0;
+  const cred = parseFloat(document.getElementById('bs-cred').value) || 0;
+  const fa = parseFloat(document.getElementById('bs-fa').value) || 0;
+  const stock = parseFloat(document.getElementById('bs-stock').value) || 0;
+  const deb = parseFloat(document.getElementById('bs-deb').value) || 0;
+  const cash = parseFloat(document.getElementById('bs-cash').value) || 0;
+  const pre = parseFloat(document.getElementById('bs-pre').value) || 0;
+  const netCap = cap + globalNP - draw;
+  const totalL = netCap + ltl + cred;
+  const totalA = fa + stock + deb + cash + pre;
+  document.getElementById('bs-l-total').innerHTML = `<strong>₹${totalL.toLocaleString('en-IN')}</strong>`;
+  document.getElementById('bs-a-total').innerHTML = `<strong>₹${totalA.toLocaleString('en-IN')}</strong>`;
+  const balanced = Math.abs(totalL - totalA) < 1;
+  document.getElementById('bs-status').innerHTML = balanced
+    ? '<span style="color:var(--success);font-weight:700;">✅ Balance Sheet BALANCES! Assets = Liabilities</span>'
+    : `<span style="color:var(--danger);font-weight:700;">❌ Difference: ₹${Math.abs(totalL-totalA).toLocaleString('en-IN')}</span>`;
+  document.getElementById('bs-status').style.background = balanced ? '#f0fff4' : '#fff5f5';
+}
+
+// ============================================================
+// PROGRESS TRACKER
+// ============================================================
+function renderProgress() {
+  const totalChapters = CHAPTERS.length;
+  const doneChapters = Object.values(progress).filter(v => v >= 1).length;
+  const partialChapters = Object.values(progress).filter(v => v > 0 && v < 1).length;
+  const quizAttempts = Object.keys(quizScores).length;
+  const avgScore = quizAttempts > 0 ? Math.round(Object.values(quizScores).reduce((a,b) => a+b, 0) / quizAttempts) : 0;
+
+  const el = document.getElementById('progress-content');
+  el.innerHTML = `
+    <div class="progress-overview">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Your Learning Journey</div>
+      <div style="opacity:0.75;font-size:13px;margin-bottom:12px;">JKBOSE Class 11 Accountancy</div>
+      <div class="progress-stat">
+        <div><div class="p-stat-val">${doneChapters}</div><div class="p-stat-lbl">Chapters Done</div></div>
+        <div><div class="p-stat-val">${quizAttempts}</div><div class="p-stat-lbl">Quizzes Taken</div></div>
+        <div><div class="p-stat-val">${avgScore}%</div><div class="p-stat-lbl">Avg Score</div></div>
+      </div>
+    </div>
+    <div class="section-label" style="padding-left:0;">Chapter Progress</div>
+    ${CHAPTERS.map(ch => {
+      const p = progress[ch.id] || 0;
+      const pct = Math.round(p * 100);
+      const qs = quizScores['ch_' + ch.id];
+      return `
+        <div class="progress-chapter-item">
+          <div style="width:36px;height:36px;background:${pct>=100?'var(--success)':pct>0?'var(--accent)':'var(--border)'};border-radius:10px;display:flex;align-items:center;justify-content:center;color:${pct>0?'#fff':'var(--muted)'};font-weight:800;font-size:13px;">${ch.id}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ch.title}</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
+              <div class="p-ch-bar-wrap"><div class="p-ch-bar" style="width:${pct}%"></div></div>
+              <span class="p-ch-pct">${pct}%</span>
+            </div>
+          </div>
+          ${qs !== undefined ? `<div style="background:var(--primary);color:#fff;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700;">${qs}%</div>` : ''}
+        </div>`;
+    }).join('')}
+    <div class="section-label" style="padding-left:0;margin-top:8px;">Quiz Scores by Chapter</div>
+    ${Object.keys(quizScores).length === 0 ? '<div style="text-align:center;color:var(--muted);padding:20px;font-size:14px;">No quizzes taken yet. Start a chapter quiz!</div>' :
+    Object.entries(quizScores).map(([k,v]) => {
+      const label = k === 'mixed' ? 'Mixed Quiz' : 'Chapter ' + k.replace('ch_','');
+      return `<div style="display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--border);">
+        <span style="flex:1;font-size:14px;font-weight:600;">${label}</span>
+        <div style="background:${v>=75?'var(--success)':v>=50?'var(--accent)':'var(--danger)'};color:#fff;padding:4px 12px;border-radius:12px;font-weight:700;font-size:13px;">${v}%</div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function resetProgress() {
+  if (confirm('Reset all progress and scores?')) {
+    progress = {}; quizScores = {};
+    localStorage.removeItem('acct_progress');
+    localStorage.removeItem('acct_quiz_scores');
+    renderProgress();
+    renderHome();
+  }
+}
+
+function saveProgress() {
+  localStorage.setItem('acct_progress', JSON.stringify(progress));
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  renderHome();
+  renderChapterList();
+  // Slight delay for home ring animation
+  setTimeout(renderHome, 300);
+});
+
+// Register Service Worker via inline Blob so it works without a separate file
+if ('serviceWorker' in navigator) {
+  try {
+    const swCode = `
+const CACHE = 'acct-v1';
+const FILES = ['./'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES).catch(()=>{})));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(()=>{})));
+});`;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl, { scope: './' })
+      .then(() => console.log('Service Worker ready (offline support active)'))
+      .catch(() => {}); // Silently ignore if blocked (e.g. preview iframes)
+  } catch(e) { /* SW not supported in this context – app still works fully */ }
+}
+</script>
+</body>
+</html>

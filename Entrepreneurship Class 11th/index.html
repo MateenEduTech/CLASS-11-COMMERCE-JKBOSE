@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Class 11 Entrepreneurship App | Mateen Yousuf</title>
+  <meta name="description" content="JKBOSE Class 11 Entrepreneurship Interactive Learning App by Mateen Yousuf" />
+  <meta name="theme-color" content="#f59e0b" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a0e1a' rx='20'/><text y='130' x='20' font-size='130'>🚀</text></svg>" />
+  <style>
+    /* ==============================
+       CSS VARIABLES & ROOT STYLES
+       ============================== */
+    :root {
+      --bg-deep: #060a14;
+      --bg-card: #0d1526;
+      --bg-panel: #111827;
+      --accent-gold: #f59e0b;
+      --accent-amber: #d97706;
+      --accent-orange: #ea580c;
+      --accent-teal: #0d9488;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+      --border: #1e293b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --font-display: 'Georgia', 'Times New Roman', serif;
+      --font-body: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+      --shadow-glow: 0 0 30px rgba(245,158,11,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ==============================
+       UTILITY CLASSES
+       ============================== */
+    .hidden { display: none !important; }
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border: none; border-radius: 50px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: all 0.3s ease; text-decoration: none;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber));
+      color: #000; box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,158,11,0.6); }
+    .btn-outline {
+      background: transparent; border: 2px solid var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    .btn-outline:hover { background: var(--accent-gold); color: #000; }
+    .btn-teal {
+      background: linear-gradient(135deg, var(--accent-teal), #0f766e);
+      color: #fff; box-shadow: 0 4px 20px rgba(13,148,136,0.4);
+    }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      transition: all 0.3s ease;
+    }
+    .card:hover { border-color: var(--accent-gold); box-shadow: var(--shadow-glow); }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .badge-gold { background: rgba(245,158,11,0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .badge-teal { background: rgba(13,148,136,0.2); color: var(--accent-teal); border: 1px solid var(--accent-teal); }
+    .badge-blue { background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+    .section-title {
+      font-size: 22px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+
+    /* ==============================
+       TITLE SCREEN
+       ============================== */
+    #screen-title {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 100vh;
+      background: radial-gradient(ellipse at 20% 50%, rgba(245,158,11,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%),
+                  var(--bg-deep);
+      padding: 24px; text-align: center; position: relative; overflow: hidden;
+    }
+    #screen-title.active { display: flex; }
+
+    .title-bg-anim {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .float-icon {
+      position: absolute; font-size: 32px; opacity: 0.08;
+      animation: floatUp 8s infinite linear;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.08; }
+      90% { opacity: 0.08; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .title-logo {
+      width: 90px; height: 90px; border-radius: 24px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px; margin-bottom: 24px;
+      box-shadow: 0 0 60px rgba(245,158,11,0.5);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow: 0 0 40px rgba(245,158,11,0.4); }
+      50% { box-shadow: 0 0 80px rgba(245,158,11,0.8); }
+    }
+
+    .title-jkbose {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent-gold); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .title-main {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 7vw, 44px);
+      font-weight: 900; line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-gold) 50%, var(--accent-orange) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .title-sub {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+      max-width: 320px;
+    }
+
+    /* Author card on title screen */
+    .author-card-title {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 60px; padding: 10px 20px; margin-bottom: 36px;
+    }
+    .author-photo-circle {
+      width: 50px; height: 50px; border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      background: var(--bg-card);
+      overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .author-photo-circle img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    }
+    .author-info-title { text-align: left; }
+    .author-name-title { font-size: 14px; font-weight: 700; color: var(--accent-gold); }
+    .author-role-title { font-size: 11px; color: var(--text-secondary); }
+
+    /* Stats row */
+    .title-stats {
+      display: flex; gap: 20px; margin-bottom: 36px; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 24px; font-weight: 900; color: var(--accent-gold); }
+    .stat-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Chapter preview pills */
+    .chapter-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px; max-width: 400px; }
+    .chapter-pill {
+      font-size: 11px; padding: 6px 14px; border-radius: 20px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* ==============================
+       NAVIGATION BAR
+       ============================== */
+    .nav-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(13,21,38,0.95); border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 8px 4px 12px; z-index: 1000;
+      backdrop-filter: blur(20px);
+    }
+    .nav-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; background: none; border: none; cursor: pointer;
+      padding: 6px 10px; border-radius: 12px;
+      transition: all 0.3s ease; color: var(--text-muted); font-size: 10px;
+    }
+    .nav-btn .nav-icon { font-size: 22px; transition: transform 0.3s ease; }
+    .nav-btn.active { color: var(--accent-gold); }
+    .nav-btn.active .nav-icon { transform: scale(1.2); }
+    .nav-btn:hover { color: var(--accent-gold); background: rgba(245,158,11,0.08); }
+
+    /* ==============================
+       TOP HEADER (inner screens)
+       ============================== */
+    .top-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(6,10,20,0.95); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .back-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+    .header-title { font-size: 16px; font-weight: 700; flex: 1; }
+    .header-badge { font-size: 10px; }
+
+    /* ==============================
+       HOME DASHBOARD
+       ============================== */
+    #screen-home { padding-bottom: 90px; }
+
+    .home-hero {
+      padding: 24px 20px 20px;
+      background: linear-gradient(160deg, rgba(245,158,11,0.12) 0%, transparent 60%);
+    }
+    .home-greeting { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+    .home-title { font-size: 22px; font-weight: 900; line-height: 1.3; }
+    .home-title span { color: var(--accent-gold); }
+
+    .progress-overview {
+      margin: 16px 0;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+    }
+    .progress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-bar-wrap { background: var(--bg-panel); border-radius: 10px; height: 8px; overflow: hidden; }
+    .progress-bar-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
+      transition: width 1s ease; width: 0%;
+    }
+
+    .home-section { padding: 0 20px 20px; }
+
+    /* Quick action cards */
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .quick-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; cursor: pointer;
+      transition: all 0.3s ease; display: flex; flex-direction: column; gap: 10px;
+    }
+    .quick-card:hover { transform: translateY(-3px); border-color: var(--accent-gold); box-shadow: var(--shadow-glow); }
+    .quick-icon { font-size: 32px; }
+    .quick-label { font-size: 13px; font-weight: 700; }
+    .quick-desc { font-size: 11px; color: var(--text-muted); }
+
+    /* Chapter cards */
+    .chapter-list { display: flex; flex-direction: column; gap: 12px; }
+    .chapter-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; cursor: pointer;
+      transition: all 0.3s ease; display: flex; align-items: center; gap: 14px;
+    }
+    .chapter-card:hover { border-color: var(--accent-gold); transform: translateX(4px); }
+    .chapter-card.completed { border-color: var(--success); }
+    .chapter-num {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: #000;
+    }
+    .chapter-info { flex: 1; }
+    .chapter-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .chapter-meta { font-size: 11px; color: var(--text-muted); }
+    .chapter-arrow { font-size: 18px; color: var(--text-muted); }
+    .chapter-card.completed .chapter-arrow { color: var(--success); }
+
+    /* ==============================
+       CHAPTER DETAIL SCREEN
+       ============================== */
+    #screen-chapter { padding-bottom: 100px; }
+
+    .chapter-hero {
+      padding: 24px 20px;
+      background: linear-gradient(160deg, rgba(245,158,11,0.15) 0%, transparent 70%);
+    }
+    .chapter-hero-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 60px; height: 60px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      font-size: 24px; font-weight: 900; color: #000; margin-bottom: 12px;
+    }
+    .chapter-hero-title { font-size: 22px; font-weight: 900; line-height: 1.3; margin-bottom: 8px; }
+    .chapter-hero-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Tab system */
+    .tab-bar {
+      display: flex; gap: 0; overflow-x: auto; padding: 0 20px;
+      border-bottom: 1px solid var(--border); margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 12px 16px; background: none; border: none; border-bottom: 2px solid transparent;
+      font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-muted);
+      white-space: nowrap; transition: all 0.2s ease;
+    }
+    .tab-btn.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+    .tab-content { padding: 0 20px; display: none; }
+    .tab-content.active { display: block; }
+
+    /* Concept blocks */
+    .concept-block {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+    }
+    .concept-block h3 {
+      font-size: 15px; font-weight: 800; color: var(--accent-gold); margin-bottom: 10px;
+    }
+    .concept-block p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+    .concept-block ul { list-style: none; padding: 0; }
+    .concept-block ul li {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+      padding: 5px 0; padding-left: 20px; position: relative;
+    }
+    .concept-block ul li::before {
+      content: '→'; position: absolute; left: 0; color: var(--accent-gold);
+    }
+
+    /* Infographic */
+    .infographic {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .infographic h3 { font-size: 14px; font-weight: 800; color: var(--accent-gold); margin-bottom: 14px; }
+
+    /* Case study */
+    .case-study {
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(234,88,12,0.05));
+      border: 1px solid rgba(245,158,11,0.3); border-radius: var(--radius);
+      padding: 18px; margin-bottom: 16px;
+    }
+    .case-study-tag {
+      font-size: 10px; font-weight: 700; color: var(--accent-gold);
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .case-study h3 { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+    .case-study p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* Key terms */
+    .key-terms { display: flex; flex-direction: column; gap: 10px; }
+    .key-term {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; display: flex; gap: 12px;
+    }
+    .key-term-icon { font-size: 24px; flex-shrink: 0; }
+    .key-term-word { font-size: 13px; font-weight: 800; color: var(--accent-gold); margin-bottom: 4px; }
+    .key-term-def { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ==============================
+       QUIZ SCREEN
+       ============================== */
+    #screen-quiz { padding-bottom: 100px; }
+
+    .quiz-selector { padding: 20px; }
+    .quiz-chapter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .quiz-chapter-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; cursor: pointer;
+      transition: all 0.3s ease; text-align: left;
+    }
+    .quiz-chapter-btn:hover { border-color: var(--accent-gold); box-shadow: var(--shadow-glow); }
+    .quiz-chapter-icon { font-size: 28px; margin-bottom: 8px; }
+    .quiz-chapter-name { font-size: 12px; font-weight: 700; }
+
+    /* Quiz engine */
+    .quiz-engine { padding: 20px; display: none; }
+    .quiz-engine.active { display: block; }
+    .quiz-progress-bar {
+      background: var(--bg-panel); border-radius: 10px; height: 6px;
+      margin-bottom: 20px; overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
+      transition: width 0.5s ease;
+    }
+    .quiz-question-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+    }
+    .quiz-q-num { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px; }
+    .quiz-q-text { font-size: 15px; font-weight: 700; line-height: 1.5; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-option {
+      background: var(--bg-card); border: 2px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; cursor: pointer;
+      font-size: 13px; text-align: left; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--accent-gold); background: rgba(245,158,11,0.05); }
+    .quiz-option.correct { border-color: var(--success); background: rgba(16,185,129,0.1); color: var(--success); }
+    .quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.1); color: var(--danger); }
+    .quiz-option:disabled { cursor: not-allowed; opacity: 0.7; }
+    .quiz-option-letter {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--bg-panel); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .quiz-feedback {
+      background: var(--bg-card); border-radius: 12px; padding: 14px;
+      margin-top: 12px; font-size: 13px; line-height: 1.6; display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct-fb { border: 1px solid var(--success); color: var(--success); }
+    .quiz-feedback.wrong-fb { border: 1px solid var(--danger); color: var(--text-secondary); }
+
+    /* Quiz results */
+    .quiz-results {
+      text-align: center; padding: 30px 20px; display: none;
+    }
+    .quiz-results.show { display: block; }
+    .result-circle {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; margin: 0 auto 20px;
+      box-shadow: 0 0 60px rgba(245,158,11,0.5);
+    }
+    .result-score { font-size: 32px; font-weight: 900; color: #000; line-height: 1; }
+    .result-total { font-size: 14px; color: rgba(0,0,0,0.7); }
+    .result-msg { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .result-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+
+    /* ==============================
+       SIMULATIONS SCREEN
+       ============================== */
+    #screen-simulations { padding-bottom: 100px; }
+
+    .sim-grid { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .sim-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px; cursor: pointer;
+      transition: all 0.3s ease; text-align: center;
+    }
+    .sim-card:hover { border-color: var(--accent-teal); box-shadow: 0 0 30px rgba(13,148,136,0.2); transform: translateY(-3px); }
+    .sim-icon { font-size: 38px; margin-bottom: 10px; }
+    .sim-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .sim-desc { font-size: 11px; color: var(--text-muted); }
+
+    /* Simulation panels */
+    .sim-panel { padding: 20px; display: none; }
+    .sim-panel.active { display: block; }
+
+    /* Startup Idea Generator */
+    .idea-output {
+      background: linear-gradient(135deg, var(--bg-card), rgba(245,158,11,0.05));
+      border: 2px solid var(--accent-gold); border-radius: var(--radius);
+      padding: 24px; margin: 20px 0; text-align: center; min-height: 160px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .idea-emoji { font-size: 48px; margin-bottom: 12px; }
+    .idea-name { font-size: 20px; font-weight: 900; color: var(--accent-gold); margin-bottom: 8px; }
+    .idea-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .idea-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+    .idea-tag {
+      font-size: 10px; padding: 4px 10px; border-radius: 20px;
+      background: rgba(245,158,11,0.15); color: var(--accent-gold);
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+
+    /* Business Model Canvas */
+    .bmc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-top: 16px;
+    }
+    .bmc-cell {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px;
+    }
+    .bmc-cell.full-width { grid-column: 1 / -1; }
+    .bmc-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--accent-teal); margin-bottom: 8px;
+    }
+    .bmc-input {
+      width: 100%; background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px; font-size: 12px;
+      color: var(--text-primary); font-family: var(--font-body); resize: none;
+    }
+    .bmc-input:focus { outline: none; border-color: var(--accent-teal); }
+
+    /* Pricing Simulator */
+    .pricing-chart { margin: 16px 0; }
+    .price-slider-wrap { margin-bottom: 16px; }
+    .price-slider-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; }
+    .price-slider-label span { color: var(--accent-gold); font-weight: 700; }
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+      background: var(--bg-panel); border-radius: 10px; outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent-gold); cursor: pointer; box-shadow: 0 0 10px rgba(245,158,11,0.5);
+    }
+    .pricing-results {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 16px;
+    }
+    .price-metric {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; text-align: center;
+    }
+    .price-metric-val { font-size: 20px; font-weight: 900; color: var(--accent-gold); }
+    .price-metric-lbl { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Profit Calculator */
+    .calc-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .calc-input-group label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+    .calc-input {
+      width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px; font-size: 14px; color: var(--text-primary);
+    }
+    .calc-input:focus { outline: none; border-color: var(--accent-gold); }
+    .calc-result {
+      background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(234,88,12,0.05));
+      border: 2px solid rgba(245,158,11,0.3); border-radius: var(--radius); padding: 20px;
+    }
+    .calc-result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .calc-result-row:last-child { border: none; font-weight: 900; font-size: 16px; }
+    .calc-result-label { color: var(--text-secondary); font-size: 13px; }
+    .calc-result-val { font-weight: 700; }
+    .profit-positive { color: var(--success); }
+    .profit-negative { color: var(--danger); }
+
+    /* Market Research Simulator */
+    .market-segments { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+    .segment-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; cursor: pointer;
+      transition: all 0.3s ease; display: flex; align-items: center; gap: 12px;
+    }
+    .segment-card.selected { border-color: var(--accent-teal); background: rgba(13,148,136,0.1); }
+    .segment-icon { font-size: 28px; }
+    .segment-name { font-size: 14px; font-weight: 700; }
+    .segment-desc { font-size: 12px; color: var(--text-muted); }
+    .segment-check { margin-left: auto; font-size: 20px; opacity: 0; transition: opacity 0.2s; }
+    .segment-card.selected .segment-check { opacity: 1; color: var(--accent-teal); }
+    .market-result {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; display: none; margin-top: 16px;
+    }
+    .market-result.show { display: block; }
+    .market-bar-item { margin-bottom: 14px; }
+    .market-bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+    .market-bar-track { background: var(--bg-panel); border-radius: 10px; height: 10px; overflow: hidden; }
+    .market-bar-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+      transition: width 1s ease;
+    }
+
+    /* ==============================
+       PROGRESS SCREEN
+       ============================== */
+    #screen-progress { padding: 20px 20px 100px; }
+
+    .progress-header {
+      text-align: center; padding: 24px 0;
+      background: linear-gradient(160deg, rgba(59,130,246,0.1), transparent);
+      border-radius: var(--radius); margin-bottom: 24px;
+    }
+    .progress-big-num { font-size: 64px; font-weight: 900; color: var(--accent-gold); line-height: 1; }
+    .progress-big-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .chapter-progress-list { display: flex; flex-direction: column; gap: 12px; }
+    .chap-prog-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px;
+    }
+    .chap-prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .chap-prog-name { font-size: 13px; font-weight: 700; }
+    .chap-prog-pct { font-size: 12px; color: var(--accent-gold); font-weight: 700; }
+    .chap-prog-bar { background: var(--bg-panel); border-radius: 10px; height: 6px; overflow: hidden; }
+    .chap-prog-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
+      transition: width 1s ease;
+    }
+    .quiz-history { margin-top: 24px; }
+    .quiz-hist-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .quiz-hist-icon { font-size: 28px; }
+    .quiz-hist-info { flex: 1; }
+    .quiz-hist-chap { font-size: 13px; font-weight: 700; }
+    .quiz-hist-date { font-size: 11px; color: var(--text-muted); }
+    .quiz-hist-score { font-size: 16px; font-weight: 900; }
+    .score-good { color: var(--success); }
+    .score-avg { color: var(--accent-gold); }
+    .score-low { color: var(--danger); }
+
+    /* ==============================
+       ABOUT/AUTHOR SCREEN
+       ============================== */
+    #screen-about { padding: 20px 20px 100px; }
+
+    .about-author-card {
+      background: var(--bg-card); border: 2px solid rgba(245,158,11,0.3);
+      border-radius: var(--radius); padding: 24px; text-align: center; margin-bottom: 24px;
+    }
+    .about-author-photo {
+      width: 100px; height: 100px; border-radius: 50%;
+      border: 3px solid var(--accent-gold); margin: 0 auto 16px;
+      overflow: hidden; background: var(--bg-panel);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-author-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .about-author-name { font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-bottom: 4px; }
+    .about-author-title { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+    .about-author-dept { font-size: 12px; color: var(--text-muted); }
+    .about-app-info h3 { font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+    .about-app-info p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
+    .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .about-feat {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; text-align: center;
+    }
+    .about-feat-icon { font-size: 28px; margin-bottom: 6px; }
+    .about-feat-name { font-size: 12px; font-weight: 700; }
+
+    /* ==============================
+       SVG CHARTS AND INFOGRAPHICS
+       ============================== */
+    .svg-chart-wrap { width: 100%; overflow: hidden; }
+    .svg-chart-wrap svg { width: 100%; height: auto; }
+
+    /* Canvas for animations */
+    #priceChart { width: 100%; border-radius: 12px; margin-top: 12px; }
+
+    /* ==============================
+       LOADING / ANIMATION STATES
+       ============================== */
+    .spinning { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .slide-in { animation: slideIn 0.3s ease forwards; }
+    @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ==============================
+       NOTIFICATION TOAST
+       ============================== */
+    #toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+      background: var(--accent-gold); color: #000; padding: 12px 24px;
+      border-radius: 50px; font-size: 13px; font-weight: 700;
+      z-index: 9999; transition: transform 0.3s ease; white-space: nowrap;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ==============================
+       RESPONSIVE ADJUSTMENTS
+       ============================== */
+    @media (max-width: 360px) {
+      .quick-actions { grid-template-columns: 1fr; }
+      .quiz-chapter-grid { grid-template-columns: 1fr; }
+      .pricing-results { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toast Notification -->
+<div id="toast">✅ Progress saved!</div>
+
+<!-- ==================== TITLE SCREEN ==================== -->
+<div id="screen-title" class="screen active">
+  <div class="title-bg-anim" id="titleBgAnim"></div>
+
+  <div class="title-logo">🚀</div>
+
+  <div class="title-jkbose">🏔️ JKBOSE · Class 11 · Entrepreneurship</div>
+  <h1 class="title-main">Entrepreneurship<br>Learning App</h1>
+  <p class="title-sub">Interactive lessons, simulations, quizzes &amp; more — fully offline</p>
+
+  <!-- Author -->
+  <div class="author-card-title">
+    <div class="author-photo-circle">
+      <img src="author.jpg" alt="Mateen Yousuf" onerror="this.parentElement.innerHTML='<span style=\'font-size:28px\'>👨‍🏫</span>'" />
+    </div>
+    <div class="author-info-title">
+      <div class="author-name-title">Mateen Yousuf</div>
+      <div class="author-role-title">Teacher · School Education Dept · J&K</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="title-stats">
+    <div class="stat-item"><div class="stat-num">6</div><div class="stat-lbl">Chapters</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Simulations</div></div>
+    <div class="stat-item"><div class="stat-num">60+</div><div class="stat-lbl">Quiz Questions</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Offline</div></div>
+  </div>
+
+  <!-- Chapter pills -->
+  <div class="chapter-pills">
+    <span class="chapter-pill">📘 Concept &amp; Functions</span>
+    <span class="chapter-pill">👤 The Entrepreneur</span>
+    <span class="chapter-pill">🗺️ Journey</span>
+    <span class="chapter-pill">💡 Innovation</span>
+    <span class="chapter-pill">🏪 Market</span>
+    <span class="chapter-pill">💰 Finance</span>
+  </div>
+
+  <button class="btn btn-gold" onclick="startApp()" style="font-size:16px; padding:16px 48px;">
+    🚀 Start Learning
+  </button>
+  <p style="margin-top:12px; font-size:11px; color:var(--text-muted);">NEP 2020 · NCF · PARAKH · NCERT Aligned</p>
+</div>
+
+<!-- ==================== HOME SCREEN ==================== -->
+<div id="screen-home" class="screen">
+  <div class="home-hero">
+    <div class="home-greeting">Welcome back, Student! 👋</div>
+    <h1 class="home-title">Class 11<br><span>Entrepreneurship</span></h1>
+
+    <!-- Progress overview -->
+    <div class="progress-overview">
+      <div class="progress-row">
+        <span style="font-size:13px; font-weight:700;">Overall Progress</span>
+        <span id="home-progress-pct" style="font-size:13px; color:var(--accent-gold); font-weight:700;">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="home-progress-bar" style="width:0%"></div>
+      </div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:6px;" id="home-chapters-done">0 of 6 chapters completed</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="home-section">
+    <div class="section-title">🎯 Quick Start</div>
+    <div class="quick-actions">
+      <div class="quick-card" onclick="showScreen('simulations')">
+        <div class="quick-icon">⚗️</div>
+        <div class="quick-label">Simulations</div>
+        <div class="quick-desc">Startup lab & business tools</div>
+      </div>
+      <div class="quick-card" onclick="openQuizSelector()">
+        <div class="quick-icon">🧩</div>
+        <div class="quick-label">Quiz Mode</div>
+        <div class="quick-desc">Test your knowledge</div>
+      </div>
+      <div class="quick-card" onclick="showScreen('progress')">
+        <div class="quick-icon">📈</div>
+        <div class="quick-label">My Progress</div>
+        <div class="quick-desc">Track achievements</div>
+      </div>
+      <div class="quick-card" onclick="showScreen('about')">
+        <div class="quick-icon">👨‍🏫</div>
+        <div class="quick-label">About</div>
+        <div class="quick-desc">Author & app info</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chapters -->
+  <div class="home-section">
+    <div class="section-title">📚 All Chapters</div>
+    <div class="chapter-list" id="home-chapter-list">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER SCREEN ==================== -->
+<div id="screen-chapter" class="screen">
+  <div class="top-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="header-title" id="chapter-header-title">Chapter</div>
+    <div id="chapter-header-badge" class="badge badge-gold">Chapter 1</div>
+  </div>
+
+  <div class="chapter-hero">
+    <div class="chapter-hero-num" id="chap-hero-num">1</div>
+    <h2 class="chapter-hero-title" id="chap-hero-title">Chapter Title</h2>
+    <p class="chapter-hero-desc" id="chap-hero-desc">Description here</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(this,'tab-concepts')">📖 Concepts</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-examples')">💡 Examples</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-keyterms')">🔑 Key Terms</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-casestudy')">📋 Case Study</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-practice')">✏️ Practice</button>
+  </div>
+
+  <div id="tab-concepts" class="tab-content active" style="padding:0 20px 20px;">
+    <!-- Populated by JS -->
+  </div>
+  <div id="tab-examples" class="tab-content" style="padding:0 20px 20px;">
+    <!-- Populated by JS -->
+  </div>
+  <div id="tab-keyterms" class="tab-content" style="padding:0 20px 20px;">
+    <!-- Populated by JS -->
+  </div>
+  <div id="tab-casestudy" class="tab-content" style="padding:0 20px 20px;">
+    <!-- Populated by JS -->
+  </div>
+  <div id="tab-practice" class="tab-content" style="padding:0 20px 20px;">
+    <!-- Populated by JS -->
+  </div>
+
+  <div style="padding:0 20px 20px;">
+    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="markChapterComplete()">
+      ✅ Mark as Complete
+    </button>
+  </div>
+</div>
+
+<!-- ==================== QUIZ SCREEN ==================== -->
+<div id="screen-quiz" class="screen">
+  <div class="top-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="header-title">Quiz Mode 🧩</div>
+    <div class="badge badge-gold">MCQ</div>
+  </div>
+
+  <!-- Chapter selector -->
+  <div class="quiz-selector" id="quiz-selector">
+    <div class="section-title">Select a Chapter</div>
+    <div class="quiz-chapter-grid" id="quiz-chapter-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div style="margin-top:20px;">
+      <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="startMixedQuiz()">
+        🔀 Mixed Quiz (All Chapters)
+      </button>
+    </div>
+  </div>
+
+  <!-- Quiz engine -->
+  <div class="quiz-engine" id="quiz-engine">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <span id="quiz-chapter-label" style="font-size:12px; color:var(--text-muted);">Chapter 1</span>
+      <span id="quiz-counter" style="font-size:12px; color:var(--accent-gold); font-weight:700;">Q 1/10</span>
+    </div>
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div>
+    </div>
+    <div class="quiz-question-card">
+      <div class="quiz-q-num" id="quiz-q-num">QUESTION 1 OF 10</div>
+      <div class="quiz-q-text" id="quiz-q-text">Loading...</div>
+    </div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <div style="margin-top:20px; display:flex; gap:10px;">
+      <button class="btn btn-gold" id="quiz-next-btn" onclick="nextQuestion()" style="flex:1; justify-content:center; display:none;">
+        Next →
+      </button>
+      <button class="btn btn-outline" onclick="exitQuiz()" style="padding:12px 20px;">✕</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="quiz-results" id="quiz-results">
+    <div class="result-circle">
+      <div class="result-score" id="result-score">0</div>
+      <div class="result-total" id="result-total">/ 10</div>
+    </div>
+    <div class="result-msg" id="result-msg">Good Job!</div>
+    <div class="result-sub" id="result-sub">You scored 0 out of 10</div>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+      <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="retryQuiz()">🔄 Try Again</button>
+      <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="exitQuiz()">← Back to Chapters</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SIMULATIONS SCREEN ==================== -->
+<div id="screen-simulations" class="screen">
+  <div class="top-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="header-title">Startup Lab ⚗️</div>
+    <div class="badge badge-teal">Interactive</div>
+  </div>
+
+  <!-- Sim selector -->
+  <div id="sim-selector">
+    <div style="padding:20px 20px 4px;">
+      <div class="section-title">Choose a Simulation</div>
+      <p style="font-size:13px; color:var(--text-muted);">Hands-on business tools to learn by doing</p>
+    </div>
+    <div class="sim-grid">
+      <div class="sim-card" onclick="openSim('idea')">
+        <div class="sim-icon">💡</div>
+        <div class="sim-name">Startup Idea Generator</div>
+        <div class="sim-desc">Discover business ideas</div>
+      </div>
+      <div class="sim-card" onclick="openSim('market')">
+        <div class="sim-icon">🎯</div>
+        <div class="sim-name">Market Research Lab</div>
+        <div class="sim-desc">Find your target customers</div>
+      </div>
+      <div class="sim-card" onclick="openSim('canvas')">
+        <div class="sim-icon">🗂️</div>
+        <div class="sim-name">Business Model Canvas</div>
+        <div class="sim-desc">Build your business plan</div>
+      </div>
+      <div class="sim-card" onclick="openSim('pricing')">
+        <div class="sim-icon">💹</div>
+        <div class="sim-name">Pricing Simulator</div>
+        <div class="sim-desc">Price &amp; demand analysis</div>
+      </div>
+      <div class="sim-card" onclick="openSim('profit')" style="grid-column: 1 / -1;">
+        <div class="sim-icon">📊</div>
+        <div class="sim-name">Profit Calculator</div>
+        <div class="sim-desc">Revenue vs. cost analysis — find your break-even point</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- SIMULATION PANELS ---- -->
+
+  <!-- Startup Idea Generator -->
+  <div id="sim-idea" class="sim-panel">
+    <div class="top-header">
+      <div class="back-btn" onclick="closeSim()">←</div>
+      <div class="header-title">💡 Startup Idea Generator</div>
+    </div>
+    <div style="padding:0 20px;">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+        Generate random startup ideas. Great for brainstorming and entrepreneurship thinking!
+      </p>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:8px;">Select a Sector:</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="idea-sector-btns">
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Any')">🌐 Any</button>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Tech')">💻 Tech</button>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Agriculture')">🌾 Agri</button>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Education')">📚 Education</button>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Tourism')">🏔️ Tourism</button>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="selectSector('Food')">🍱 Food</button>
+        </div>
+      </div>
+      <div class="idea-output" id="idea-output">
+        <div class="idea-emoji">💡</div>
+        <div class="idea-name">Press generate to get an idea!</div>
+        <div class="idea-desc">Tap the button below to generate a random startup idea.</div>
+      </div>
+      <button class="btn btn-gold" style="width:100%; justify-content:center; font-size:16px;" onclick="generateIdea()">
+        ⚡ Generate Startup Idea
+      </button>
+      <div id="idea-viability" style="display:none; margin-top:16px;">
+        <div class="section-title" style="font-size:16px;">📊 Idea Analysis</div>
+        <div id="idea-viability-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Market Research Lab -->
+  <div id="sim-market" class="sim-panel">
+    <div class="top-header">
+      <div class="back-btn" onclick="closeSim()">←</div>
+      <div class="header-title">🎯 Market Research Lab</div>
+    </div>
+    <div style="padding:0 20px;">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+        Identify your target customer segment and analyse market potential.
+      </p>
+      <div class="section-title" style="font-size:16px;">Select Target Segments:</div>
+      <div class="market-segments" id="market-segments">
+        <!-- Populated by JS -->
+      </div>
+      <button class="btn btn-teal" style="width:100%; justify-content:center;" onclick="analyzeMarket()">
+        🔍 Analyze Market
+      </button>
+      <div class="market-result" id="market-result">
+        <div class="section-title" style="font-size:16px;">Market Analysis</div>
+        <div id="market-bars"></div>
+        <div id="market-insight" style="margin-top:14px; font-size:13px; color:var(--text-secondary); line-height:1.7;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Model Canvas -->
+  <div id="sim-canvas" class="sim-panel">
+    <div class="top-header">
+      <div class="back-btn" onclick="closeSim()">←</div>
+      <div class="header-title">🗂️ Business Model Canvas</div>
+    </div>
+    <div style="padding:0 20px;">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">
+        Fill in the 9 building blocks of a Business Model Canvas for your startup idea.
+      </p>
+      <div class="bmc-grid" id="bmc-grid">
+        <!-- Populated by JS -->
+      </div>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn btn-gold" style="flex:1; justify-content:center;" onclick="saveCanvas()">💾 Save Canvas</button>
+        <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="clearCanvas()">🗑️ Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Simulator -->
+  <div id="sim-pricing" class="sim-panel">
+    <div class="top-header">
+      <div class="back-btn" onclick="closeSim()">←</div>
+      <div class="header-title">💹 Pricing Simulator</div>
+    </div>
+    <div style="padding:0 20px;">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+        Adjust price and cost to see how demand and revenue change. Understand price elasticity!
+      </p>
+      <div class="price-slider-wrap">
+        <div class="price-slider-label">
+          <span>Selling Price (₹)</span>
+          <span id="price-val">250</span>
+        </div>
+        <input type="range" min="50" max="1000" value="250" id="price-slider" oninput="updatePricing()" />
+      </div>
+      <div class="price-slider-wrap">
+        <div class="price-slider-label">
+          <span>Cost per Unit (₹)</span>
+          <span id="cost-val">100</span>
+        </div>
+        <input type="range" min="10" max="800" value="100" id="cost-slider" oninput="updatePricing()" />
+      </div>
+      <div class="price-slider-wrap">
+        <div class="price-slider-label">
+          <span>Market Sensitivity</span>
+          <span id="sens-val">Medium</span>
+        </div>
+        <input type="range" min="1" max="3" value="2" id="sens-slider" oninput="updatePricing()" />
+      </div>
+      <canvas id="priceChart" height="180"></canvas>
+      <div class="pricing-results" id="pricing-results">
+        <div class="price-metric">
+          <div class="price-metric-val" id="p-demand">400</div>
+          <div class="price-metric-lbl">Est. Demand (units)</div>
+        </div>
+        <div class="price-metric">
+          <div class="price-metric-val" id="p-revenue">₹1,00,000</div>
+          <div class="price-metric-lbl">Revenue</div>
+        </div>
+        <div class="price-metric">
+          <div class="price-metric-val" id="p-profit">₹60,000</div>
+          <div class="price-metric-lbl">Profit</div>
+        </div>
+      </div>
+      <div id="pricing-insight" style="margin-top:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px; font-size:13px; color:var(--text-secondary);"></div>
+    </div>
+  </div>
+
+  <!-- Profit Calculator -->
+  <div id="sim-profit" class="sim-panel">
+    <div class="top-header">
+      <div class="back-btn" onclick="closeSim()">←</div>
+      <div class="header-title">📊 Profit Calculator</div>
+    </div>
+    <div style="padding:0 20px;">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+        Enter your business numbers to calculate revenue, costs, and profit.
+      </p>
+      <div class="calc-inputs">
+        <div class="calc-input-group">
+          <label>💰 Selling Price per Unit (₹)</label>
+          <input type="number" class="calc-input" id="calc-price" value="200" oninput="calcProfit()" />
+        </div>
+        <div class="calc-input-group">
+          <label>📦 Units Sold</label>
+          <input type="number" class="calc-input" id="calc-units" value="100" oninput="calcProfit()" />
+        </div>
+        <div class="calc-input-group">
+          <label>🏭 Variable Cost per Unit (₹)</label>
+          <input type="number" class="calc-input" id="calc-vc" value="80" oninput="calcProfit()" />
+        </div>
+        <div class="calc-input-group">
+          <label>🏢 Fixed Costs (₹) — rent, salaries, etc.</label>
+          <input type="number" class="calc-input" id="calc-fc" value="5000" oninput="calcProfit()" />
+        </div>
+      </div>
+      <div class="calc-result" id="calc-result">
+        <div class="calc-result-row">
+          <span class="calc-result-label">Total Revenue</span>
+          <span class="calc-result-val" id="calc-revenue">₹20,000</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="calc-result-label">Variable Costs</span>
+          <span class="calc-result-val" id="calc-vc-total">₹8,000</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="calc-result-label">Fixed Costs</span>
+          <span class="calc-result-val" id="calc-fc-total">₹5,000</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="calc-result-label">Total Costs</span>
+          <span class="calc-result-val" id="calc-tc-total">₹13,000</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="calc-result-label" style="font-weight:900; color:var(--text-primary);">Net Profit / Loss</span>
+          <span class="calc-result-val" id="calc-net-profit">₹7,000</span>
+        </div>
+      </div>
+      <div id="calc-bep" style="margin-top:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px; font-size:13px; color:var(--text-secondary);"></div>
+      <!-- Break-even SVG chart -->
+      <div style="margin-top:16px;">
+        <div class="section-title" style="font-size:14px;">Break-Even Chart</div>
+        <div class="svg-chart-wrap" id="bep-chart-wrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROGRESS SCREEN ==================== -->
+<div id="screen-progress" class="screen">
+  <div class="top-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="header-title">My Progress 📈</div>
+    <div class="badge badge-blue">Tracker</div>
+  </div>
+  <div style="padding:20px 20px 100px;">
+    <div class="progress-header">
+      <div class="progress-big-num" id="prog-pct-big">0%</div>
+      <div style="font-size:13px; color:var(--accent-gold); font-weight:700;" id="prog-chaps-done">0 / 6 Chapters</div>
+      <div class="progress-big-label">Overall Completion</div>
+    </div>
+
+    <div class="section-title">Chapter Progress</div>
+    <div class="chapter-progress-list" id="chapter-progress-list"></div>
+
+    <div class="quiz-history">
+      <div class="section-title">Quiz History</div>
+      <div id="quiz-history-list">
+        <div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">
+          No quiz attempts yet. Take a quiz to see your history!
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <button class="btn btn-outline" style="width:100%; justify-content:center; color:var(--danger); border-color:var(--danger);" onclick="resetProgress()">
+        🗑️ Reset All Progress
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ABOUT SCREEN ==================== -->
+<div id="screen-about" class="screen">
+  <div class="top-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="header-title">About This App</div>
+  </div>
+  <div style="padding:20px 20px 100px;">
+    <div class="about-author-card">
+      <div class="about-author-photo">
+        <img src="author.jpg" alt="Mateen Yousuf" onerror="this.parentElement.innerHTML='<span style=\'font-size:48px\'>👨‍🏫</span>'" />
+      </div>
+      <div class="about-author-name">Mateen Yousuf</div>
+      <div class="about-author-title">Teacher</div>
+      <div class="about-author-dept">School Education Department<br>Jammu and Kashmir</div>
+    </div>
+
+    <div class="card about-app-info" style="margin-bottom:16px;">
+      <div class="section-title">About the App</div>
+      <p>This interactive Progressive Web App covers the complete JKBOSE Class 11 Entrepreneurship syllabus. It is designed in alignment with NEP 2020, NCF, PARAKH, and NCERT guidelines.</p>
+      <p>The app runs 100% offline and can be installed as a mobile app on Android devices.</p>
+    </div>
+
+    <div class="section-title">Features</div>
+    <div class="about-features">
+      <div class="about-feat"><div class="about-feat-icon">📖</div><div class="about-feat-name">6 Full Chapters</div></div>
+      <div class="about-feat"><div class="about-feat-icon">⚗️</div><div class="about-feat-name">5 Simulations</div></div>
+      <div class="about-feat"><div class="about-feat-icon">🧩</div><div class="about-feat-name">60+ Quiz Questions</div></div>
+      <div class="about-feat"><div class="about-feat-icon">📊</div><div class="about-feat-name">Progress Tracking</div></div>
+      <div class="about-feat"><div class="about-feat-icon">📱</div><div class="about-feat-name">Installable App</div></div>
+      <div class="about-feat"><div class="about-feat-icon">🌐</div><div class="about-feat-name">100% Offline</div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px; text-align:center;">
+      <div style="font-size:11px; color:var(--text-muted);">Version 1.0 · JKBOSE Class 11</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Made with ❤️ for Students of J&K</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BOTTOM NAV ==================== -->
+<nav class="nav-bar" id="nav-bar" style="display:none;">
+  <button class="nav-btn active" onclick="showScreen('home')" id="nav-home">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" onclick="showScreen('quiz')" id="nav-quiz">
+    <span class="nav-icon">🧩</span>Quiz
+  </button>
+  <button class="nav-btn" onclick="showScreen('simulations')" id="nav-sim">
+    <span class="nav-icon">⚗️</span>Lab
+  </button>
+  <button class="nav-btn" onclick="showScreen('progress')" id="nav-progress">
+    <span class="nav-icon">📈</span>Progress
+  </button>
+  <button class="nav-btn" onclick="showScreen('about')" id="nav-about">
+    <span class="nav-icon">👨‍🏫</span>About
+  </button>
+</nav>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+/* ================================================
+   DATA: CHAPTER CONTENT
+   JKBOSE Class 11 Entrepreneurship - Full Syllabus
+   ================================================ */
+const CHAPTERS = [
+  {
+    id: 1,
+    icon: '📘',
+    title: 'Entrepreneurship: Concept and Functions',
+    shortTitle: 'Concept & Functions',
+    desc: 'Understand what entrepreneurship means, its importance, and the key functions of an entrepreneur in the economy.',
+    color: '#f59e0b',
+    concepts: [
+      {
+        heading: '📌 What is Entrepreneurship?',
+        body: 'Entrepreneurship is the process of designing, launching, and running a new business venture. It involves identifying opportunities, mobilizing resources, and bearing risks to create value. The word comes from the French term "entreprendre" meaning "to undertake".'
+      },
+      {
+        heading: '🌟 Importance of Entrepreneurship',
+        body: 'Entrepreneurship is vital for economic growth. It creates employment, generates wealth, fosters innovation, meets consumer needs, and promotes competition. In the context of J&K, entrepreneurship offers huge potential in tourism, handicrafts, agriculture-tech, and food processing.'
+      },
+      {
+        heading: '⚙️ Functions of an Entrepreneur',
+        list: [
+          'Innovation: Introducing new products, services, or methods',
+          'Risk-taking: Bearing uncertainty and financial risk',
+          'Decision Making: Choosing among alternatives to achieve goals',
+          'Resource Mobilization: Gathering land, labour, capital, and enterprise',
+          'Organizing: Combining factors of production efficiently',
+          'Market Research: Identifying consumer needs and market gaps'
+        ]
+      },
+      {
+        heading: '🔄 Types of Entrepreneurship',
+        list: [
+          'Small Business Entrepreneurship: Local shops, restaurants, freelancers',
+          'Scalable Startup Entrepreneurship: Tech startups aiming for rapid growth',
+          'Social Entrepreneurship: Solving social problems through business (e.g. SEWA)',
+          'Corporate Entrepreneurship (Intrapreneurship): Innovation within companies',
+          'Lifestyle Entrepreneurship: Building a business that supports personal goals'
+        ]
+      }
+    ],
+    examples: [
+      {
+        title: '🍎 Dhruv Lakra – Mirakle Couriers (Social Entrepreneur)',
+        desc: 'Dhruv started a courier company that exclusively employs deaf individuals. He identified a social problem (unemployment among differently-abled) and built a sustainable business around it. Today Mirakle Couriers operates across Mumbai delivering for major companies. This is an excellent example of social entrepreneurship.'
+      },
+      {
+        title: '🌶️ Kashmiri Saffron Farmer Co-operative',
+        desc: 'Farmers in Pampore, J&K, formed cooperatives to market their GI-tagged saffron directly to buyers, eliminating middlemen. This entrepreneurial effort tripled their income and created a brand "Kashmir Saffron" with global recognition.'
+      },
+      {
+        title: '📱 Byju Raveendran – BYJU\'S EdTech',
+        desc: 'A teacher from Kerala who identified the gap in quality education and launched BYJU\'S app. Starting from coaching classes, he scaled it to become India\'s most valued EdTech startup. This shows scalable startup entrepreneurship in action.'
+      }
+    ],
+    keyTerms: [
+      { icon: '🚀', word: 'Entrepreneur', def: 'A person who organizes and manages a business, taking on financial risk to do so.' },
+      { icon: '💡', word: 'Innovation', def: 'The process of translating an idea or invention into a good or service that creates value.' },
+      { icon: '⚖️', word: 'Risk-Taking', def: 'Willingness to accept the possibility of loss in pursuit of potential gains.' },
+      { icon: '🌱', word: 'Venture', def: 'A new business enterprise that involves some degree of risk.' },
+      { icon: '🔍', word: 'Opportunity', def: 'A favourable set of circumstances that creates a need for a new product, service, or business.' },
+      { icon: '💰', word: 'Profit Motive', def: 'The desire to earn income from a business enterprise above and beyond costs.' }
+    ],
+    caseStudy: {
+      title: 'Lijjat Papad – A Women\'s Cooperative',
+      content: 'In 1959, seven women from a chawl in Mumbai started making papad with a borrowed capital of ₹80. Today Shri Mahila Griha Udyog Lijjat Papad has an annual turnover of over ₹1,600 crore and employs over 45,000 women. The key success factors were: unity, self-reliance, women empowerment, quality consistency, and entrepreneurial spirit. This story demonstrates that entrepreneurship is not just about individual wealth but collective growth.',
+      questions: ['What problem did the founders of Lijjat Papad identify?', 'How did they mobilize resources with minimal capital?', 'What type of entrepreneurship does this represent?', 'What lessons can young entrepreneurs learn from this story?']
+    }
+  },
+  {
+    id: 2,
+    icon: '👤',
+    title: 'An Entrepreneur',
+    shortTitle: 'The Entrepreneur',
+    desc: 'Explore the characteristics, qualities, types, and psychological profile of successful entrepreneurs.',
+    color: '#8b5cf6',
+    concepts: [
+      {
+        heading: '🧠 Who is an Entrepreneur?',
+        body: 'An entrepreneur is an individual who takes initiative to create a new enterprise, bearing risk and uncertainty, in order to make a profit. They are agents of change who transform ideas into successful businesses.'
+      },
+      {
+        heading: '✨ Key Characteristics of Entrepreneurs',
+        list: [
+          'Self-Confidence: Belief in their own abilities and decisions',
+          'Initiative: Taking action proactively without being prompted',
+          'Risk-bearing ability: Comfortable with uncertainty',
+          'Creativity and Innovation: Constantly generating new ideas',
+          'Vision: Ability to see long-term possibilities',
+          'Persistence: Not giving up in the face of failure',
+          'Leadership: Inspiring and guiding a team',
+          'Decision-making ability: Making timely and informed choices',
+          'Adaptability: Changing with market conditions',
+          'Networking: Building relationships that support business growth'
+        ]
+      },
+      {
+        heading: '📊 Types of Entrepreneurs',
+        list: [
+          'Innovative Entrepreneur: Introduces new products or methods (e.g., Steve Jobs)',
+          'Imitative Entrepreneur: Copies successful models in new markets',
+          'Fabian Entrepreneur: Cautious, only adopts changes when necessary',
+          'Drone Entrepreneur: Refuses to change methods even at the cost of failure',
+          'Social Entrepreneur: Creates solutions to social problems',
+          'Technopreneur: Technology-driven entrepreneur (e.g., Sundar Pichai)'
+        ]
+      },
+      {
+        heading: '🔑 Entrepreneurial Motivation',
+        body: 'McClelland\'s theory identifies "Need for Achievement (nAch)" as the primary driver of entrepreneurial behaviour. Entrepreneurs are motivated by the desire to excel, take calculated risks, and achieve personal success. Other motivators include need for independence, desire to create wealth, family tradition, and social recognition.'
+      }
+    ],
+    examples: [
+      {
+        title: '👓 Ritesh Agarwal – OYO Rooms',
+        desc: 'Ritesh dropped out of college at 19 to start OYO, a budget hotel aggregator. He started with a single rented guesthouse in Orissa. By identifying India\'s need for affordable, standardized accommodation, he built Asia\'s largest hospitality company. His story exemplifies creativity, risk-taking, and persistence.'
+      },
+      {
+        title: '🌿 Anshu Gupta – Goonj (Social Entrepreneurship)',
+        desc: 'Anshu quit his corporate job to address India\'s cloth shortage among the poor. He built Goonj, a system that treats urban surplus as a resource for rural development. He turned "cloth as currency" — people do community work and receive clothing in return. This shows entrepreneurial vision beyond profit.'
+      }
+    ],
+    keyTerms: [
+      { icon: '🎯', word: 'nAch (Need for Achievement)', def: 'McClelland\'s concept: a strong desire to accomplish something difficult or succeed in competition.' },
+      { icon: '🧭', word: 'Self-Confidence', def: 'Belief in one\'s own abilities, judgment, and capacity to succeed.' },
+      { icon: '💪', word: 'Persistence', def: 'Continuing in a course of action despite difficulty or opposition.' },
+      { icon: '🔄', word: 'Adaptability', def: 'The quality of being able to adjust to new conditions.' },
+      { icon: '🌐', word: 'Networking', def: 'Interacting with others to exchange information and develop professional or social contacts.' },
+      { icon: '👁️', word: 'Vision', def: 'The ability to think about or plan the future with imagination and wisdom.' }
+    ],
+    caseStudy: {
+      title: 'Dr. Kiran Mazumdar-Shaw – Biocon',
+      content: 'Kiran started Biocon in a garage in 1978 with a capital of ₹10,000. She faced many obstacles: banks refused to give loans to a woman starting a biotech firm, and the concept was new to India. Her persistence, scientific knowledge, and vision of making healthcare affordable led Biocon to become India\'s largest biopharmaceutical company. Today it develops life-saving medicines and exports to 85+ countries. Her journey is a testament to the power of entrepreneurial determination.',
+      questions: ['What challenges did Kiran face as a woman entrepreneur in India?', 'What characteristic of an entrepreneur does her story best illustrate?', 'How did she contribute to social welfare through her business?', 'Can you identify the type of entrepreneur she represents?']
+    }
+  },
+  {
+    id: 3,
+    icon: '🗺️',
+    title: 'Entrepreneurial Journey',
+    shortTitle: 'Entrepreneurial Journey',
+    desc: 'Follow the step-by-step journey of an entrepreneur from idea generation to launching and growing a venture.',
+    color: '#0d9488',
+    concepts: [
+      {
+        heading: '🛣️ Stages of the Entrepreneurial Journey',
+        list: [
+          'Stage 1 - Idea Generation: Identifying problems, gaps, and opportunities in the market',
+          'Stage 2 - Evaluation: Feasibility analysis — Is the idea viable?',
+          'Stage 3 - Planning: Writing a Business Plan',
+          'Stage 4 - Funding: Raising capital through savings, loans, investors, crowdfunding',
+          'Stage 5 - Launch: Setting up the business and starting operations',
+          'Stage 6 - Growth: Scaling, hiring, and expanding',
+          'Stage 7 - Maturity/Exit: Franchising, IPO, merger, or selling the business'
+        ]
+      },
+      {
+        heading: '💼 The Business Plan',
+        body: 'A Business Plan is a written document that describes a company\'s core business activities, objectives, and plans for achieving them. It includes: Executive Summary, Company Description, Market Analysis, Products/Services, Marketing Plan, Operations Plan, Financial Plan, and Risk Analysis.'
+      },
+      {
+        heading: '💡 Sources of Business Ideas',
+        list: [
+          'Own experience and skills',
+          'Observing problems in daily life',
+          'Brainstorming sessions',
+          'Customer feedback and surveys',
+          'Trade fairs and exhibitions',
+          'Research and development',
+          'Studying successful businesses abroad',
+          'Emerging technology trends'
+        ]
+      },
+      {
+        heading: '📝 Feasibility Analysis',
+        list: [
+          'Market Feasibility: Is there demand for this product/service?',
+          'Technical Feasibility: Do we have the technology and skills?',
+          'Financial Feasibility: Can we afford to start and sustain it?',
+          'Organizational Feasibility: Do we have the right team?'
+        ]
+      }
+    ],
+    examples: [
+      {
+        title: '🚗 Ola Cabs – Bhavish Aggarwal\'s Journey',
+        desc: 'Bhavish was angered by a bad taxi experience — the driver stopped mid-way and demanded extra money. Instead of just complaining, he identified a massive problem: India lacks reliable, affordable taxi services. He started Ola from his college dorm. Today, Ola operates in 250+ cities across India and multiple countries, revolutionizing urban mobility.'
+      },
+      {
+        title: '🍕 Domino\'s – The Power of a Business Plan',
+        desc: 'Tom Monaghan bought a struggling pizza store called DomiNick\'s in 1960 for $500. He wrote a detailed business plan focused on one thing: delivery in 30 minutes. This single focus helped Domino\'s grow to 19,000+ stores worldwide. The lesson: a focused business plan with a clear value proposition is the foundation of success.'
+      }
+    ],
+    keyTerms: [
+      { icon: '📄', word: 'Business Plan', def: 'A written document describing business goals, strategies, and financial projections.' },
+      { icon: '🔍', word: 'Feasibility Study', def: 'An analysis of the viability of an idea before committing significant resources.' },
+      { icon: '💡', word: 'Idea Generation', def: 'The process of creating, developing, and communicating new concepts.' },
+      { icon: '💵', word: 'Seed Capital', def: 'Initial funding used to start a business, typically for early-stage development.' },
+      { icon: '📈', word: 'Scaling', def: 'Growing a business by increasing production, sales, and market reach.' },
+      { icon: '🚪', word: 'Exit Strategy', def: 'A planned approach to ending ownership of a business, such as selling or merging.' }
+    ],
+    caseStudy: {
+      title: 'Paytm – From SMS to Super App',
+      content: 'Vijay Shekhar Sharma grew up in Aligarh with limited resources and poor English. He started Paytm in 2010 as an SMS-based platform for mobile recharges. His entrepreneurial journey involved multiple pivots: mobile recharges → digital wallet → e-commerce → banking. The 2016 demonetization was a turning point — Paytm became the go-to digital payment app overnight, crossing 100 million users in weeks. This journey shows idea evolution, persistence through pivots, and capitalizing on external events.',
+      questions: ['At which stage of the entrepreneurial journey did Paytm find its breakthrough?', 'How did Vijay pivot his business multiple times?', 'What external factor helped Paytm scale rapidly?', 'What can students learn from Sharma\'s early challenges?']
+    }
+  },
+  {
+    id: 4,
+    icon: '💡',
+    title: 'Entrepreneurship as Innovation and Problem Solving',
+    shortTitle: 'Innovation & Problem Solving',
+    desc: 'Learn how entrepreneurs drive innovation, solve problems creatively, and create disruptive solutions.',
+    color: '#3b82f6',
+    concepts: [
+      {
+        heading: '🔬 Schumpeter\'s Theory of Innovation',
+        body: 'Joseph Schumpeter described the entrepreneur as an "agent of creative destruction." Innovation is the driving force behind economic growth. Schumpeter identified five types of innovation: new products, new production methods, new markets, new sources of supply, and new business structures.'
+      },
+      {
+        heading: '💡 Types of Innovation',
+        list: [
+          'Product Innovation: Creating new or improved products (iPhone, Jio SIM)',
+          'Process Innovation: Better methods of production (Toyota production system)',
+          'Marketing Innovation: New ways to reach customers (Amul\'s advertising)',
+          'Organizational Innovation: New business models (Amazon subscription)',
+          'Disruptive Innovation: Overturning existing markets (Netflix vs Blockbuster)',
+          'Incremental Innovation: Small improvements over time',
+          'Frugal Innovation (Jugaad): Low-cost, simple solutions for local needs'
+        ]
+      },
+      {
+        heading: '🧩 Design Thinking for Entrepreneurs',
+        list: [
+          'Empathize: Understand users\' real needs',
+          'Define: Clearly frame the problem',
+          'Ideate: Brainstorm multiple solutions',
+          'Prototype: Build a quick, testable version',
+          'Test: Gather feedback and iterate'
+        ]
+      },
+      {
+        heading: '🌍 Jugaad Innovation',
+        body: 'Jugaad (juggling with constraints) is India\'s unique form of frugal innovation. It means finding affordable, flexible, and sustainable solutions for resource-scarce environments. Examples: Jaipur Foot (affordable prosthetic), clay pots as refrigerators (Mitticool), bike-mounted water pump.'
+      }
+    ],
+    examples: [
+      {
+        title: '❄️ Mansukhbhai Prajapati – Mitticool (Clay Refrigerator)',
+        desc: 'After reading a newspaper headline "Poor man\'s fridge breaks" about flood victims, a potter from Gujarat made a working refrigerator from clay. The Mitticool costs ₹2,500 and keeps water and vegetables cool without electricity. This is Jugaad innovation at its finest — solving a real problem with available resources. It won the National Innovation Foundation award.'
+      },
+      {
+        title: '💊 Aravind Eye Hospitals – Healthcare Innovation',
+        desc: 'Dr. Govindappa Venkataswamy created the "McDonald\'s model" for eye care. By industrializing cataract surgery — using assembly-line efficiency — Aravind performs more eye surgeries than the entire UK at 1/500th the cost. 60% of patients pay little or nothing. This is social + process innovation combined.'
+      }
+    ],
+    keyTerms: [
+      { icon: '💥', word: 'Disruptive Innovation', def: 'Innovation that displaces existing markets, industries, or technologies.' },
+      { icon: '🔧', word: 'Jugaad', def: 'An Indian approach to frugal innovation using creative, low-cost solutions.' },
+      { icon: '🔄', word: 'Creative Destruction', def: 'Schumpeter\'s concept: new innovations destroy old economic structures.' },
+      { icon: '🧪', word: 'Prototype', def: 'An early model of a product built to test an idea or concept.' },
+      { icon: '🎨', word: 'Design Thinking', def: 'A human-centred approach to problem-solving using empathy, ideation, and testing.' },
+      { icon: '📉', word: 'Incremental Innovation', def: 'Small, gradual improvements to existing products or processes.' }
+    ],
+    caseStudy: {
+      title: 'Jio – Disrupting India\'s Telecom Sector',
+      content: 'In 2016, Reliance Jio disrupted India\'s telecom market by offering free voice calls and nearly-free data. Before Jio, 1GB of data cost ₹250; after Jio it cost ₹10. Over 100 million users signed up in 170 days — the fastest adoption in telecom history. Competitors like Aircel and BSNL struggled. This is classic Disruptive Innovation: Jio changed the price point, business model, and the very nature of internet access in India.',
+      questions: ['What type of innovation did Jio introduce?', 'How did Jio\'s entry affect existing telecom companies?', 'What problem did Jio solve for millions of Indians?', 'Is "disruption" always good? Discuss pros and cons.']
+    }
+  },
+  {
+    id: 5,
+    icon: '🏪',
+    title: 'Concept of Market',
+    shortTitle: 'Concept of Market',
+    desc: 'Understand markets, market structures, demand and supply, pricing, and how entrepreneurs identify and create markets.',
+    color: '#10b981',
+    concepts: [
+      {
+        heading: '🏪 What is a Market?',
+        body: 'A market is any arrangement that facilitates buying and selling of goods, services, or resources. It does not necessarily require a physical place — online marketplaces, stock exchanges, and commodity exchanges are all markets. A market is defined by buyers, sellers, a commodity, and a price.'
+      },
+      {
+        heading: '📊 Types of Markets',
+        list: [
+          'Based on area: Local, Regional, National, Global',
+          'Based on time: Spot/Immediate, Short-term, Long-term',
+          'Based on competition: Perfect Competition, Monopoly, Oligopoly, Monopolistic Competition',
+          'Based on nature: Consumer Market, Industrial Market, Government Market',
+          'Digital Market: E-commerce platforms like Amazon, Flipkart, Meesho'
+        ]
+      },
+      {
+        heading: '📉 Demand and Supply',
+        body: 'Demand is the quantity of a product consumers are willing and able to buy at various prices. Supply is the quantity producers are willing to sell at various prices. The Equilibrium Price is where demand equals supply — the market "clears." Entrepreneurs must understand these forces to price their products correctly.'
+      },
+      {
+        heading: '🎯 Market Segmentation',
+        list: [
+          'Demographic: Age, gender, income, education',
+          'Geographic: City, state, region, country',
+          'Psychographic: Lifestyle, values, personality',
+          'Behavioural: Buying habits, brand loyalty, usage patterns',
+          'Benefit: What benefit the customer seeks (price, quality, convenience)'
+        ]
+      },
+      {
+        heading: '📣 4Ps of Marketing Mix',
+        list: [
+          'Product: What are you selling? Features, quality, design',
+          'Price: How much? Pricing strategy (skimming, penetration, competitive)',
+          'Place: Where is it available? Distribution channels',
+          'Promotion: How do customers know? Advertising, social media, word of mouth'
+        ]
+      }
+    ],
+    examples: [
+      {
+        title: '🍵 Chai Sutta Bar – Creating a New Market',
+        desc: 'Anubhav Dubey identified that young people wanted a hip, affordable cafe experience without expensive coffee. He created "Chai Sutta Bar" selling tea in clay cups for ₹10-30. By creating a completely new market segment (youth + chai culture + Instagram vibes), it grew to 400+ outlets across 150 cities in 5 years. Entrepreneurs don\'t just enter markets — they sometimes create entirely new ones.'
+      },
+      {
+        title: '🛒 Meesho – Creating a Market for Resellers',
+        desc: 'Meesho identified a market gap: millions of housewives wanted to earn income but lacked capital for inventory. Meesho created a social commerce platform where anyone can resell products via WhatsApp without holding inventory. They created a new type of entrepreneur — the micro-reseller. This changed the market structure of Indian e-commerce.'
+      }
+    ],
+    keyTerms: [
+      { icon: '⚖️', word: 'Equilibrium Price', def: 'The price at which quantity demanded equals quantity supplied.' },
+      { icon: '🎯', word: 'Target Market', def: 'A specific group of consumers a business aims its products and marketing at.' },
+      { icon: '🏆', word: 'Market Share', def: 'The percentage of a market controlled by a particular company or product.' },
+      { icon: '📊', word: 'Market Segmentation', def: 'Dividing the market into distinct groups of consumers with similar needs.' },
+      { icon: '🔄', word: 'Marketing Mix (4Ps)', def: 'Product, Price, Place, and Promotion — the four tools of marketing strategy.' },
+      { icon: '💎', word: 'USP (Unique Selling Proposition)', def: 'The unique feature that makes a product different from and better than competitors.' }
+    ],
+    caseStudy: {
+      title: 'Amul – India\'s Milk Revolution',
+      content: 'In 1946, farmers in Anand, Gujarat were exploited by a private dairy monopoly (Polson). Dr. Verghese Kurien helped them create the Amul cooperative. Farmers owned the supply chain from cow to customer. Amul disrupted the monopolistic market structure and created India\'s largest food brand. Today Amul handles 20 million litres of milk daily from 3.6 million farmer-members. The "Amul girl" advertising campaign is Asia\'s longest-running campaign, demonstrating marketing innovation. This case shows market disruption through cooperative entrepreneurship.',
+      questions: ['What market structure existed in the dairy industry before Amul?', 'How did Amul change this market structure?', 'Which of the 4Ps was Amul\'s strongest strategy?', 'How does Amul benefit both producers (farmers) and consumers?']
+    }
+  },
+  {
+    id: 6,
+    icon: '💰',
+    title: 'Business Finance and Arithmetic',
+    shortTitle: 'Finance & Arithmetic',
+    desc: 'Master the basics of business finance — capital, costs, revenue, profit, and key financial calculations every entrepreneur needs.',
+    color: '#ef4444',
+    concepts: [
+      {
+        heading: '💵 Sources of Business Finance',
+        list: [
+          'Personal Savings: Own money invested (lowest risk for lender)',
+          'Family and Friends: Informal borrowing',
+          'Bank Loans: Commercial bank credit (requires collateral)',
+          'Microfinance: Small loans for tiny businesses (NABARD, SHGs)',
+          'Angel Investors: Wealthy individuals who invest in early-stage startups',
+          'Venture Capital: Firms that invest large amounts in high-growth startups',
+          'Crowdfunding: Raising money from many small investors online',
+          'Government Schemes: PMEGP, Mudra Loans, Startup India',
+          'Trade Credit: Buying goods now and paying later'
+        ]
+      },
+      {
+        heading: '📊 Types of Costs',
+        list: [
+          'Fixed Costs: Don\'t change with output — rent, salaries, insurance',
+          'Variable Costs: Change with output — raw materials, packaging, power',
+          'Semi-Variable Costs: Fixed up to a point, then variable',
+          'Opportunity Cost: Value of the next best alternative foregone',
+          'Sunk Cost: Already spent money that cannot be recovered'
+        ]
+      },
+      {
+        heading: '📈 Revenue and Profit Concepts',
+        list: [
+          'Revenue = Price × Quantity Sold',
+          'Gross Profit = Revenue - Cost of Goods Sold',
+          'Net Profit = Gross Profit - All Operating Expenses',
+          'Profit Margin = (Net Profit / Revenue) × 100',
+          'Break-Even Point = Fixed Costs / (Price - Variable Cost per Unit)'
+        ]
+      },
+      {
+        heading: '🧮 Working Capital',
+        body: 'Working Capital = Current Assets - Current Liabilities. It represents the money a business needs for day-to-day operations. Positive working capital means the business can pay its short-term debts. Poor working capital management is one of the top reasons businesses fail.'
+      }
+    ],
+    examples: [
+      {
+        title: '📱 Startup India – Government Support for Finance',
+        desc: 'The Indian Government\'s Startup India initiative provides tax exemptions for 3 years, access to ₹10,000 crore fund, simplified regulations, and patent fee reductions. MUDRA loans (Micro Units Development and Refinance Agency) provide ₹50,000 to ₹10 lakh loans to micro-entrepreneurs without collateral. In J&K, the "J&K Entrepreneurship Development Institute" provides training and seed funding.'
+      },
+      {
+        title: '🧮 Break-Even Example: Bakery',
+        desc: 'A student baker has: Fixed Costs = ₹5,000/month (rent + equipment EMI). Variable Cost per cake = ₹100. Selling price per cake = ₹200. Break-Even = 5,000 / (200-100) = 50 cakes/month. So she needs to sell 50 cakes just to cover costs. Every cake above 50 earns ₹100 profit. This simple calculation can determine if a business is viable!'
+      }
+    ],
+    keyTerms: [
+      { icon: '💳', word: 'Working Capital', def: 'Money available for day-to-day business operations (Current Assets - Current Liabilities).' },
+      { icon: '📉', word: 'Break-Even Point', def: 'The sales level at which total revenue equals total costs — no profit, no loss.' },
+      { icon: '🏦', word: 'Venture Capital', def: 'Private equity funding provided to high-potential startups in exchange for equity.' },
+      { icon: '👼', word: 'Angel Investor', def: 'A wealthy individual who provides capital for startups, usually in exchange for convertible debt or equity.' },
+      { icon: '📊', word: 'Profit Margin', def: 'Percentage of revenue that remains after all costs are deducted.' },
+      { icon: '🔒', word: 'Collateral', def: 'An asset pledged as security for a loan.' }
+    ],
+    caseStudy: {
+      title: 'Mamaearth – Bootstrapped to ₹10,000 Crore Startup',
+      content: 'Varun and Ghazal Alagh started Mamaearth in 2016 with ₹90 lakh of their own savings (bootstrapped) after they couldn\'t find safe, toxin-free baby products in India. They bootstrapped for the first year before raising angel investment. They kept their burn rate low, focused on organic social media, and turned profitable before raising large VC funding. In 2023, Mamaearth became the first D2C brand to list on Indian stock exchanges, valued at ₹10,000 crore. Key lesson: Understand your costs, manage working capital wisely, and don\'t raise money before you need it.',
+      questions: ['What does "bootstrapping" mean? How did Mamaearth use it?', 'How did the founders manage costs in the early stages?', 'At what point should a startup raise VC funding?', 'Calculate: If Mamaearth sold each product for ₹500 with ₹200 variable cost and ₹50,000 fixed costs, what is the break-even quantity?']
+    }
+  }
+];
+
+/* ================================================
+   DATA: QUIZ QUESTIONS (10 per chapter)
+   ================================================ */
+const QUIZ_DATA = {
+  1: [
+    { q: 'The word "entrepreneur" comes from which language?', opts: ['Latin','French','German','Italian'], ans: 1, exp: 'The word "entrepreneur" is derived from the French verb "entreprendre" meaning "to undertake".' },
+    { q: 'Which of the following BEST describes entrepreneurship?', opts: ['Managing a government office','Creating and running a new business venture','Working in a factory','Investing in stocks'], ans: 1, exp: 'Entrepreneurship is the process of designing, launching, and running a new business venture.' },
+    { q: 'An entrepreneur who solves social problems through business is called a:', opts: ['Corporate entrepreneur','Lifestyle entrepreneur','Social entrepreneur','Drone entrepreneur'], ans: 2, exp: 'Social entrepreneurs focus on solving social, environmental, or cultural problems through business models.' },
+    { q: 'Which function of an entrepreneur involves introducing new products or methods?', opts: ['Risk-taking','Innovation','Organizing','Decision-making'], ans: 1, exp: 'Innovation is the function where entrepreneurs introduce new products, services, or methods.' },
+    { q: '"Intrapreneurship" refers to:', opts: ['Starting a new company','Entrepreneurship within an existing organization','Trading internationally','Buying a franchise'], ans: 1, exp: 'Intrapreneurship (Corporate Entrepreneurship) is the act of behaving like an entrepreneur within an established company.' },
+    { q: 'Lijjat Papad started with a borrowed capital of:', opts: ['₹80','₹800','₹8,000','₹80,000'], ans: 0, exp: 'Seven women started Shri Mahila Griha Udyog Lijjat Papad with a borrowed capital of just ₹80 in 1959.' },
+    { q: 'Which of the following is NOT a function of an entrepreneur?', opts: ['Risk-taking','Resource mobilization','Paying taxes for others','Decision-making'], ans: 2, exp: 'Paying taxes for others is not an entrepreneurial function. Core functions include risk-taking, innovation, organizing, and decision-making.' },
+    { q: 'A "lifestyle entrepreneur" primarily aims to:', opts: ['Achieve rapid growth','Build a business supporting personal goals','Create social impact','Develop technology'], ans: 1, exp: 'Lifestyle entrepreneurs build businesses that support their personal interests, values, and desired lifestyle.' },
+    { q: 'BYJU\'S is an example of which type of entrepreneurship?', opts: ['Social','Lifestyle','Scalable startup','Drone'], ans: 2, exp: 'BYJU\'S is a scalable startup — it grew rapidly using technology to reach millions of students globally.' },
+    { q: 'The primary goal of a social entrepreneur is:', opts: ['Maximum profit','Market domination','Solving social problems','Importing goods'], ans: 2, exp: 'Social entrepreneurs primarily aim to solve social, environmental, or cultural problems rather than maximizing profit.' }
+  ],
+  2: [
+    { q: 'McClelland\'s theory relates entrepreneurial behaviour to which "need"?', opts: ['Need for Power','Need for Achievement (nAch)','Need for Affiliation','Need for Security'], ans: 1, exp: 'David McClelland identified "Need for Achievement" (nAch) as the primary driver of entrepreneurial behaviour.' },
+    { q: 'An "innovative entrepreneur" is best described as someone who:', opts: ['Copies existing successful models','Introduces new products or methods','Refuses to change','Only uses old technology'], ans: 1, exp: 'An innovative entrepreneur introduces new products, processes, or methods into the market (e.g., Steve Jobs).' },
+    { q: 'A "Fabian entrepreneur" is characterized by:', opts: ['Quick adoption of all changes','Refusal to change at all','Caution — only changes when necessary','Focus on technology'], ans: 2, exp: 'Fabian entrepreneurs are cautious and only adopt changes when it is absolutely necessary to survive.' },
+    { q: 'Ritesh Agarwal started OYO Rooms at what age?', opts: ['16','19','21','25'], ans: 1, exp: 'Ritesh Agarwal dropped out of college and started OYO Rooms at the age of 19.' },
+    { q: 'Which characteristic of an entrepreneur means "not giving up despite failures"?', opts: ['Vision','Networking','Persistence','Self-confidence'], ans: 2, exp: 'Persistence is the quality of continuing in a course of action despite difficulty or failure.' },
+    { q: 'Biocon was started by Dr. Kiran Mazumdar-Shaw with an initial capital of:', opts: ['₹1,000','₹10,000','₹1,00,000','₹10,00,000'], ans: 1, exp: 'Kiran Mazumdar-Shaw started Biocon in a garage with a capital of just ₹10,000 in 1978.' },
+    { q: 'An entrepreneur who is technology-driven is called:', opts: ['Social entrepreneur','Technopreneur','Lifestyle entrepreneur','Fabian entrepreneur'], ans: 1, exp: 'A "technopreneur" is a technology-driven entrepreneur who creates tech-based businesses (e.g., Sundar Pichai, Elon Musk).' },
+    { q: 'Which of the following is NOT a characteristic of an entrepreneur?', opts: ['Risk-bearing ability','Self-confidence','Fear of failure','Initiative'], ans: 2, exp: 'Fear of failure is NOT a characteristic of a good entrepreneur. Entrepreneurs embrace calculated risk and learn from failures.' },
+    { q: 'Goonj was founded by:', opts: ['Vijay Shekhar Sharma','Anshu Gupta','Ritesh Agarwal','Kiran Shaw'], ans: 1, exp: 'Anshu Gupta founded Goonj, a non-profit that treats urban surplus cloth as a resource for rural development.' },
+    { q: '"Drone entrepreneur" refers to someone who:', opts: ['Uses drones in business','Refuses to change even at cost of failure','Is a fast innovator','Imitates others'], ans: 1, exp: 'A "drone entrepreneur" refuses to adopt changes and continues with outdated methods even when facing losses.' }
+  ],
+  3: [
+    { q: 'The FIRST stage of the entrepreneurial journey is:', opts: ['Funding','Planning','Idea Generation','Launch'], ans: 2, exp: 'The entrepreneurial journey begins with Idea Generation — identifying problems and opportunities in the market.' },
+    { q: 'A Business Plan does NOT typically include:', opts: ['Market Analysis','Financial Plan','Employee personal details','Marketing Plan'], ans: 2, exp: 'Employee personal details are not part of a business plan. It includes market analysis, financial plan, operations, and marketing strategy.' },
+    { q: 'Bhavish Aggarwal co-founded Ola because of:', opts: ['A good investment opportunity','A bad taxi experience','A government scheme','A college project'], ans: 1, exp: 'Bhavish was angered when a taxi driver abandoned him mid-journey. This real problem inspired him to create Ola.' },
+    { q: 'Which type of feasibility asks "Do we have the right team?"', opts: ['Market feasibility','Technical feasibility','Financial feasibility','Organizational feasibility'], ans: 3, exp: 'Organizational feasibility examines whether the founding team has the right skills, experience, and leadership to run the business.' },
+    { q: 'Paytm was started in which year?', opts: ['2008','2010','2012','2016'], ans: 1, exp: 'Vijay Shekhar Sharma founded Paytm in 2010, initially as an SMS-based mobile recharge platform.' },
+    { q: '"Seed Capital" refers to:', opts: ['Capital for expanding a business','Initial funding to start a business','Money from venture capitalists','Bank loan for property'], ans: 1, exp: 'Seed capital is the initial funding used to start a business, typically for early product development and testing.' },
+    { q: 'Which event dramatically accelerated Paytm\'s growth?', opts: ['COVID-19','2016 Demonetization','GST Launch','Olympics 2016'], ans: 1, exp: 'India\'s demonetization in November 2016 drove millions to digital payments, helping Paytm grow to 100M users in weeks.' },
+    { q: 'What does "exit strategy" mean for an entrepreneur?', opts: ['Leaving the market temporarily','A planned approach to ending ownership of a business','Firing employees','Closing the factory'], ans: 1, exp: 'An exit strategy is how an entrepreneur plans to sell or transfer ownership — through IPO, merger, acquisition, or sale.' },
+    { q: 'Which source of business idea involves studying problems in everyday life?', opts: ['Trade fairs','R&D','Observing daily life','Government reports'], ans: 2, exp: 'Many successful entrepreneurs get ideas by observing everyday problems — like Bhavish Aggarwal with Ola and Mansukhbhai with Mitticool.' },
+    { q: 'Domino\'s success was built around which single focus?', opts: ['Lowest price pizza','30-minute delivery','Healthiest ingredients','Widest variety'], ans: 1, exp: 'Tom Monaghan built Domino\'s around one clear value proposition: pizza delivery in 30 minutes or it\'s free.' }
+  ],
+  4: [
+    { q: 'According to Schumpeter, the entrepreneur is an agent of:', opts: ['Slow growth','Creative destruction','Market stability','Government policy'], ans: 1, exp: 'Joseph Schumpeter described the entrepreneur as an agent of "creative destruction" — new innovations destroy old economic structures.' },
+    { q: '"Jugaad" innovation is best characterized as:', opts: ['High-tech innovation','Expensive innovation','Frugal, low-cost innovation','Foreign innovation'], ans: 2, exp: 'Jugaad is India\'s unique approach to frugal, flexible innovation that creates simple solutions for resource-scarce environments.' },
+    { q: 'The Mitticool clay refrigerator was invented by:', opts: ['Anshu Gupta','Dr. V. Kurien','Mansukhbhai Prajapati','Vijay Shekhar'], ans: 2, exp: 'Mansukhbhai Prajapati, a potter from Gujarat, invented the Mitticool — a clay refrigerator that works without electricity.' },
+    { q: 'Design Thinking begins with which step?', opts: ['Prototype','Test','Ideate','Empathize'], ans: 3, exp: 'Design Thinking starts with "Empathize" — deeply understanding the user\'s needs, feelings, and problems.' },
+    { q: 'Which type of innovation displaces existing markets entirely?', opts: ['Incremental innovation','Process innovation','Disruptive innovation','Product innovation'], ans: 2, exp: 'Disruptive innovation radically changes or replaces existing markets, products, or industries.' },
+    { q: 'Before Jio launched, 1GB of mobile data cost approximately:', opts: ['₹10','₹50','₹250','₹1,000'], ans: 2, exp: 'Before Jio\'s 2016 launch, 1GB of mobile data cost around ₹250. After Jio, it dropped to under ₹10.' },
+    { q: 'Aravind Eye Hospitals used which model to industrialize eye surgery?', opts: ['Amazon model','McDonald\'s model','Toyota model','Apple model'], ans: 1, exp: 'Dr. Venkataswamy created the "McDonald\'s model" for eye care — standardized, high-volume, low-cost surgery.' },
+    { q: 'Schumpeter identified how many types of innovation?', opts: ['3','5','7','10'], ans: 1, exp: 'Schumpeter identified 5 types: new products, new production methods, new markets, new supply sources, and new business structures.' },
+    { q: 'Which of the following is an example of PRODUCT innovation?', opts: ['Toyota production system','Amazon Prime subscription','Apple iPhone','Amul\'s advertising'], ans: 2, exp: 'The Apple iPhone is a classic product innovation — a completely new type of product that changed an entire industry.' },
+    { q: '"Frugal innovation" means:', opts: ['Expensive high-tech solutions','Low-cost simple solutions for real needs','Innovation in farming','Finance-based innovation'], ans: 1, exp: 'Frugal innovation (Jugaad) creates affordable, simple solutions designed for users with limited resources.' }
+  ],
+  5: [
+    { q: 'A market is defined as any arrangement that facilitates:', opts: ['Government planning','Buying and selling','Manufacturing','Taxation'], ans: 1, exp: 'A market is any arrangement — physical or virtual — that facilitates buying and selling of goods, services, or resources.' },
+    { q: 'Segmenting a market by age, gender, and income is called:', opts: ['Geographic segmentation','Psychographic segmentation','Demographic segmentation','Behavioural segmentation'], ans: 2, exp: 'Demographic segmentation divides the market based on characteristics like age, gender, income, and education.' },
+    { q: 'The 4Ps of marketing mix do NOT include:', opts: ['Product','Process','Price','Promotion'], ans: 1, exp: 'The traditional 4Ps are Product, Price, Place, and Promotion. "Process" is added in the extended 7Ps but not in the original 4Ps.' },
+    { q: 'Equilibrium price is where:', opts: ['Demand is maximum','Supply is maximum','Demand equals supply','Price is lowest'], ans: 2, exp: 'The equilibrium price is where quantity demanded equals quantity supplied — the market "clears" with no surplus or shortage.' },
+    { q: 'Chai Sutta Bar created a new market by targeting:', opts: ['Senior citizens','Young people wanting affordable cafe experience','International tourists','Corporate offices'], ans: 1, exp: 'Chai Sutta Bar targeted young people who wanted a trendy, affordable cafe experience built around Indian chai culture.' },
+    { q: 'Meesho created a market for:', opts: ['Micro-resellers using social media','Big corporate retailers','Export businesses','Manufacturing units'], ans: 0, exp: 'Meesho created a social commerce platform enabling housewives and small entrepreneurs to resell products via WhatsApp without holding inventory.' },
+    { q: 'A market where one seller dominates is called:', opts: ['Perfect competition','Oligopoly','Monopoly','Monopsony'], ans: 2, exp: 'A monopoly is a market structure where a single seller dominates, controlling price and supply with no close competitors.' },
+    { q: 'USP stands for:', opts: ['Unique Standard Product','Universal Sales Pricing','Unique Selling Proposition','Unified Supply Plan'], ans: 2, exp: 'USP (Unique Selling Proposition) is the unique feature that differentiates a product and makes it better than competitors.' },
+    { q: 'Amul is organized as a:', opts: ['Private company','Government enterprise','Cooperative','Foreign company'], ans: 2, exp: 'Amul is organized as a cooperative — owned and operated by millions of farmer-members across Gujarat.' },
+    { q: 'Geographic segmentation divides the market based on:', opts: ['Customer age','Location','Buying behaviour','Income level'], ans: 1, exp: 'Geographic segmentation divides the market based on location — city, state, region, or country.' }
+  ],
+  6: [
+    { q: 'MUDRA loans are available up to:', opts: ['₹50,000','₹10 lakh','₹1 crore','₹10 crore'], ans: 1, exp: 'MUDRA (Micro Units Development and Refinance Agency) loans range from ₹50,000 to ₹10 lakh for micro-entrepreneurs without collateral.' },
+    { q: 'Fixed costs are costs that:', opts: ['Change with output','Do not change with output','Are never paid','Depend on sales'], ans: 1, exp: 'Fixed costs remain constant regardless of output level — examples include rent, salaries, and insurance premiums.' },
+    { q: 'Break-Even Point formula is:', opts: ['Revenue / Fixed Costs','Fixed Costs / (Price - Variable Cost)','Net Profit × Revenue','Total Costs × Price'], ans: 1, exp: 'BEP = Fixed Costs ÷ (Selling Price - Variable Cost per unit). This gives the number of units needed to cover all costs.' },
+    { q: 'If price = ₹200, variable cost = ₹100, fixed costs = ₹5,000, the break-even quantity is:', opts: ['25 units','50 units','75 units','100 units'], ans: 1, exp: 'BEP = 5,000 / (200-100) = 5,000 / 100 = 50 units. You need to sell exactly 50 units to cover all costs.' },
+    { q: 'Mamaearth was founded by:', opts: ['Ritesh Agarwal & Vijay Sharma','Varun & Ghazal Alagh','Bhavish Aggarwal & Ankit Bhati','Byju & Divya Gokulnath'], ans: 1, exp: 'Varun Alagh and Ghazal Alagh founded Mamaearth in 2016, making toxin-free baby care and personal care products.' },
+    { q: 'Starting a business using only personal savings is called:', opts: ['Venture capital funding','Crowdfunding','Bootstrapping','Angel investment'], ans: 2, exp: 'Bootstrapping means funding a startup using personal savings, without external investors.' },
+    { q: 'Working Capital = Current Assets minus:', opts: ['Fixed Assets','Long-term liabilities','Current Liabilities','Total Capital'], ans: 2, exp: 'Working Capital = Current Assets - Current Liabilities. It measures a business\'s ability to meet short-term obligations.' },
+    { q: 'An "angel investor" typically invests in:', opts: ['Government bonds','Early-stage startups','Large corporations','Real estate only'], ans: 1, exp: 'Angel investors are wealthy individuals who provide capital to early-stage startups, usually in exchange for equity or convertible debt.' },
+    { q: 'Gross Profit = Revenue minus:', opts: ['All operating expenses','Fixed costs only','Cost of Goods Sold','Interest payments'], ans: 2, exp: 'Gross Profit = Revenue - Cost of Goods Sold (COGS). It shows profit before deducting operating expenses.' },
+    { q: 'Profit Margin is expressed as:', opts: ['Revenue × 100','(Net Profit / Revenue) × 100','Costs / Revenue × 100','Units × Price'], ans: 1, exp: 'Profit Margin (%) = (Net Profit / Revenue) × 100. It shows what percentage of each rupee of revenue is profit.' }
+  ]
+};
+
+/* ================================================
+   STATE MANAGEMENT
+   ================================================ */
+let currentScreen = 'title';
+let currentChapter = null;
+let currentQuiz = { questions: [], idx: 0, score: 0, chapterKey: null };
+let completedChapters = JSON.parse(localStorage.getItem('completedChapters') || '[]');
+let quizHistory = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+let canvasData = JSON.parse(localStorage.getItem('canvasData') || '{}');
+let ideaSector = 'Any';
+
+/* ================================================
+   NAVIGATION
+   ================================================ */
+function startApp() {
+  document.getElementById('screen-title').classList.remove('active');
+  document.getElementById('nav-bar').style.display = 'flex';
+  showScreen('home');
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  currentScreen = name;
+
+  // Update nav
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const navMap = { home:'nav-home', quiz:'nav-quiz', simulations:'nav-sim', progress:'nav-progress', about:'nav-about' };
+  if (navMap[name]) document.getElementById(navMap[name]).classList.add('active');
+
+  // Scroll to top
+  window.scrollTo(0,0);
+
+  // Screen-specific init
+  if (name === 'home') renderHome();
+  if (name === 'progress') renderProgress();
+  if (name === 'quiz') { showQuizSelector(); }
+}
+
+/* ================================================
+   HOME SCREEN RENDER
+   ================================================ */
+function renderHome() {
+  const done = completedChapters.length;
+  const pct = Math.round((done / 6) * 100);
+  document.getElementById('home-progress-pct').textContent = pct + '%';
+  document.getElementById('home-progress-bar').style.width = pct + '%';
+  document.getElementById('home-chapters-done').textContent = done + ' of 6 chapters completed';
+
+  const list = document.getElementById('home-chapter-list');
+  list.innerHTML = CHAPTERS.map(ch => `
+    <div class="chapter-card ${completedChapters.includes(ch.id) ? 'completed' : ''}" onclick="openChapter(${ch.id})">
+      <div class="chapter-num">${ch.id}</div>
+      <div class="chapter-info">
+        <div class="chapter-name">${ch.title}</div>
+        <div class="chapter-meta">${ch.concepts.length} concepts • ${ch.keyTerms.length} key terms${completedChapters.includes(ch.id) ? ' • ✅ Completed' : ''}</div>
+      </div>
+      <div class="chapter-arrow">${completedChapters.includes(ch.id) ? '✅' : '→'}</div>
+    </div>
+  `).join('');
+}
+
+/* ================================================
+   CHAPTER SCREEN
+   ================================================ */
+function openChapter(id) {
+  currentChapter = CHAPTERS.find(c => c.id === id);
+  if (!currentChapter) return;
+
+  document.getElementById('chapter-header-title').textContent = currentChapter.shortTitle;
+  document.getElementById('chapter-header-badge').textContent = 'Ch ' + id;
+  document.getElementById('chap-hero-num').textContent = id;
+  document.getElementById('chap-hero-title').textContent = currentChapter.title;
+  document.getElementById('chap-hero-desc').textContent = currentChapter.desc;
+
+  // Reset tabs
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  document.querySelectorAll('.tab-content').forEach((c,i) => c.classList.toggle('active', i===0));
+
+  renderChapterTabs(currentChapter);
+  showScreen('chapter');
+}
+
+function renderChapterTabs(ch) {
+  // Concepts tab
+  document.getElementById('tab-concepts').innerHTML = ch.concepts.map(c => `
+    <div class="concept-block">
+      <h3>${c.heading}</h3>
+      ${c.body ? `<p>${c.body}</p>` : ''}
+      ${c.list ? `<ul>${c.list.map(l=>`<li>${l}</li>`).join('')}</ul>` : ''}
+    </div>
+  `).join('') + renderChapterInfographic(ch);
+
+  // Examples tab
+  document.getElementById('tab-examples').innerHTML = ch.examples.map(e => `
+    <div class="case-study">
+      <div class="case-study-tag">📌 Real-World Example</div>
+      <h3>${e.title}</h3>
+      <p>${e.desc}</p>
+    </div>
+  `).join('');
+
+  // Key terms tab
+  document.getElementById('tab-keyterms').innerHTML = `
+    <div class="key-terms">${ch.keyTerms.map(t => `
+      <div class="key-term">
+        <div class="key-term-icon">${t.icon}</div>
+        <div>
+          <div class="key-term-word">${t.word}</div>
+          <div class="key-term-def">${t.def}</div>
+        </div>
+      </div>
+    `).join('')}</div>`;
+
+  // Case study tab
+  const cs = ch.caseStudy;
+  document.getElementById('tab-casestudy').innerHTML = `
+    <div class="case-study">
+      <div class="case-study-tag">📋 Case Study</div>
+      <h3>${cs.title}</h3>
+      <p>${cs.content}</p>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="section-title" style="font-size:16px;">💬 Discussion Questions</div>
+      ${cs.questions.map((q,i) => `
+        <div class="concept-block" style="padding:14px;">
+          <h3 style="font-size:13px;">Q${i+1}. ${q}</h3>
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Practice tab — 3 quick questions from quiz data
+  const qs = (QUIZ_DATA[ch.id] || []).slice(0,3);
+  document.getElementById('tab-practice').innerHTML = `
+    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">Practice questions to test your understanding. Click on an option to reveal the answer.</p>
+    ${qs.map((q,i) => `
+      <div class="concept-block" id="pq-${ch.id}-${i}">
+        <h3>Q${i+1}: ${q.q}</h3>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+          ${q.opts.map((o,j) => `
+            <button onclick="checkPQ(${ch.id},${i},${j},${q.ans},'${encodeURIComponent(q.exp)}')"
+              id="pq-btn-${ch.id}-${i}-${j}"
+              style="background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:10px 12px; text-align:left; cursor:pointer; font-size:13px; color:var(--text-primary); transition:all 0.2s;">
+              ${String.fromCharCode(65+j)}. ${o}
+            </button>
+          `).join('')}
+        </div>
+        <div id="pq-fb-${ch.id}-${i}" style="display:none; margin-top:10px; padding:10px; border-radius:8px; font-size:12px;"></div>
+      </div>
+    `).join('')}
+    <div style="margin-top:16px;">
+      <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="openQuizForChapter(${ch.id})">
+        🧩 Take Full Chapter Quiz →
+      </button>
+    </div>`;
+}
+
+function checkPQ(chId, qIdx, selected, correct, expEncoded) {
+  const exp = decodeURIComponent(expEncoded);
+  const buttons = document.querySelectorAll(`[id^="pq-btn-${chId}-${qIdx}-"]`);
+  buttons.forEach((b,j) => {
+    b.disabled = true;
+    if (j === correct) { b.style.borderColor = 'var(--success)'; b.style.background = 'rgba(16,185,129,0.1)'; b.style.color = 'var(--success)'; }
+    else if (j === selected && selected !== correct) { b.style.borderColor = 'var(--danger)'; b.style.background = 'rgba(239,68,68,0.1)'; b.style.color = 'var(--danger)'; }
+    else { b.style.opacity = '0.4'; }
+  });
+  const fb = document.getElementById(`pq-fb-${chId}-${qIdx}`);
+  fb.style.display = 'block';
+  fb.style.background = selected === correct ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+  fb.style.border = `1px solid ${selected === correct ? 'var(--success)' : 'var(--danger)'}`;
+  fb.style.color = selected === correct ? 'var(--success)' : 'var(--text-secondary)';
+  fb.textContent = (selected === correct ? '✅ Correct! ' : '❌ Incorrect. ') + exp;
+}
+
+function renderChapterInfographic(ch) {
+  // Generate chapter-specific SVG infographic
+  if (ch.id === 1) return `
+    <div class="infographic">
+      <h3>🔄 Types of Entrepreneurs</h3>
+      <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#ea580c"/>
+          </linearGradient>
+        </defs>
+        <circle cx="170" cy="100" r="40" fill="url(#g1)" opacity="0.9"/>
+        <text x="170" y="104" text-anchor="middle" fill="#000" font-size="11" font-weight="bold">Entrepreneur</text>
+        ${[['Small Business',45,40],['Scalable Startup',295,40],['Social',45,160],['Corporate',295,160],['Lifestyle',170,175]].map(([l,x,y])=>`
+          <circle cx="${x}" cy="${y}" r="32" fill="#0d1526" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="${x}" y="${y+4}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold">${l}</text>
+          <line x1="${x < 150 ? x+32 : x > 190 ? x-32 : x}" y1="${y < 90 ? y+32 : y-32}" x2="${x<150?138:x>190?202:170}" y2="${y<90?62:138}" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4"/>
+        `).join('')}
+      </svg>
+    </div>`;
+  if (ch.id === 3) return `
+    <div class="infographic">
+      <h3>🛣️ The Entrepreneurial Journey</h3>
+      <svg viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg">
+        ${['Idea','Evaluate','Plan','Fund','Launch','Grow','Exit'].map((s,i) => `
+          <rect x="${i*47+5}" y="20" width="40" height="40" rx="8" fill="${i===0?'#f59e0b':'#0d1526'}" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="${i*47+25}" y="37" text-anchor="middle" fill="${i===0?'#000':'#f59e0b'}" font-size="10">●</text>
+          <text x="${i*47+25}" y="50" text-anchor="middle" fill="${i===0?'#000':'#94a3b8'}" font-size="8">${s}</text>
+          ${i<6?`<text x="${i*47+47}" y="42" text-anchor="middle" fill="#f59e0b" font-size="14">›</text>`:''}
+        `).join('')}
+      </svg>
+    </div>`;
+  if (ch.id === 5) return `
+    <div class="infographic">
+      <h3>🎯 Market Segmentation</h3>
+      <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="170" cy="80" r="70" fill="none" stroke="#1e293b" stroke-width="30" stroke-dasharray="110 330"/>
+        <circle cx="170" cy="80" r="70" fill="none" stroke="#f59e0b" stroke-width="30" stroke-dasharray="110 330" stroke-dashoffset="-110"/>
+        <circle cx="170" cy="80" r="70" fill="none" stroke="#0d9488" stroke-width="30" stroke-dasharray="55 385" stroke-dashoffset="-220"/>
+        <circle cx="170" cy="80" r="70" fill="none" stroke="#3b82f6" stroke-width="30" stroke-dasharray="55 385" stroke-dashoffset="-275"/>
+        <circle cx="170" cy="80" r="40" fill="#0a0e1a"/>
+        <text x="170" y="76" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Market</text>
+        <text x="170" y="88" text-anchor="middle" fill="#f59e0b" font-size="8">Segments</text>
+        <text x="260" y="30" fill="#f59e0b" font-size="9">● Demographic</text>
+        <text x="260" y="50" fill="#f59e0b" font-size="9">● Geographic</text>
+        <text x="260" y="70" fill="#0d9488" font-size="9">● Psychographic</text>
+        <text x="260" y="90" fill="#3b82f6" font-size="9">● Behavioural</text>
+      </svg>
+    </div>`;
+  return '';
+}
+
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function markChapterComplete() {
+  if (!currentChapter) return;
+  if (!completedChapters.includes(currentChapter.id)) {
+    completedChapters.push(currentChapter.id);
+    localStorage.setItem('completedChapters', JSON.stringify(completedChapters));
+  }
+  showToast('✅ Chapter marked complete!');
+  showScreen('home');
+}
+
+/* ================================================
+   QUIZ ENGINE
+   ================================================ */
+function openQuizSelector() {
+  showScreen('quiz');
+  showQuizSelector();
+}
+
+function showQuizSelector() {
+  document.getElementById('quiz-selector').style.display = 'block';
+  document.getElementById('quiz-engine').classList.remove('active');
+  document.getElementById('quiz-results').classList.remove('show');
+  const grid = document.getElementById('quiz-chapter-grid');
+  grid.innerHTML = CHAPTERS.map(ch => `
+    <div class="quiz-chapter-btn" onclick="openQuizForChapter(${ch.id})">
+      <div class="quiz-chapter-icon">${ch.icon}</div>
+      <div class="quiz-chapter-name">${ch.shortTitle}</div>
+    </div>
+  `).join('');
+}
+
+function openQuizForChapter(chId) {
+  const qs = (QUIZ_DATA[chId] || []).map(q => ({...q}));
+  currentQuiz = {
+    questions: shuffleArray(qs).slice(0, Math.min(10, qs.length)),
+    idx: 0, score: 0,
+    chapterKey: chId,
+    chapterName: CHAPTERS.find(c=>c.id===chId)?.shortTitle || 'Chapter '+chId
+  };
+  startQuiz();
+}
+
+function startMixedQuiz() {
+  let all = [];
+  Object.values(QUIZ_DATA).forEach(qs => all.push(...qs));
+  currentQuiz = {
+    questions: shuffleArray(all).slice(0, 15),
+    idx: 0, score: 0,
+    chapterKey: 'mixed',
+    chapterName: 'Mixed (All Chapters)'
+  };
+  startQuiz();
+}
+
+function startQuiz() {
+  document.getElementById('quiz-selector').style.display = 'none';
+  document.getElementById('quiz-engine').classList.add('active');
+  document.getElementById('quiz-results').classList.remove('show');
+  document.getElementById('quiz-chapter-label').textContent = '📚 ' + currentQuiz.chapterName;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQuiz.questions[currentQuiz.idx];
+  const total = currentQuiz.questions.length;
+  const idx = currentQuiz.idx;
+
+  document.getElementById('quiz-counter').textContent = `Q ${idx+1}/${total}`;
+  document.getElementById('quiz-q-num').textContent = `QUESTION ${idx+1} OF ${total}`;
+  document.getElementById('quiz-q-text').textContent = q.q;
+  document.getElementById('quiz-progress-fill').style.width = ((idx/total)*100)+'%';
+
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = q.opts.map((o,i) => `
+    <button class="quiz-option" onclick="selectAnswer(${i})" id="qopt-${i}">
+      <span class="quiz-option-letter">${String.fromCharCode(65+i)}</span>
+      ${o}
+    </button>
+  `).join('');
+
+  document.getElementById('quiz-feedback').classList.remove('show');
+  document.getElementById('quiz-next-btn').style.display = 'none';
+}
+
+function selectAnswer(selected) {
+  const q = currentQuiz.questions[currentQuiz.idx];
+  document.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
+  document.getElementById('qopt-'+selected).classList.add(selected === q.ans ? 'correct' : 'wrong');
+  if (selected !== q.ans) document.getElementById('qopt-'+q.ans).classList.add('correct');
+
+  const fb = document.getElementById('quiz-feedback');
+  fb.classList.add('show');
+  fb.className = 'quiz-feedback show ' + (selected === q.ans ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = (selected === q.ans ? '✅ Correct! ' : '❌ Incorrect. ') + q.exp;
+
+  if (selected === q.ans) currentQuiz.score++;
+  document.getElementById('quiz-next-btn').style.display = 'flex';
+}
+
+function nextQuestion() {
+  currentQuiz.idx++;
+  if (currentQuiz.idx >= currentQuiz.questions.length) {
+    showQuizResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showQuizResults() {
+  document.getElementById('quiz-engine').classList.remove('active');
+  const res = document.getElementById('quiz-results');
+  res.classList.add('show');
+
+  const s = currentQuiz.score, t = currentQuiz.questions.length;
+  const pct = Math.round((s/t)*100);
+  document.getElementById('result-score').textContent = s;
+  document.getElementById('result-total').textContent = '/ ' + t;
+
+  let msg, sub;
+  if (pct >= 80) { msg = '🏆 Excellent Work!'; sub = 'Outstanding! You have mastered this chapter.'; }
+  else if (pct >= 60) { msg = '👍 Good Job!'; sub = 'Well done! Review the incorrect questions.'; }
+  else if (pct >= 40) { msg = '📚 Keep Practicing!'; sub = 'You\'re getting there. Re-read the concepts.'; }
+  else { msg = '💪 Don\'t Give Up!'; sub = 'Review the chapter material and try again.'; }
+
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-sub').textContent = sub;
+
+  // Save to history
+  const record = {
+    chapterName: currentQuiz.chapterName,
+    score: s, total: t, pct: pct,
+    date: new Date().toLocaleDateString('en-IN')
+  };
+  quizHistory.unshift(record);
+  if (quizHistory.length > 20) quizHistory.pop();
+  localStorage.setItem('quizHistory', JSON.stringify(quizHistory));
+  showToast('📊 Score saved!');
+}
+
+function retryQuiz() {
+  if (currentQuiz.chapterKey === 'mixed') startMixedQuiz();
+  else openQuizForChapter(currentQuiz.chapterKey);
+}
+
+function exitQuiz() {
+  showQuizSelector();
+}
+
+/* ================================================
+   PROGRESS SCREEN
+   ================================================ */
+function renderProgress() {
+  const done = completedChapters.length;
+  const pct = Math.round((done / 6) * 100);
+  document.getElementById('prog-pct-big').textContent = pct + '%';
+  document.getElementById('prog-chaps-done').textContent = done + ' / 6 Chapters';
+
+  // Chapter progress
+  const list = document.getElementById('chapter-progress-list');
+  list.innerHTML = CHAPTERS.map(ch => {
+    const isComplete = completedChapters.includes(ch.id);
+    const hasQuiz = quizHistory.find(h => h.chapterName === ch.shortTitle);
+    const p = isComplete ? 100 : (hasQuiz ? hasQuiz.pct : 0);
+    return `
+      <div class="chap-prog-item">
+        <div class="chap-prog-header">
+          <span class="chap-prog-name">${ch.icon} ${ch.shortTitle}</span>
+          <span class="chap-prog-pct">${p}%</span>
+        </div>
+        <div class="chap-prog-bar"><div class="chap-prog-fill" style="width:${p}%"></div></div>
+      </div>`;
+  }).join('');
+
+  // Quiz history
+  const histList = document.getElementById('quiz-history-list');
+  if (quizHistory.length === 0) {
+    histList.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No quiz attempts yet.</div>';
+  } else {
+    histList.innerHTML = quizHistory.slice(0,10).map(h => `
+      <div class="quiz-hist-item">
+        <div class="quiz-hist-icon">🧩</div>
+        <div class="quiz-hist-info">
+          <div class="quiz-hist-chap">${h.chapterName}</div>
+          <div class="quiz-hist-date">${h.date}</div>
+        </div>
+        <div class="quiz-hist-score ${h.pct>=80?'score-good':h.pct>=50?'score-avg':'score-low'}">${h.score}/${h.total}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function resetProgress() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    completedChapters = [];
+    quizHistory = [];
+    localStorage.removeItem('completedChapters');
+    localStorage.removeItem('quizHistory');
+    localStorage.removeItem('canvasData');
+    renderProgress();
+    showToast('🗑️ Progress reset');
+  }
+}
+
+/* ================================================
+   SIMULATIONS
+   ================================================ */
+function openSim(name) {
+  document.getElementById('sim-selector').style.display = 'none';
+  document.querySelectorAll('.sim-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('sim-' + name);
+  if (panel) {
+    panel.classList.add('active');
+    // Init specific sims
+    if (name === 'market') initMarketSim();
+    if (name === 'canvas') initCanvas();
+    if (name === 'pricing') initPricing();
+    if (name === 'profit') { calcProfit(); renderBEPChart(); }
+  }
+}
+
+function closeSim() {
+  document.querySelectorAll('.sim-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('sim-selector').style.display = 'block';
+}
+
+/* -- Startup Idea Generator -- */
+const STARTUP_IDEAS = {
+  Any: [
+    { emoji:'🛵', name:'EcoRide Delivery', desc:'Eco-friendly last-mile delivery using electric bikes for local businesses.', tags:['Green','Logistics','Urban'] },
+    { emoji:'📦', name:'FreshBox Kashmir', desc:'Weekly subscription boxes of authentic Kashmiri food products delivered across India.', tags:['Food','E-commerce','J&K'] },
+    { emoji:'📱', name:'SkillBridge App', desc:'Connect rural skilled artisans directly with urban buyers via video showcase.', tags:['Tech','Artisans','Social Impact'] },
+    { emoji:'🌱', name:'Rooftop Greens', desc:'Urban rooftop farming kits with guided plant care and subscription refills.', tags:['Agriculture','Sustainability','Urban'] },
+    { emoji:'🎓', name:'TutorNear', desc:'Hyperlocal peer tutoring platform connecting Class 11-12 toppers with struggling students.', tags:['EdTech','Local','Peer Learning'] },
+    { emoji:'👗', name:'Kashmiri Craft Store', desc:'D2C brand selling authenticated Kashmiri handicrafts with artisan stories.', tags:['Handicrafts','D2C','Heritage'] }
+  ],
+  Tech: [
+    { emoji:'🤖', name:'AI Study Buddy', desc:'AI-powered study assistant for Class 9-12 students in regional languages.', tags:['AI','EdTech','Regional'] },
+    { emoji:'📊', name:'FarmData Analytics', desc:'IoT-based soil health dashboard for small farmers — affordable and offline-capable.', tags:['IoT','AgriTech','Rural'] },
+    { emoji:'🔐', name:'LocalPay QR', desc:'Zero-commission QR payment system for small Kashmiri shopkeepers.', tags:['FinTech','QR','Local'] }
+  ],
+  Agriculture: [
+    { emoji:'🍎', name:'Kashmir Direct Harvest', desc:'Connecting Kashmiri apple farmers directly with Delhi/Mumbai consumers.', tags:['AgriTech','Direct Trade','Kashmir'] },
+    { emoji:'🌾', name:'Cold Chain Van', desc:'Affordable shared cold-storage logistics for perishable goods in rural J&K.', tags:['Logistics','Cold Chain','Rural'] },
+    { emoji:'🐄', name:'Milk Route', desc:'Daily fresh milk delivery from local dairy farms with traceability app.', tags:['Dairy','D2C','Fresh'] }
+  ],
+  Education: [
+    { emoji:'📚', name:'Regional NCERT App', desc:'NCERT textbooks in Kashmiri, Dogri, and Urdu with visual explainers.', tags:['EdTech','Multilingual','J&K'] },
+    { emoji:'🎮', name:'EduGame Studio', desc:'Educational mobile games teaching math through Kashmiri folk stories.', tags:['Gamification','Culture','Learning'] },
+    { emoji:'🏫', name:'Village School Hub', desc:'Shared learning center in villages with one device serving 20 students.', tags:['Rural EdTech','Low Cost','Impact'] }
+  ],
+  Tourism: [
+    { emoji:'🏔️', name:'Trek & Stay', desc:'Platform connecting trekkers with certified local guides and homestays in J&K.', tags:['Tourism','Homestay','Adventure'] },
+    { emoji:'🍽️', name:'Heritage Kitchen', desc:'Home dining experiences with authentic Wazwan cooked by local families.', tags:['Food Tourism','Culture','Homestay'] },
+    { emoji:'📸', name:'Kashmir Photo Tours', desc:'Photography-focused guided tours with professional editing workshops.', tags:['Photography','Tourism','Premium'] }
+  ],
+  Food: [
+    { emoji:'🍱', name:'Tiffin Box Network', desc:'Home-cooked meal delivery by verified local home chefs for office areas.', tags:['FoodTech','Home Cooks','Healthy'] },
+    { emoji:'🥤', name:'Himalayan Brew', desc:'Premium artisanal herbal teas and kahwa blends from J&K sold online.', tags:['Beverages','Premium','Export'] },
+    { emoji:'🌮', name:'Cloud Kitchen Kiosk', desc:'Shared commercial kitchen for 5 food entrepreneurs to reduce fixed costs.', tags:['FoodTech','Shared Economy','Startup'] }
+  ]
+};
+
+function selectSector(sector) {
+  ideaSector = sector;
+}
+
+function generateIdea() {
+  const pool = ideaSector === 'Any' ? Object.values(STARTUP_IDEAS).flat() : (STARTUP_IDEAS[ideaSector] || STARTUP_IDEAS.Any);
+  const idea = pool[Math.floor(Math.random() * pool.length)];
+  const out = document.getElementById('idea-output');
+  out.innerHTML = `
+    <div class="idea-emoji">${idea.emoji}</div>
+    <div class="idea-name">${idea.name}</div>
+    <div class="idea-desc">${idea.desc}</div>
+    <div class="idea-tags">${idea.tags.map(t=>`<span class="idea-tag">${t}</span>`).join('')}</div>
+  `;
+  // Viability bars
+  const viab = document.getElementById('idea-viability');
+  viab.style.display = 'block';
+  const scores = { 'Market Demand': 60+Math.floor(Math.random()*35), 'Ease of Start': 40+Math.floor(Math.random()*50), 'Profitability': 50+Math.floor(Math.random()*45), 'Social Impact': 30+Math.floor(Math.random()*65) };
+  document.getElementById('idea-viability-content').innerHTML = Object.entries(scores).map(([label, val]) => `
+    <div class="market-bar-item">
+      <div class="market-bar-label"><span>${label}</span><span style="color:var(--accent-gold); font-weight:700;">${val}%</span></div>
+      <div class="market-bar-track"><div class="market-bar-fill" style="width:${val}%; transition:width 1s ease;"></div></div>
+    </div>
+  `).join('');
+}
+
+/* -- Market Research Simulator -- */
+const MARKET_SEGMENTS_DATA = [
+  { icon:'🧑‍🎓', name:'Students (13-22)', desc:'College and school students', key:'students' },
+  { icon:'👩‍💼', name:'Working Professionals', desc:'Urban office workers, 23-40', key:'professionals' },
+  { icon:'👩‍🌾', name:'Rural Farmers', desc:'Agricultural community, semi-urban', key:'farmers' },
+  { icon:'👴', name:'Senior Citizens', desc:'Retired adults, 55+', key:'seniors' },
+  { icon:'🏠', name:'Homemakers', desc:'Household managers, all ages', key:'homemakers' },
+  { icon:'💼', name:'Small Business Owners', desc:'MSMEs, local entrepreneurs', key:'sme' }
+];
+
+let selectedSegments = [];
+
+function initMarketSim() {
+  selectedSegments = [];
+  document.getElementById('market-result').classList.remove('show');
+  const container = document.getElementById('market-segments');
+  container.innerHTML = MARKET_SEGMENTS_DATA.map(seg => `
+    <div class="segment-card" onclick="toggleSegment('${seg.key}', this)" id="seg-${seg.key}">
+      <div class="segment-icon">${seg.icon}</div>
+      <div>
+        <div class="segment-name">${seg.name}</div>
+        <div class="segment-desc">${seg.desc}</div>
+      </div>
+      <div class="segment-check">✓</div>
+    </div>
+  `).join('');
+}
+
+function toggleSegment(key, el) {
+  if (selectedSegments.includes(key)) {
+    selectedSegments = selectedSegments.filter(k=>k!==key);
+    el.classList.remove('selected');
+  } else {
+    selectedSegments.push(key);
+    el.classList.add('selected');
+  }
+}
+
+function analyzeMarket() {
+  if (selectedSegments.length === 0) { showToast('Select at least one segment!'); return; }
+  const res = document.getElementById('market-result');
+  const bars = document.getElementById('market-bars');
+  res.classList.add('show');
+
+  const metrics = { 'Market Size': 55+Math.floor(Math.random()*40), 'Buying Power': 40+Math.floor(Math.random()*55), 'Growth Rate': 30+Math.floor(Math.random()*65), 'Competition Level': 20+Math.floor(Math.random()*70), 'Digital Reach': 35+Math.floor(Math.random()*60) };
+  bars.innerHTML = Object.entries(metrics).map(([label, val]) => `
+    <div class="market-bar-item">
+      <div class="market-bar-label"><span>${label}</span><span style="color:var(--accent-teal); font-weight:700;">${val}%</span></div>
+      <div class="market-bar-track"><div class="market-bar-fill" style="width:${val}%;"></div></div>
+    </div>
+  `).join('');
+  document.getElementById('market-insight').innerHTML = `
+    <strong style="color:var(--accent-gold);">📌 Analysis for ${selectedSegments.length} segment(s):</strong><br><br>
+    Based on your selected target segments, the combined addressable market shows <strong>${metrics['Market Size']}% market potential</strong>. 
+    Buying power is <strong>${metrics['Buying Power'] > 60 ? 'high' : 'moderate'}</strong>, suggesting 
+    ${metrics['Buying Power'] > 60 ? 'premium pricing may work.' : 'competitive or penetration pricing is advisable.'}
+    The market is growing at <strong>${metrics['Growth Rate']}%</strong> and has <strong>${metrics['Competition Level'] > 50 ? 'high' : 'low-to-moderate'}</strong> competition.
+    <br><br><strong>Recommendation:</strong> ${selectedSegments.length > 2 ? 'You have too many segments — focus on 1-2 for better results.' : 'Good focus! Develop a tailored value proposition for your target segments.'}
+  `;
+}
+
+/* -- Business Model Canvas -- */
+const BMC_BLOCKS = [
+  { key:'kp', label:'🤝 Key Partners', placeholder:'Who are your key partners and suppliers?' },
+  { key:'ka', label:'⚙️ Key Activities', placeholder:'What key activities does your value proposition require?' },
+  { key:'vp', label:'💎 Value Proposition', placeholder:'What value do you deliver to customers?' },
+  { key:'cr', label:'❤️ Customer Relationships', placeholder:'What type of relationship does each segment expect?' },
+  { key:'cs', label:'👥 Customer Segments', placeholder:'Who are you creating value for?' },
+  { key:'kr', label:'🏭 Key Resources', placeholder:'What key resources does your value proposition require?' },
+  { key:'ch', label:'📢 Channels', placeholder:'How do you reach your customer segments?' },
+  { key:'co', label:'💸 Cost Structure', placeholder:'What are the most important costs in your business?' },
+  { key:'rs', label:'💰 Revenue Streams', placeholder:'For what value are customers willing to pay?' }
+];
+
+function initCanvas() {
+  const saved = JSON.parse(localStorage.getItem('canvasData') || '{}');
+  const grid = document.getElementById('bmc-grid');
+  grid.innerHTML = BMC_BLOCKS.map(b => `
+    <div class="bmc-cell${b.key==='co'||b.key==='rs'?' full-width':''}">
+      <div class="bmc-label">${b.label}</div>
+      <textarea class="bmc-input" id="bmc-${b.key}" placeholder="${b.placeholder}" rows="3">${saved[b.key]||''}</textarea>
+    </div>
+  `).join('');
+}
+
+function saveCanvas() {
+  const data = {};
+  BMC_BLOCKS.forEach(b => { data[b.key] = document.getElementById('bmc-'+b.key)?.value || ''; });
+  localStorage.setItem('canvasData', JSON.stringify(data));
+  showToast('💾 Canvas saved!');
+}
+
+function clearCanvas() {
+  BMC_BLOCKS.forEach(b => { const el = document.getElementById('bmc-'+b.key); if(el) el.value=''; });
+  localStorage.removeItem('canvasData');
+  showToast('🗑️ Canvas cleared');
+}
+
+/* -- Pricing Simulator -- */
+function initPricing() {
+  updatePricing();
+}
+
+function updatePricing() {
+  const price = +document.getElementById('price-slider').value;
+  const cost = +document.getElementById('cost-slider').value;
+  const sens = +document.getElementById('sens-slider').value;
+  document.getElementById('price-val').textContent = price;
+  document.getElementById('cost-val').textContent = cost;
+  document.getElementById('sens-val').textContent = ['','Low','Medium','High'][sens];
+
+  // Demand model: higher price = lower demand
+  const baseQty = 1000;
+  const elasticity = [0, 0.5, 1.5, 3][sens];
+  const demand = Math.max(0, Math.round(baseQty * (1 - elasticity * ((price-100)/900))));
+  const revenue = price * demand;
+  const profit = (price - cost) * demand;
+
+  document.getElementById('p-demand').textContent = demand.toLocaleString('en-IN');
+  document.getElementById('p-revenue').textContent = '₹' + (revenue/1000).toFixed(1) + 'K';
+  document.getElementById('p-profit').textContent = (profit >= 0 ? '₹' : '-₹') + (Math.abs(profit)/1000).toFixed(1) + 'K';
+
+  let insight = '';
+  if (price < cost) insight = '⚠️ Selling price is BELOW cost — you will make a loss on every unit!';
+  else if (profit <= 0) insight = '📉 No profit at this price. Try increasing the price or reducing costs.';
+  else if ((profit/revenue*100) > 40) insight = '✅ Excellent margin! You have strong pricing power.';
+  else insight = `💡 Profit margin is ${((profit/revenue)*100).toFixed(1)}%. Consider optimizing costs for better margins.`;
+  document.getElementById('pricing-insight').textContent = insight;
+
+  // Draw demand curve on canvas
+  drawPriceChart(price, cost, sens, demand);
+}
+
+function drawPriceChart(currentPrice, cost, sens, currentDemand) {
+  const canvas = document.getElementById('priceChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = 360;
+  const W = canvas.width, H = canvas.height;
+  const pad = 50;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#0d1526';
+  ctx.fillRect(0,0,W,H);
+
+  const elasticity = [0, 0.5, 1.5, 3][sens];
+  const points = [];
+  for (let p=50; p<=1000; p+=20) {
+    const d = Math.max(0, 1000 * (1 - elasticity * ((p-100)/900)));
+    points.push([p, d]);
+  }
+
+  // Grid
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1;
+  for (let i=1; i<5; i++) {
+    ctx.beginPath(); ctx.moveTo(pad, pad + (H-2*pad)*i/5); ctx.lineTo(W-pad, pad + (H-2*pad)*i/5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad + (W-2*pad)*i/5, pad); ctx.lineTo(pad + (W-2*pad)*i/5, H-pad); ctx.stroke();
+  }
+
+  // Axes labels
+  ctx.fillStyle = '#475569'; ctx.font = '18px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Price (₹)', W/2, H-5);
+  ctx.save(); ctx.translate(15, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Demand', 0, 0); ctx.restore();
+
+  // Demand curve
+  ctx.beginPath(); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+  points.forEach(([p,d],i) => {
+    const x = pad + (p-50)/(950)*(W-2*pad);
+    const y = H-pad - d/1000*(H-2*pad);
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Cost line
+  const cx = pad + (cost-50)/(950)*(W-2*pad);
+  ctx.setLineDash([8,8]); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx, pad); ctx.lineTo(cx, H-pad); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Current price marker
+  const cpx = pad + (currentPrice-50)/(950)*(W-2*pad);
+  const cpy = H-pad - currentDemand/1000*(H-2*pad);
+  ctx.beginPath(); ctx.arc(cpx, cpy, 8, 0, Math.PI*2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.stroke();
+
+  // Legend
+  ctx.font = '20px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#f59e0b'; ctx.fillText('— Demand Curve', pad, 28);
+  ctx.fillStyle = '#ef4444'; ctx.fillText('-- Cost Line', W/2, 28);
+}
+
+/* -- Profit Calculator -- */
+function calcProfit() {
+  const price = +document.getElementById('calc-price').value || 0;
+  const units = +document.getElementById('calc-units').value || 0;
+  const vc = +document.getElementById('calc-vc').value || 0;
+  const fc = +document.getElementById('calc-fc').value || 0;
+
+  const revenue = price * units;
+  const vcTotal = vc * units;
+  const tc = vcTotal + fc;
+  const profit = revenue - tc;
+
+  const fmt = n => '₹' + Math.abs(n).toLocaleString('en-IN');
+  document.getElementById('calc-revenue').textContent = fmt(revenue);
+  document.getElementById('calc-vc-total').textContent = fmt(vcTotal);
+  document.getElementById('calc-fc-total').textContent = fmt(fc);
+  document.getElementById('calc-tc-total').textContent = fmt(tc);
+  const profEl = document.getElementById('calc-net-profit');
+  profEl.textContent = (profit>=0?'':'- ') + fmt(profit);
+  profEl.className = 'calc-result-val ' + (profit>=0?'profit-positive':'profit-negative');
+
+  const margin = price - vc;
+  const bep = margin > 0 ? Math.ceil(fc / margin) : 'N/A';
+  document.getElementById('calc-bep').innerHTML = margin > 0
+    ? `📌 <strong>Break-Even Point:</strong> ${bep} units — You must sell at least <strong>${bep} units</strong> to cover all costs.
+       <br><br>📊 <strong>Contribution per unit:</strong> ₹${margin.toLocaleString('en-IN')} (Price - Variable Cost)
+       <br>💡 <strong>Profit Margin:</strong> ${revenue > 0 ? ((profit/revenue)*100).toFixed(1) : 0}%`
+    : `⚠️ Variable cost equals or exceeds price — cannot calculate break-even. Increase your selling price.`;
+
+  renderBEPChart();
+}
+
+function renderBEPChart() {
+  const price = +document.getElementById('calc-price').value || 200;
+  const vc = +document.getElementById('calc-vc').value || 80;
+  const fc = +document.getElementById('calc-fc').value || 5000;
+
+  const margin = price - vc;
+  if (margin <= 0) { document.getElementById('bep-chart-wrap').innerHTML = '<p style="color:var(--danger); font-size:13px; padding:10px;">Cannot render chart: variable cost ≥ price.</p>'; return; }
+  const bep = Math.ceil(fc / margin);
+  const maxUnits = Math.max(bep * 2, 50);
+
+  const pts = 6;
+  const step = Math.ceil(maxUnits / pts);
+  const svgPoints = Array.from({length:pts+1}, (_,i) => i*step);
+
+  const maxCost = fc + vc * maxUnits;
+  const maxRev = price * maxUnits;
+  const maxY = Math.max(maxCost, maxRev);
+
+  const W = 320, H = 200, pad = 45;
+  const toX = u => pad + (u/maxUnits)*(W-pad-10);
+  const toY = v => H-pad - (v/maxY)*(H-2*pad);
+
+  const revPts = svgPoints.map(u => `${toX(u)},${toY(price*u)}`).join(' ');
+  const costPts = svgPoints.map(u => `${toX(u)},${toY(fc+vc*u)}`).join(' ');
+  const bepX = toX(bep);
+  const bepY = toY(price*bep);
+
+  document.getElementById('bep-chart-wrap').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:#0d1526; border-radius:12px; padding:4px;">
+      <!-- Grid lines -->
+      ${[1,2,3,4].map(i=>`<line x1="${pad}" y1="${pad + (H-2*pad)*i/4}" x2="${W-10}" y2="${pad + (H-2*pad)*i/4}" stroke="#1e293b" stroke-width="1"/>`).join('')}
+      <!-- Revenue line -->
+      <polyline points="${revPts}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- Cost line -->
+      <polyline points="${costPts}" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- BEP vertical -->
+      <line x1="${bepX}" y1="${pad}" x2="${bepX}" y2="${H-pad}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- BEP dot -->
+      <circle cx="${bepX}" cy="${bepY}" r="5" fill="#f59e0b"/>
+      <!-- Labels -->
+      <text x="${bepX+4}" y="${bepY-8}" fill="#f59e0b" font-size="9">BEP: ${bep} units</text>
+      <text x="${W-50}" y="${toY(price*maxUnits)+4}" fill="#10b981" font-size="9">Revenue</text>
+      <text x="${W-50}" y="${toY(fc+vc*maxUnits)+4}" fill="#ef4444" font-size="9">Costs</text>
+      <!-- X axis labels -->
+      ${svgPoints.filter((_,i)=>i%2===0).map(u=>`<text x="${toX(u)}" y="${H-5}" text-anchor="middle" fill="#475569" font-size="8">${u}</text>`).join('')}
+      <text x="${W/2}" y="${H+2}" text-anchor="middle" fill="#475569" font-size="8">Units Sold</text>
+    </svg>`;
+}
+
+/* ================================================
+   TITLE SCREEN ANIMATION
+   ================================================ */
+function initTitleAnim() {
+  const icons = ['🚀','💡','📊','🏪','💰','🎯','⚗️','📈','🌟','💎','🏆','⚡'];
+  const container = document.getElementById('titleBgAnim');
+  icons.forEach((icon, i) => {
+    const el = document.createElement('div');
+    el.className = 'float-icon';
+    el.textContent = icon;
+    el.style.left = Math.random() * 90 + '%';
+    el.style.animationDelay = (i * 0.8) + 's';
+    el.style.animationDuration = (7 + Math.random()*4) + 's';
+    el.style.fontSize = (20 + Math.random()*20) + 'px';
+    container.appendChild(el);
+  });
+}
+
+/* ================================================
+   UTILITY FUNCTIONS
+   ================================================ */
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i=a.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ================================================
+   PWA SERVICE WORKER REGISTRATION (inline blob)
+   Works even when served as a single HTML file
+   ================================================ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swCode = `
+const CACHE_NAME = 'entrepreneur-app-v1';
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached))
+  );
+});`;
+    try {
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl)
+        .then(() => console.log('SW registered via blob'))
+        .catch(() => {}); // silently ignore if blocked
+    } catch(e) {
+      // Silently ignore SW errors — app works fine without it
+    }
+  });
+}
+
+/* ================================================
+   APP INITIALIZATION
+   ================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  initTitleAnim();
+});
+</script>
+</body>
+</html>

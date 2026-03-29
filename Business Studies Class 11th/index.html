@@ -1,0 +1,3333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a237e">
+<meta name="description" content="JKBOSE Class 11 Business Studies Interactive Learning App by Mateen Yousuf">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Class 11 Business Studies | Mateen Yousuf</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CSS VARIABLES & RESET
+   ============================================================ */
+:root {
+  --navy: #0d1b4b;
+  --deep: #162054;
+  --blue: #1a3a9e;
+  --accent: #f4b942;
+  --gold: #e8a020;
+  --teal: #00b4d8;
+  --green: #06d6a0;
+  --red: #ef233c;
+  --white: #ffffff;
+  --gray-light: #f0f4ff;
+  --gray: #8892b0;
+  --card-bg: rgba(255,255,255,0.07);
+  --card-border: rgba(255,255,255,0.15);
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+  --radius: 16px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Nunito', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   SCREENS (Single Page App Routing)
+   ============================================================ */
+.screen {
+  display: none;
+  min-height: 100vh;
+  animation: fadeIn 0.4s ease;
+}
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   SPLASH / TITLE SCREEN
+   ============================================================ */
+#screen-splash {
+  background: linear-gradient(135deg, #0d1b4b 0%, #162054 40%, #1a3a9e 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Animated background grid */
+#screen-splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(244,185,66,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,185,66,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+/* Floating orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.25;
+  animation: orbFloat 8s ease-in-out infinite;
+}
+.orb-1 { width: 300px; height: 300px; background: var(--teal); top: -80px; right: -80px; animation-delay: 0s; }
+.orb-2 { width: 200px; height: 200px; background: var(--accent); bottom: 10%; left: -50px; animation-delay: 3s; }
+.orb-3 { width: 150px; height: 150px; background: var(--green); top: 50%; right: 10%; animation-delay: 5s; }
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.splash-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Business icons row SVG */
+.splash-icons {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.splash-icon {
+  width: 52px; height: 52px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  animation: iconBounce 2s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+}
+.splash-icon:nth-child(2) { animation-delay: 0.2s; }
+.splash-icon:nth-child(3) { animation-delay: 0.4s; }
+.splash-icon:nth-child(4) { animation-delay: 0.6s; }
+.splash-icon:nth-child(5) { animation-delay: 0.8s; }
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.jkbose-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.splash-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 7vw, 52px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #a8c8ff 50%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.splash-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+/* Author Card */
+.author-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.author-photo {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--accent);
+  flex-shrink: 0;
+  background: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+
+.author-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+
+.author-info h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.author-info p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.4;
+}
+
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 800;
+  padding: 16px 40px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 30px rgba(244,185,66,0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-start:hover, .btn-start:active {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 40px rgba(244,185,66,0.6);
+}
+
+/* ============================================================
+   HOME DASHBOARD
+   ============================================================ */
+#screen-home {
+  background: var(--navy);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.top-bar {
+  background: linear-gradient(135deg, var(--deep) 0%, var(--navy) 100%);
+  padding: 20px 20px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+}
+
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.top-bar h1 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.top-bar p {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+.home-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.stat-card .stat-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  display: block;
+}
+
+.stat-card .stat-label {
+  font-size: 11px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Section headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Quick access cards */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.quick-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.quick-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+}
+
+.quick-card.chapters::before { background: linear-gradient(90deg, var(--blue), var(--teal)); }
+.quick-card.quiz::before { background: linear-gradient(90deg, var(--green), var(--teal)); }
+.quick-card.simulations::before { background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.quick-card.progress::before { background: linear-gradient(90deg, var(--red), #ff6b9d); }
+
+.quick-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+}
+
+.quick-card .card-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.quick-card h3 {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.quick-card p {
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+/* Chapters list on home */
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+}
+
+.chapter-item:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateX(4px);
+  border-color: var(--teal);
+}
+
+.chapter-num {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+  color: white;
+}
+
+.chapter-item.completed .chapter-num {
+  background: linear-gradient(135deg, var(--green), #05c48a);
+}
+
+.chapter-info { flex: 1; }
+.chapter-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.chapter-info p { font-size: 11px; color: var(--gray); }
+
+.chapter-arrow { color: var(--gray); font-size: 16px; }
+.chapter-item.completed .chapter-arrow { color: var(--green); }
+
+/* ============================================================
+   CHAPTER DETAIL SCREEN
+   ============================================================ */
+#screen-chapter {
+  background: var(--navy);
+  min-height: 100vh;
+}
+
+.chapter-hero {
+  background: linear-gradient(135deg, var(--deep) 0%, var(--blue) 100%);
+  padding: 20px 20px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 30px;
+  background: var(--navy);
+  border-radius: 30px 30px 0 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  transition: background 0.2s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.25); }
+
+.chapter-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 5vw, 30px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.chapter-hero p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  padding: 16px 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-btn:hover { color: var(--white); }
+
+.tab-content {
+  display: none;
+  padding: 24px 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active { display: block; }
+
+/* Concept Cards */
+.concept-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.concept-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.concept-card p, .concept-card li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+}
+
+.concept-card ul {
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+.concept-card li { margin-bottom: 6px; }
+
+/* Flowchart SVG Diagrams */
+.diagram-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.diagram-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--teal);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Case Study Card */
+.case-study-card {
+  background: linear-gradient(135deg, rgba(0,180,216,0.1), rgba(6,214,160,0.05));
+  border: 1px solid rgba(0,180,216,0.3);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.case-study-card .case-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,180,216,0.2);
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+
+.case-study-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.case-study-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 8px;
+}
+
+.key-learning {
+  background: rgba(6,214,160,0.1);
+  border-left: 3px solid var(--green);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--green);
+  margin-top: 12px;
+}
+
+/* ============================================================
+   QUIZ SCREEN
+   ============================================================ */
+#screen-quiz {
+  background: var(--navy);
+  min-height: 100vh;
+}
+
+.quiz-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.quiz-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--green));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.question-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.question-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+
+.badge-mcq { background: rgba(26,58,158,0.3); color: var(--teal); }
+.badge-case { background: rgba(6,214,160,0.2); color: var(--green); }
+.badge-ar { background: rgba(244,185,66,0.2); color: var(--accent); }
+
+.question-text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.option-btn {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--teal);
+}
+
+.option-btn.correct {
+  background: rgba(6,214,160,0.15);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.option-btn.wrong {
+  background: rgba(239,35,60,0.15);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.option-letter {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.feedback-box {
+  background: rgba(6,214,160,0.1);
+  border: 1px solid rgba(6,214,160,0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  display: none;
+}
+
+.feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+.feedback-box.wrong-feedback {
+  background: rgba(239,35,60,0.1);
+  border-color: rgba(239,35,60,0.3);
+}
+
+.feedback-box h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.feedback-box.wrong-feedback h4 { color: var(--red); }
+.feedback-box p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+
+.btn-next {
+  width: 100%;
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  border: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 800;
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: none;
+  margin-top: 12px;
+}
+.btn-next.show { display: block; }
+.btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,180,216,0.3); }
+
+/* Score Card */
+.score-card {
+  background: linear-gradient(135deg, var(--deep), var(--blue));
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 40px 24px;
+  text-align: center;
+  display: none;
+}
+.score-card.show { display: block; animation: fadeIn 0.5s ease; }
+
+.score-circle {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 32px rgba(244,185,66,0.4);
+}
+
+.score-circle .score-num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.score-circle .score-total {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.score-card h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.score-card p {
+  color: rgba(255,255,255,0.7);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* ============================================================
+   SIMULATION SCREEN
+   ============================================================ */
+#screen-simulation {
+  background: var(--navy);
+  min-height: 100vh;
+}
+
+.sim-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.sim-select-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.sim-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.sim-card:hover {
+  transform: translateX(6px);
+  border-color: var(--teal);
+  background: rgba(0,180,216,0.05);
+}
+
+.sim-icon {
+  font-size: 36px;
+  width: 60px; height: 60px;
+  background: linear-gradient(135deg, rgba(0,180,216,0.2), rgba(26,58,158,0.2));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.sim-info h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.sim-info p { font-size: 13px; color: var(--gray); line-height: 1.4; }
+
+/* Simulation Area */
+.sim-area {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.sim-area.active { display: block; }
+
+.sim-game-box {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.sim-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sim-title-bar h2 { font-size: 18px; font-weight: 800; color: var(--accent); }
+.sim-close-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Sliders */
+.slider-group {
+  margin-bottom: 20px;
+}
+
+.slider-group label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,0.9);
+}
+
+.slider-group label span {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.15);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(244,185,66,0.4);
+}
+
+.btn-simulate {
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  border: none;
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  width: 100%;
+  margin-top: 8px;
+}
+.btn-simulate:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,185,66,0.3); }
+
+.result-display {
+  background: rgba(6,214,160,0.08);
+  border: 1px solid rgba(6,214,160,0.25);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.result-display.show { display: block; }
+.result-display h4 { color: var(--green); font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+.result-display p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.metric-item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.metric-item .metric-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  display: block;
+}
+
+.metric-item .metric-label {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   PROGRESS SCREEN
+   ============================================================ */
+#screen-progress {
+  background: var(--navy);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.progress-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.progress-chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.progress-bar-container {
+  flex: 1;
+}
+
+.progress-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.mini-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--green));
+  transition: width 0.8s ease;
+}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(13,27,75,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  z-index: 200;
+  display: none;
+}
+
+.bottom-nav.visible { display: flex; }
+
+.nav-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 10px 6px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-btn .nav-icon { font-size: 20px; }
+.nav-btn.active { color: var(--accent); }
+.nav-btn:hover { color: var(--white); }
+
+/* ============================================================
+   UTILITIES & BUTTONS
+   ============================================================ */
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  border: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,180,216,0.3); }
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+.flex-row {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-4 { margin-bottom: 16px; }
+
+.quiz-selection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quiz-chapter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s;
+  backdrop-filter: blur(10px);
+}
+
+.quiz-chapter-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  background: rgba(244,185,66,0.06);
+}
+
+.quiz-chapter-card .ch-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.quiz-chapter-card h4 { font-size: 12px; font-weight: 800; line-height: 1.3; }
+.quiz-chapter-card p { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--green);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 100px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 500;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+/* Loading */
+.loading-screen {
+  position: fixed; inset: 0;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+}
+
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+
+.loader-ring {
+  width: 60px; height: 60px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .quick-grid { grid-template-columns: 1fr 1fr; }
+  .stats-bar { grid-template-columns: repeat(3,1fr); }
+  .quiz-selection-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loader-ring"></div>
+  <p style="color: var(--accent); font-weight: 800; font-size:14px;">Loading Business Studies App...</p>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- ====================================================
+     SCREEN 1: SPLASH / TITLE
+     ==================================================== -->
+<div class="screen active" id="screen-splash">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="splash-content">
+    <!-- Floating Business Icons -->
+    <div class="splash-icons">
+      <div class="splash-icon">🏢</div>
+      <div class="splash-icon">📈</div>
+      <div class="splash-icon">🌐</div>
+      <div class="splash-icon">💼</div>
+      <div class="splash-icon">🤝</div>
+    </div>
+
+    <div class="jkbose-badge">📚 JKBOSE Class 11</div>
+
+    <h1 class="splash-title">Business Studies<br>Learning App</h1>
+
+    <p class="splash-subtitle">Complete JKBOSE Class 11 curriculum with interactive simulations, case studies & smart quizzes</p>
+
+    <!-- Author Card -->
+    <div class="author-card">
+      <div class="author-photo">
+        <img src="author.jpg" alt="Mateen Yousuf" onerror="this.parentElement.innerHTML='👨‍🏫'">
+      </div>
+      <div class="author-info">
+        <h3>Mateen Yousuf</h3>
+        <p>Teacher<br>School Education Department<br>Jammu & Kashmir</p>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="showHome()">
+      🚀 Start Learning
+    </button>
+
+    <p style="margin-top: 16px; font-size: 11px; color: rgba(255,255,255,0.4);">NEP 2020 · NCF · NCERT Aligned · Offline Ready</p>
+  </div>
+</div>
+
+<!-- ====================================================
+     SCREEN 2: HOME DASHBOARD
+     ==================================================== -->
+<div class="screen" id="screen-home">
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div>
+        <h1>📘 Class 11 Business</h1>
+        <p>JKBOSE Curriculum · All Chapters</p>
+      </div>
+      <div style="font-size:24px; cursor:pointer;" onclick="showProgress()">📊</div>
+    </div>
+  </div>
+
+  <div class="home-content">
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card">
+        <span class="stat-number" id="statCompleted">0</span>
+        <div class="stat-label">Chapters Done</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="statScore">0</span>
+        <div class="stat-label">Quiz Score</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">10</span>
+        <div class="stat-label">Total Chapters</div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="section-header">
+      <div class="section-title">⚡ Quick Access</div>
+    </div>
+    <div class="quick-grid">
+      <div class="quick-card chapters" onclick="showChaptersView()">
+        <span class="card-icon">📚</span>
+        <h3>All Chapters</h3>
+        <p>Browse all 10 chapters with concepts & case studies</p>
+      </div>
+      <div class="quick-card quiz" onclick="showQuizSelection()">
+        <span class="card-icon">🧠</span>
+        <h3>Quiz Mode</h3>
+        <p>MCQ, Case-based & Assertion-Reason questions</p>
+      </div>
+      <div class="quick-card simulations" onclick="showSimulations()">
+        <span class="card-icon">⚙️</span>
+        <h3>Simulations</h3>
+        <p>Interactive business & trade simulators</p>
+      </div>
+      <div class="quick-card progress" onclick="showProgress()">
+        <span class="card-icon">📊</span>
+        <h3>My Progress</h3>
+        <p>Track your learning & quiz scores</p>
+      </div>
+    </div>
+
+    <!-- Chapters List -->
+    <div class="section-header">
+      <div class="section-title">📖 Chapters</div>
+      <span style="font-size:12px; color:var(--gray);">Tap to study</span>
+    </div>
+    <div class="chapter-list" id="homeChapterList">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================
+     SCREEN 3: CHAPTER DETAIL
+     ==================================================== -->
+<div class="screen" id="screen-chapter">
+  <div class="chapter-hero" id="chapterHero">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h1 id="chapterTitle">Chapter Title</h1>
+    <p id="chapterSubtitle">Chapter subtitle</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(this,'tab-concepts')">💡 Concepts</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-diagram')">📊 Diagrams</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-case')">🏢 Case Studies</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-practice')">✏️ Practice</button>
+  </div>
+
+  <!-- Concepts Tab -->
+  <div class="tab-content active" id="tab-concepts">
+    <div id="conceptContent"></div>
+    <button class="btn-primary mt-4" onclick="markChapterComplete()">✅ Mark Complete</button>
+  </div>
+
+  <!-- Diagram Tab -->
+  <div class="tab-content" id="tab-diagram">
+    <div id="diagramContent"></div>
+  </div>
+
+  <!-- Case Study Tab -->
+  <div class="tab-content" id="tab-case">
+    <div id="caseContent"></div>
+  </div>
+
+  <!-- Practice Tab -->
+  <div class="tab-content" id="tab-practice">
+    <div id="practiceContent"></div>
+  </div>
+</div>
+
+<!-- ====================================================
+     SCREEN 4: QUIZ
+     ==================================================== -->
+<div class="screen" id="screen-quiz">
+  <!-- Quiz Selection View -->
+  <div id="quizSelectionView">
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div>
+          <h1>🧠 Quiz Mode</h1>
+          <p>Select a chapter to quiz on</p>
+        </div>
+        <button class="back-btn" style="margin-bottom:0;" onclick="showHome()">←</button>
+      </div>
+    </div>
+    <div class="quiz-container">
+      <div class="quiz-selection-grid" id="quizSelectionGrid">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Play View -->
+  <div id="quizPlayView" style="display:none;">
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div>
+          <h1 id="quizChapterTitle">Quiz</h1>
+          <p id="quizQuestionCounter">Question 1 of 10</p>
+        </div>
+        <button class="back-btn" style="margin-bottom:0;" onclick="exitQuiz()">✕</button>
+      </div>
+    </div>
+    <div class="quiz-container">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quizProgressFill"></div>
+      </div>
+      <div id="questionArea"></div>
+      <div class="score-card" id="scoreCard">
+        <div class="score-circle">
+          <span class="score-num" id="finalScore">0</span>
+          <span class="score-total" id="finalTotal">/10</span>
+        </div>
+        <h2 id="scoreTitle">Well Done!</h2>
+        <p id="scoreMsg">You completed the quiz.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="retryQuiz()">🔄 Retry Quiz</button>
+          <button class="btn-outline" onclick="showHome()">🏠 Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================
+     SCREEN 5: SIMULATIONS
+     ==================================================== -->
+<div class="screen" id="screen-simulation">
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div>
+        <h1>⚙️ Simulations</h1>
+        <p>Interactive business learning</p>
+      </div>
+      <button class="back-btn" style="margin-bottom:0;" onclick="showHome()">←</button>
+    </div>
+  </div>
+
+  <div class="sim-container">
+    <!-- Simulation Selection -->
+    <div id="simSelection">
+      <div class="sim-select-grid">
+        <div class="sim-card" onclick="runSim('decision')">
+          <div class="sim-icon">🏢</div>
+          <div class="sim-info">
+            <h3>Business Decision Simulator</h3>
+            <p>Make strategic choices for your business. Pricing, hiring, marketing decisions and see outcomes.</p>
+          </div>
+        </div>
+        <div class="sim-card" onclick="runSim('demand')">
+          <div class="sim-icon">📈</div>
+          <div class="sim-info">
+            <h3>Market Demand Simulator</h3>
+            <p>Adjust price and income levels. Watch supply-demand curves shift in real time.</p>
+          </div>
+        </div>
+        <div class="sim-card" onclick="runSim('entrepreneur')">
+          <div class="sim-icon">💡</div>
+          <div class="sim-info">
+            <h3>Entrepreneurship Simulator</h3>
+            <p>Start your own small business. Allocate resources and grow your startup.</p>
+          </div>
+        </div>
+        <div class="sim-card" onclick="runSim('trade')">
+          <div class="sim-icon">🛒</div>
+          <div class="sim-info">
+            <h3>Trade Simulator</h3>
+            <p>Buy and sell goods. Experience wholesale, retail, and profit margins.</p>
+          </div>
+        </div>
+        <div class="sim-card" onclick="runSim('international')">
+          <div class="sim-icon">🌐</div>
+          <div class="sim-info">
+            <h3>International Trade Simulator</h3>
+            <p>Navigate export/import process. Deal with duties, exchange rates, and trade documents.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulation Area (shown when sim runs) -->
+    <div class="sim-area" id="simArea">
+      <div class="sim-game-box">
+        <div class="sim-title-bar">
+          <h2 id="simTitle">Simulation</h2>
+          <button class="sim-close-btn" onclick="closeSim()">✕</button>
+        </div>
+        <div id="simContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================
+     SCREEN 6: PROGRESS
+     ==================================================== -->
+<div class="screen" id="screen-progress">
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div>
+        <h1>📊 My Progress</h1>
+        <p>Track your learning journey</p>
+      </div>
+      <button class="back-btn" style="margin-bottom:0;" onclick="showHome()">←</button>
+    </div>
+  </div>
+  <div class="progress-container">
+    <div id="progressContent"></div>
+    <button class="btn-outline mt-6" onclick="resetProgress()" style="width:100%; margin-top:24px;">🔄 Reset Progress</button>
+  </div>
+</div>
+
+<!-- ====================================================
+     BOTTOM NAVIGATION
+     ==================================================== -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn active" id="nav-home" onclick="showHome()">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" id="nav-chapters" onclick="showChaptersView()">
+    <span class="nav-icon">📚</span>Chapters
+  </button>
+  <button class="nav-btn" id="nav-quiz" onclick="showQuizSelection()">
+    <span class="nav-icon">🧠</span>Quiz
+  </button>
+  <button class="nav-btn" id="nav-sim" onclick="showSimulations()">
+    <span class="nav-icon">⚙️</span>Simulate
+  </button>
+  <button class="nav-btn" id="nav-progress" onclick="showProgress()">
+    <span class="nav-icon">📊</span>Progress
+  </button>
+</nav>
+
+<!-- ====================================================
+     JAVASCRIPT
+     ==================================================== -->
+<script>
+// ============================================================
+// DATA: JKBOSE CLASS 11 BUSINESS STUDIES CHAPTERS
+// ============================================================
+const CHAPTERS = [
+  {
+    id: 1,
+    title: "Nature and Purpose of Business",
+    icon: "🏢",
+    subtitle: "Understanding what business is and why it exists",
+    color: "#1a3a9e",
+    concepts: [
+      {
+        heading: "What is Business?",
+        icon: "🏢",
+        text: "Business refers to all economic activities undertaken by a person with the primary objective of earning profit. It involves production or purchase of goods and services for sale to others. Business satisfies human wants and creates utility.",
+        points: [
+          "Business must involve goods or services",
+          "There must be regularity of transactions",
+          "Profit motive is essential",
+          "Element of risk must be present"
+        ]
+      },
+      {
+        heading: "Characteristics of Business",
+        icon: "✅",
+        text: "Every business has certain key features that distinguish it from other activities like hobbies or employment.",
+        points: [
+          "Economic activity — involves production/exchange for earning money",
+          "Production or procurement of goods and services",
+          "Sale or exchange of goods — one-time sale is NOT business",
+          "Dealing in goods and services on a regular basis",
+          "Profit motive — desire to earn profit drives business",
+          "Uncertainty of return — no guaranteed profit",
+          "Element of risk — possibility of loss always exists"
+        ]
+      },
+      {
+        heading: "Classification of Business Activities",
+        icon: "📊",
+        text: "Business activities are broadly classified into Industry and Commerce. Industry deals with production while Commerce facilitates the distribution of goods.",
+        points: [
+          "Industry: Primary (agriculture, mining), Secondary (manufacturing), Tertiary (services)",
+          "Commerce: Trade (home, foreign) + Auxiliaries to trade",
+          "Auxiliaries: Transport, Banking, Insurance, Warehousing, Advertising"
+        ]
+      },
+      {
+        heading: "Objectives of Business",
+        icon: "🎯",
+        text: "While profit is the primary motive, modern businesses also focus on social and human objectives.",
+        points: [
+          "Economic Objectives: Profit earning, creating customers, innovation",
+          "Social Objectives: Supply quality goods, provide employment, fair wages",
+          "Human Objectives: Employee welfare, job satisfaction",
+          "National Objectives: Promote national growth, earn foreign exchange"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "Tata Group — A Business Giant",
+        company: "Tata Group",
+        description: "The Tata Group, founded in 1868, is one of India's largest conglomerates. Starting with a textile mill, Tata diversified into steel, automobiles, IT (TCS), hospitality, and consumer goods. Tata's success shows how a business can grow while fulfilling social obligations — the group donates 2/3 of its profits to charitable trusts.",
+        learning: "Key Learning: Profit motive and social responsibility can coexist. Tata shows that long-term business success requires serving society.",
+        questions: ["What industries does Tata Group operate in?", "How does Tata balance profit with social responsibility?"]
+      },
+      {
+        title: "Amul — The Cooperative Success",
+        company: "AMUL India",
+        description: "Amul (Anand Milk Union Limited) started in 1946 when Gujarat dairy farmers were exploited by middlemen. Dr. Verghese Kurien organized farmers into a cooperative. Today, Amul is a Rs 72,000 crore brand, distributing profits directly to 36 lakh farmer members.",
+        learning: "Key Learning: Business can be structured to eliminate exploitation and empower producers. Cooperative model can challenge established business norms.",
+        questions: ["What problem did Amul solve?", "How is Amul different from a private company?"]
+      }
+    ],
+    practiceQuestions: [
+      "Define business. List its key characteristics.",
+      "Distinguish between industry and commerce.",
+      "What are the economic objectives of business?",
+      "Why is risk an essential feature of business?",
+      "How does business differ from profession and employment?"
+    ]
+  },
+  {
+    id: 2,
+    title: "Forms of Business Organisation",
+    icon: "🤝",
+    subtitle: "Sole proprietorship, partnership, company and more",
+    color: "#006d77",
+    concepts: [
+      {
+        heading: "Sole Proprietorship",
+        icon: "👤",
+        text: "A business owned, managed and controlled by a single individual. It is the simplest and most common form of business in India.",
+        points: [
+          "Formation: Easy, no legal formalities needed",
+          "Liability: Unlimited — personal assets at risk",
+          "Capital: Limited to owner's personal resources",
+          "Control: Complete control by the owner",
+          "Examples: Local kirana shops, tailors, cobblers",
+          "Merits: Easy to start, quick decisions, all profit to owner",
+          "Limitations: Limited capital, unlimited liability, limited life"
+        ]
+      },
+      {
+        heading: "Partnership",
+        icon: "🤝",
+        text: "A business form where two or more persons agree to carry on business together and share profits/losses. Governed by Indian Partnership Act, 1932.",
+        points: [
+          "Minimum 2, Maximum 50 partners (non-banking)",
+          "Partnership deed is the agreement between partners",
+          "Types: Active, Sleeping, Secret, Nominal, Minor partners",
+          "Liability: Usually unlimited (except LLP)",
+          "Registration: Optional but advisable",
+          "Merits: More capital, shared risk, complementary skills",
+          "Limitations: Unlimited liability, limited life, risk of disputes"
+        ]
+      },
+      {
+        heading: "Joint Hindu Family Business",
+        icon: "👨‍👩‍👧‍👦",
+        text: "A business owned by members of a Hindu Undivided Family (HUF), governed by Hindu Law. The senior-most member is the Karta.",
+        points: [
+          "Governed by Hindu Law (Mitakshara or Dayabhaga)",
+          "Karta manages, others are co-parceners",
+          "Membership by birth",
+          "Karta has unlimited liability; others have limited",
+          "Most prevalent in Rajasthan, UP trade communities"
+        ]
+      },
+      {
+        heading: "Cooperative Society",
+        icon: "🌾",
+        text: "A voluntary association of persons who come together to serve a common economic interest. Governed by Cooperative Societies Act, 1912.",
+        points: [
+          "Minimum 10 members",
+          "Registration compulsory",
+          "One member, one vote — democratic",
+          "Types: Consumer, Producer, Credit, Housing, Marketing, Farming cooperatives",
+          "Examples: AMUL, Kendriya Bhandar, IFFCO"
+        ]
+      },
+      {
+        heading: "Company",
+        icon: "🏛️",
+        text: "An association of persons registered under Companies Act, 2013. It is an artificial person with a separate legal identity.",
+        points: [
+          "Private Company: Minimum 2, Maximum 200 members",
+          "Public Company: Minimum 7, no maximum member limit",
+          "Separate legal entity — company can sue and be sued",
+          "Limited liability of shareholders",
+          "Managed by Board of Directors",
+          "Can raise large capital through share market"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "Infosys — A Partnership to Public Company",
+        company: "Infosys Ltd.",
+        description: "In 1981, N.R. Narayana Murthy and six colleagues started Infosys with ₹10,000. They began as a partnership. As the business grew, they converted to a private limited company, then went public in 1993. Today, Infosys is listed on NYSE with a market cap of over $70 billion.",
+        learning: "Key Learning: Businesses often change their organisational form as they grow. Partnership → Private Ltd → Public Ltd is a natural growth path.",
+        questions: ["Why did Infosys change from partnership to company?", "What advantages did going public give Infosys?"]
+      }
+    ],
+    practiceQuestions: [
+      "Compare sole proprietorship with partnership.",
+      "What is a Partnership Deed? What does it contain?",
+      "Explain the features of a cooperative society.",
+      "Distinguish between Private and Public Company.",
+      "What is the role of Karta in Joint Hindu Family Business?"
+    ]
+  },
+  {
+    id: 3,
+    title: "Public, Private and Global Enterprises",
+    icon: "🌐",
+    subtitle: "Government business, private sector and MNCs",
+    color: "#e63946",
+    concepts: [
+      {
+        heading: "Public Sector Enterprises",
+        icon: "🏛️",
+        text: "Enterprises owned, managed and controlled by the government. Their primary objective is social welfare, not profit.",
+        points: [
+          "Departmental Undertakings: Run as government departments (Post, Railways, Ordnance)",
+          "Statutory Corporations: Created by Act of Parliament (RBI, LIC, ONGC)",
+          "Government Company: 51%+ government shareholding (BHEL, SAIL, NTPC)",
+          "Objectives: Public welfare, equitable distribution, employment, national security"
+        ]
+      },
+      {
+        heading: "Private Sector Enterprises",
+        icon: "💼",
+        text: "Enterprises owned by private individuals or groups. Profit is the primary motive.",
+        points: [
+          "Forms: Sole proprietorship, Partnership, Company",
+          "Examples: Reliance, Tata, Wipro, Bajaj",
+          "Advantages: Efficiency, innovation, profit-driven quality",
+          "Competition leads to better products and lower prices"
+        ]
+      },
+      {
+        heading: "Multinational Corporations (MNCs)",
+        icon: "🌐",
+        text: "Companies that operate in multiple countries with headquarters in one country. They have large capital, technology and global reach.",
+        points: [
+          "Examples: Apple (US), Samsung (South Korea), Unilever (UK-Netherlands)",
+          "Indian context: Pepsi, Coca-Cola, McDonald's, Amazon in India",
+          "Indian MNCs: TCS, Infosys, Wipro (operate globally)",
+          "Benefits: Technology transfer, employment, FDI inflow",
+          "Concerns: Profit repatriation, cultural impact, competition with local businesses"
+        ]
+      },
+      {
+        heading: "Privatisation and Disinvestment",
+        icon: "📉",
+        text: "Process of transferring ownership of public enterprises to the private sector. India has been pursuing disinvestment since 1991.",
+        points: [
+          "Reasons: Improving efficiency, reducing fiscal burden",
+          "Strategic Disinvestment: Majority stake sold (e.g., Air India to Tata, 2022)",
+          "Minority Disinvestment: Government retains majority control",
+          "Privatisation helps bring professional management"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "ONGC — Maharatna PSU",
+        company: "ONGC",
+        description: "Oil and Natural Gas Corporation (ONGC) is India's largest oil and gas company, established as a government company. With a turnover of over ₹6 lakh crore, ONGC contributes enormously to India's energy security. It holds Maharatna status, allowing greater autonomy in financial decisions.",
+        learning: "Key Learning: Public sector enterprises can be both profitable and serve national interest. ONGC shows that government companies can compete globally.",
+        questions: ["What is Maharatna status?", "How does ONGC serve national objectives?"]
+      },
+      {
+        title: "Air India — From PSU to Tata",
+        company: "Air India",
+        description: "Air India, founded by JRD Tata in 1932, was nationalised in 1953. After decades of losses, the government completed strategic disinvestment in January 2022, selling Air India back to Tata Group for ₹18,000 crore. This marked India's biggest privatisation in years.",
+        learning: "Key Learning: Privatisation can revive loss-making PSUs. Air India's return to Tata is a landmark in India's disinvestment history.",
+        questions: ["Why was Air India privatised?", "What are the advantages and concerns of this disinvestment?"]
+      }
+    ],
+    practiceQuestions: [
+      "Distinguish between Departmental Undertaking and Government Company.",
+      "What are the features of Multinational Corporations?",
+      "What is disinvestment? What are its objectives?",
+      "Why was the private sector developed in India?",
+      "Explain how globalisation has affected Indian businesses."
+    ]
+  },
+  {
+    id: 4,
+    title: "Business Services",
+    icon: "🏦",
+    subtitle: "Banking, insurance, transport, warehousing, communication",
+    color: "#7b2d8b",
+    concepts: [
+      {
+        heading: "Banking Services",
+        icon: "🏦",
+        text: "Banks are financial institutions that accept deposits and provide loans. They are the backbone of business finance.",
+        points: [
+          "Types: Commercial banks, Co-operative banks, Central Bank (RBI)",
+          "Services: Savings account, Current account, Fixed deposits",
+          "Loans: Working capital loans, Term loans, Overdraft",
+          "RBI: Regulates all banks in India, manages monetary policy",
+          "Digital Banking: NEFT, RTGS, IMPS, UPI, Internet banking"
+        ]
+      },
+      {
+        heading: "Insurance Services",
+        icon: "🛡️",
+        text: "Insurance is a contract to compensate for loss against payment of premium. It transfers risk from individual to insurer.",
+        points: [
+          "Life Insurance: HDFC Life, LIC — covers human life risk",
+          "Fire Insurance: Covers loss from fire",
+          "Marine Insurance: Covers sea transport risks (hull, cargo, freight)",
+          "Principles: Utmost good faith, Insurable interest, Indemnity, Subrogation",
+          "IRDA regulates insurance in India"
+        ]
+      },
+      {
+        heading: "Transport and Communication",
+        icon: "🚛",
+        text: "Transport creates place utility — moves goods from place of production to place of consumption. Communication facilitates business coordination.",
+        points: [
+          "Modes: Road (flexible, cheap), Rail (bulk, inland), Water (cheapest for bulk internationally), Air (fastest, most expensive)",
+          "Indian Railways: Largest employer, handles bulk freight",
+          "Communication: Postal, Telecom, Internet — enables trade",
+          "E-commerce depends heavily on logistics and communication"
+        ]
+      },
+      {
+        heading: "Warehousing",
+        icon: "🏭",
+        text: "Warehousing creates time utility — stores goods until they are needed. It helps stabilise prices and ensures regular supply.",
+        points: [
+          "Types: Private, Public, Bonded (CWC), Cold Storage",
+          "Functions: Storage, protection, price stabilisation, financing",
+          "Cold Storage: Essential for perishable goods like fruits, vegetables",
+          "FCI (Food Corporation of India) — largest warehousing in India"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "UPI — Revolutionising Payments",
+        company: "NPCI / UPI",
+        description: "Unified Payments Interface (UPI), launched by NPCI in 2016, has transformed business payments in India. Processing over 12 billion transactions monthly in 2024, UPI accounts for over 50% of all digital payments. Small kirana shops, street vendors, all accept UPI — democratising financial services.",
+        learning: "Key Learning: Banking services innovation (UPI) can transform how business transactions happen, helping even small businesses access formal finance.",
+        questions: ["How has UPI changed business payments?", "What role does NPCI play in India's banking system?"]
+      }
+    ],
+    practiceQuestions: [
+      "Explain the types of bank accounts useful for business.",
+      "What are the principles of insurance?",
+      "Compare the different modes of transport for business.",
+      "Why is warehousing important for agricultural produce?",
+      "How has digital communication changed business operations?"
+    ]
+  },
+  {
+    id: 5,
+    title: "Emerging Modes of Business",
+    icon: "💻",
+    subtitle: "E-commerce, outsourcing, and digital business",
+    color: "#f77f00",
+    concepts: [
+      {
+        heading: "E-Commerce",
+        icon: "💻",
+        text: "E-commerce (Electronic Commerce) refers to buying and selling of goods and services through the internet. It has transformed how business is conducted globally.",
+        points: [
+          "B2B (Business to Business): Alibaba, IndiaMart — companies sell to companies",
+          "B2C (Business to Consumer): Amazon, Flipkart — companies sell to individuals",
+          "C2C (Consumer to Consumer): OLX, eBay — individuals sell to individuals",
+          "B2G (Business to Government): GeM portal in India",
+          "Advantages: 24/7 availability, global reach, lower costs, price comparison",
+          "Limitations: Lack of personal touch, security concerns, delivery delays"
+        ]
+      },
+      {
+        heading: "Outsourcing",
+        icon: "🔄",
+        text: "Outsourcing means contracting out certain business activities to external agencies rather than doing them in-house.",
+        points: [
+          "BPO (Business Process Outsourcing): Call centres, data entry",
+          "KPO (Knowledge Process Outsourcing): Legal, accounting, research services",
+          "IT Outsourcing: Software development, maintenance",
+          "India is the world's #1 IT outsourcing destination",
+          "Benefits: Cost reduction, focus on core activities, access to expertise",
+          "Companies like TCS, Wipro, Infosys earn billions from outsourcing"
+        ]
+      },
+      {
+        heading: "Online Business Processes",
+        icon: "🌐",
+        text: "Modern businesses use digital processes for efficiency and scale.",
+        points: [
+          "Online booking: IRCTC, Makemytrip",
+          "Digital payments: UPI, Net banking, Wallets (Paytm)",
+          "Cloud computing: Businesses use AWS, Google Cloud for data storage",
+          "Social media marketing: Instagram, YouTube for business promotion",
+          "Work from home: Enabled by video conferencing tools (Zoom, Teams)"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "Flipkart — India's E-Commerce Pioneer",
+        company: "Flipkart",
+        description: "Sachin and Binny Bansal started Flipkart in 2007 from a Bangalore apartment, initially selling only books. Today, Flipkart processes millions of orders daily. Acquired by Walmart for $16 billion in 2018, Flipkart created the entire e-commerce ecosystem in India — spawning logistics companies, payment gateways, and digital-first brands.",
+        learning: "Key Learning: E-commerce transformed traditional retail. Flipkart's journey shows how technology enables a startup to challenge established brick-and-mortar retail.",
+        questions: ["How did Flipkart disrupt traditional retail?", "What logistics challenges did Flipkart solve?"]
+      },
+      {
+        title: "GeM Portal — B2G E-Commerce",
+        company: "Government e-Marketplace",
+        description: "The Government e-Marketplace (GeM), launched in 2016, is India's digital platform for government procurement. By 2024, GeM has recorded over ₹4 lakh crore in orders. MSMEs, artisans, and women entrepreneurs can directly sell to government departments without middlemen.",
+        learning: "Key Learning: B2G e-commerce eliminates corruption and gives small businesses direct access to government buyers.",
+        questions: ["Who can sell on GeM?", "How does GeM help MSMEs?"]
+      }
+    ],
+    practiceQuestions: [
+      "Distinguish between B2B and B2C e-commerce with examples.",
+      "What is outsourcing? What are its advantages?",
+      "How has e-commerce changed consumer behaviour?",
+      "Explain the risks involved in e-commerce.",
+      "What is KPO? How is it different from BPO?"
+    ]
+  },
+  {
+    id: 6,
+    title: "Social Responsibility of Business",
+    icon: "🌱",
+    subtitle: "CSR, ethics, and sustainable business practices",
+    color: "#2d9142",
+    concepts: [
+      {
+        heading: "Concept of Social Responsibility",
+        icon: "🌱",
+        text: "Social Responsibility refers to the obligation of business to take decisions and actions that will benefit society. Business exists within society and must give back.",
+        points: [
+          "Carroll's CSR Pyramid: Economic → Legal → Ethical → Philanthropic",
+          "Responsibility towards shareholders: Profit, dividend, transparency",
+          "Responsibility towards employees: Fair wages, safety, career growth",
+          "Responsibility towards consumers: Quality, fair price, honest advertising",
+          "Responsibility towards community: No pollution, employment, charity",
+          "Responsibility towards government: Tax compliance, legal adherence"
+        ]
+      },
+      {
+        heading: "CSR in India — Companies Act 2013",
+        icon: "📋",
+        text: "India was the first country to make CSR spending mandatory by law. Section 135 of Companies Act 2013 requires certain companies to spend 2% of average net profit on CSR.",
+        points: [
+          "Applicable to: Net worth ≥ ₹500 cr, OR Turnover ≥ ₹1000 cr, OR Net profit ≥ ₹5 cr",
+          "CSR activities: Education, healthcare, environment, women empowerment",
+          "CSR Committee of Board of Directors must be formed",
+          "Total CSR spending by India Inc: Over ₹25,000 crore annually"
+        ]
+      },
+      {
+        heading: "Business Ethics",
+        icon: "⚖️",
+        text: "Business ethics refers to the application of ethical principles and moral standards to business activities.",
+        points: [
+          "Honesty and transparency in dealings",
+          "No misleading advertising (ASCI guidelines in India)",
+          "Fair competition — no predatory pricing or cartels",
+          "Environmental responsibility — don't harm the environment",
+          "Employee rights — no discrimination, no child labour"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "ITC — e-Choupal & Rural CSR",
+        company: "ITC Limited",
+        description: "ITC's e-Choupal initiative, started in 2000, connected rural farmers to internet kiosks for market prices, weather forecasts, and agricultural inputs. By 2024, e-Choupal reaches 40,000+ villages and 4 million+ farmers. ITC also invests in watershed development, women's empowerment and sustainable agriculture.",
+        learning: "Key Learning: CSR done well creates shared value — ITC's farmers become more productive, benefiting both the community and ITC's raw material supply.",
+        questions: ["How does e-Choupal benefit farmers?", "Is ITC's CSR purely philanthropic or does it also serve business interests?"]
+      }
+    ],
+    practiceQuestions: [
+      "Explain the concept of social responsibility of business.",
+      "What are the arguments for and against social responsibility?",
+      "Explain the provisions of CSR under Companies Act, 2013.",
+      "What do you mean by business ethics? Give examples.",
+      "How can a business be environmentally responsible?"
+    ]
+  },
+  {
+    id: 7,
+    title: "Sources of Business Finance",
+    icon: "💰",
+    subtitle: "How businesses raise money — equity, debt and more",
+    color: "#c77dff",
+    concepts: [
+      {
+        heading: "Owner's Funds (Equity)",
+        icon: "💰",
+        text: "Money contributed by the owners of the business. It is permanent capital and carries risk.",
+        points: [
+          "Share capital (Equity shares, Preference shares)",
+          "Retained profits — profits ploughed back into business",
+          "No obligation to repay; no fixed interest",
+          "Equity shareholders get dividend after preference shareholders",
+          "IPO (Initial Public Offering) — first-time public share issue"
+        ]
+      },
+      {
+        heading: "Borrowed Funds (Debt)",
+        icon: "🏦",
+        text: "Funds raised from external sources with an obligation to repay with interest. Also called external finance.",
+        points: [
+          "Debentures: Fixed interest, no voting rights",
+          "Bank loans: Term loans (long-term), Cash credit (working capital)",
+          "Trade credit: Buy now, pay later from suppliers",
+          "Public deposits: Companies accept deposits from public (up to 25% of paid-up capital)",
+          "Financial Institutions: SIDBI, NABARD, IDBI provide long-term finance"
+        ]
+      },
+      {
+        heading: "Special Sources",
+        icon: "🌟",
+        text: "Modern and alternative sources of business finance beyond traditional banks and equity.",
+        points: [
+          "Venture Capital: Funding for startups with high growth potential (Sequoia, Accel)",
+          "Angel Investors: High net-worth individuals funding early startups",
+          "Crowdfunding: Raising small amounts from many people (Kickstarter, Ketto)",
+          "Retained Earnings: Profits kept in business instead of distributing",
+          "Lease Financing: Use assets without buying them",
+          "Factoring: Sell accounts receivable to get immediate cash"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "LIC IPO — India's Biggest Ever",
+        company: "LIC India",
+        description: "In May 2022, Life Insurance Corporation of India launched India's largest-ever IPO, raising ₹20,557 crore. The IPO was oversubscribed despite market turbulence. For the first time, millions of LIC policyholders could become shareholders. This demonstrated how even traditional businesses can tap equity markets for funding.",
+        learning: "Key Learning: IPOs allow businesses to raise large capital from the public. LIC's IPO shows how even government companies use equity markets.",
+        questions: ["What is an IPO?", "Why did LIC choose to go public?", "How is an IPO different from an FPO?"]
+      }
+    ],
+    practiceQuestions: [
+      "Distinguish between owner's funds and borrowed funds.",
+      "What are debentures? What are their types?",
+      "Explain venture capital. How is it different from angel investment?",
+      "What is trade credit? What are its advantages?",
+      "Why do companies retain earnings instead of distributing all profits?"
+    ]
+  },
+  {
+    id: 8,
+    title: "Small Business and Entrepreneurship",
+    icon: "🚀",
+    subtitle: "MSMEs, startup ecosystem, and entrepreneurship in India",
+    color: "#e76f51",
+    concepts: [
+      {
+        heading: "Small Business in India",
+        icon: "🏪",
+        text: "Small businesses (MSMEs) form the backbone of Indian economy. They contribute 30% of GDP and 45% of exports, employing over 11 crore people.",
+        points: [
+          "Micro Enterprise: Investment < ₹1 cr, Turnover < ₹5 cr",
+          "Small Enterprise: Investment < ₹10 cr, Turnover < ₹50 cr",
+          "Medium Enterprise: Investment < ₹50 cr, Turnover < ₹250 cr",
+          "MSME Ministry oversees small business development",
+          "Key sectors: Textiles, food processing, handicrafts, engineering"
+        ]
+      },
+      {
+        heading: "Role and Problems of Small Business",
+        icon: "⚖️",
+        text: "Small businesses play a vital role in employment and regional development but face many challenges.",
+        points: [
+          "Roles: Employment generation, regional development, exports, innovation",
+          "Problems: Lack of capital, obsolete technology, marketing difficulties",
+          "Problems: Competition from large industry, labour issues",
+          "Government support: MUDRA loans, PM SVANidhi, Udyam registration",
+          "Credit Guarantee Fund: CGTMSE provides collateral-free loans"
+        ]
+      },
+      {
+        heading: "Entrepreneurship",
+        icon: "💡",
+        text: "Entrepreneurship is the ability and willingness to develop, organise, and manage a business venture along with any risks involved in order to make a profit.",
+        points: [
+          "Entrepreneur qualities: Risk-taking, innovation, leadership, vision",
+          "Types: Innovative, Imitative, Fabian, Drone entrepreneurs",
+          "Start-up India: Launched 2016 — tax benefits, funding for startups",
+          "India is 3rd largest startup ecosystem globally",
+          "Unicorns: 100+ Indian startups valued over $1 billion (Zepto, Meesho, Rapido)"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "Zepto — From Student Startup to Unicorn",
+        company: "Zepto",
+        description: "Aadit Palicha and Kaivalya Vohra, both 19-year-old Stanford dropouts, founded Zepto in 2021 after failing with a different idea. Zepto pioneered 10-minute grocery delivery in India, building dark stores across major cities. By 2024, Zepto became a unicorn at $1.4 billion valuation. They identified a clear market gap and executed with speed.",
+        learning: "Key Learning: Young entrepreneurs with the right vision and execution can build billion-dollar companies. Problem identification and customer obsession are key.",
+        questions: ["What problem did Zepto solve?", "What risks did the founders take?"]
+      },
+      {
+        title: "Lijjat Papad — Women Entrepreneurship",
+        company: "Lijjat Papad",
+        description: "In 1959, seven housewives in Mumbai started rolling papads on a building rooftop with borrowed capital of ₹80. Lijjat Papad is now a cooperative with 45,000 women members, annual turnover of ₹1,600 crore. Each member owner gets equal profit share. It is one of the most inspiring examples of grassroots entrepreneurship.",
+        learning: "Key Learning: Entrepreneurship can start from anywhere. Cooperative model empowers women and distributes wealth equitably.",
+        questions: ["How is Lijjat Papad different from a regular company?", "What challenges did the founders overcome?"]
+      }
+    ],
+    practiceQuestions: [
+      "Define MSME as per the revised MSME definition 2020.",
+      "What are the problems faced by small businesses in India?",
+      "What is entrepreneurship? What qualities make a good entrepreneur?",
+      "Explain the role of small businesses in India's economy.",
+      "What is Start-up India? What benefits does it offer?"
+    ]
+  },
+  {
+    id: 9,
+    title: "Internal Trade",
+    icon: "🛒",
+    subtitle: "Wholesale, retail, consumer protection in India",
+    color: "#118ab2",
+    concepts: [
+      {
+        heading: "Types of Internal Trade",
+        icon: "🛒",
+        text: "Internal trade means buying and selling of goods within a country. It includes wholesale and retail trade.",
+        points: [
+          "Wholesale Trade: Buying in bulk from producers, selling to retailers",
+          "Retail Trade: Selling to end consumers in small quantities",
+          "Chain of distribution: Producer → Wholesaler → Retailer → Consumer",
+          "Wholesalers: Break bulk, provide credit, storage, market information",
+          "Retailers: Final link in distribution chain"
+        ]
+      },
+      {
+        heading: "Types of Retail Stores",
+        icon: "🏪",
+        text: "Retail has evolved from traditional kirana stores to modern hypermarkets and online platforms.",
+        points: [
+          "Itinerant Traders: Hawkers, peddlers, market traders",
+          "Fixed Small Shops: General stores, specialty shops, street stalls",
+          "Large Scale Retail: Departmental stores, chain stores, supermarkets",
+          "Mail Order Houses: Sell through catalogues",
+          "E-retailers: Amazon, Flipkart, Meesho (largest growth segment)"
+        ]
+      },
+      {
+        heading: "Consumer Protection",
+        icon: "🛡️",
+        text: "Consumer protection ensures that consumers are protected from unfair trade practices and defective goods.",
+        points: [
+          "Consumer Protection Act, 2019 (updated from 1986 Act)",
+          "Consumer Rights: Right to safety, information, choice, redressal, education",
+          "CCPA: Central Consumer Protection Authority (set up in 2020)",
+          "Consumer Courts: District (up to ₹1 cr), State (₹1-10 cr), National (above ₹10 cr)",
+          "E-filing of complaints; Online consumer forum",
+          "Redressal against: Defective goods, deficient services, unfair trade practices"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "Reliance Retail — Transforming Indian Retail",
+        company: "Reliance Retail",
+        description: "Reliance Retail, started in 2006, is now India's largest retailer with 18,000+ stores across formats — grocery (Smart Bazaar), electronics (Jio Points), fashion (Trends), and B2B. Combined with JioMart (e-commerce), Reliance Retail integrates kirana stores into its supply chain, creating a phygital (physical + digital) retail model.",
+        learning: "Key Learning: Modern retail integrates physical stores, e-commerce, and kirana partnerships. Scale and supply chain efficiency are key competitive advantages.",
+        questions: ["What retail formats does Reliance operate?", "How does JioMart partner with kirana stores?"]
+      }
+    ],
+    practiceQuestions: [
+      "Distinguish between wholesale and retail trade.",
+      "What are the functions of a wholesaler?",
+      "Explain the different types of large-scale retail stores.",
+      "What are consumer rights under Consumer Protection Act?",
+      "How can a consumer file a complaint in a consumer forum?"
+    ]
+  },
+  {
+    id: 10,
+    title: "International Business",
+    icon: "✈️",
+    subtitle: "Exports, imports, trade barriers and global trade",
+    color: "#4361ee",
+    concepts: [
+      {
+        heading: "Nature of International Business",
+        icon: "🌍",
+        text: "International business involves buying and selling of goods and services across national borders. It includes trade, FDI, licensing, franchising and joint ventures.",
+        points: [
+          "Reasons for international trade: Unequal distribution of resources, specialisation",
+          "Comparative Advantage: Countries should produce what they produce best",
+          "India's exports: IT services, pharmaceuticals, textiles, gems & jewellery",
+          "India's imports: Crude oil, electronics, machinery, gold",
+          "India's major trading partners: USA, China, UAE, Saudi Arabia"
+        ]
+      },
+      {
+        heading: "Trade Barriers and Free Trade",
+        icon: "⛔",
+        text: "Trade barriers are government policies that restrict international trade. They protect domestic industry but raise prices for consumers.",
+        points: [
+          "Tariff barriers: Import duties, custom duties — most common",
+          "Non-tariff barriers: Quotas, licensing, standards, subsidies",
+          "WTO: World Trade Organisation — promotes free trade since 1995",
+          "India's approach: Selective protectionism + gradual liberalisation",
+          "Make in India: Policy to boost domestic manufacturing, reduce imports"
+        ]
+      },
+      {
+        heading: "Export-Import Procedure",
+        icon: "📦",
+        text: "Exporting and importing requires following specific procedures involving customs, shipping, and documentation.",
+        points: [
+          "IE Code (IEC): Import Export Code mandatory for all traders",
+          "Key documents: Bill of Lading, Packing List, Invoice, Certificate of Origin",
+          "EXIM Bank: Provides finance for exports and imports",
+          "Letter of Credit: Banking instrument ensuring payment in trade",
+          "Incoterms: FOB, CIF, EXW — international shipping terms"
+        ]
+      },
+      {
+        heading: "India's Foreign Trade",
+        icon: "📊",
+        text: "India's foreign trade has grown significantly. India's goods exports were over $430 billion in 2023-24.",
+        points: [
+          "Top exports: Petroleum products, gems, pharma, IT services",
+          "Top imports: Crude oil, electronics, gold, machinery",
+          "Trade deficit: India imports more than it exports",
+          "Services surplus: IT/BPO exports create services trade surplus",
+          "CEPA/FTA: Free Trade Agreements with UAE, Australia, ASEAN"
+        ]
+      }
+    ],
+    caseStudies: [
+      {
+        title: "India's Pharma Exports — Pharmacy of the World",
+        company: "Indian Pharma Industry",
+        description: "India is the world's largest supplier of generic medicines, supplying 20% of global generic drugs by volume. Companies like Sun Pharma, Cipla, and Dr. Reddy's export to 200+ countries. Indian vaccines saved millions of lives globally during COVID. India's pharma exports crossed $27 billion in 2023-24.",
+        learning: "Key Learning: India's competitive advantage in pharma (skilled chemists, lower costs) has made it the world's pharmacy. Comparative advantage drives international trade.",
+        questions: ["What gives India competitive advantage in pharma?", "What are the challenges for Indian pharma exports?"]
+      }
+    ],
+    practiceQuestions: [
+      "What is meant by comparative advantage? How does it drive trade?",
+      "What are tariff and non-tariff barriers? Give examples.",
+      "Explain the export procedure in India.",
+      "What is a Letter of Credit? How does it help in trade?",
+      "What is WTO? What are its main functions?"
+    ]
+  }
+];
+
+// ============================================================
+// QUIZ DATA — MCQ, Case-Based, Assertion-Reason
+// ============================================================
+const QUIZ_DATA = {
+  1: [
+    { type: 'mcq', q: "Which of the following is NOT a characteristic of business?", opts: ["Profit motive", "Single transaction", "Risk element", "Regular transactions"], ans: 1, exp: "A single or occasional transaction does not constitute business. Business requires regularity of transactions." },
+    { type: 'mcq', q: "Hobbies and games are NOT considered business activities because they:", opts: ["Involve goods and services", "Are not done for economic gain", "Have no customers", "Require skills"], ans: 1, exp: "Hobbies are done for personal satisfaction, not for earning profit. Economic motive is essential for business." },
+    { type: 'case', q: "Rajan buys vegetables every morning and sells them in his village. He earns ₹500 daily. This activity is classified as:", opts: ["Employment", "Profession", "Business", "Hobby"], ans: 2, exp: "Rajan's activity involves regular purchase and sale of goods for profit, making it a business activity." },
+    { type: 'ar', q: "Assertion (A): All activities aimed at earning a livelihood are business. Reason (R): Business must involve regular sale of goods or services for profit.", opts: ["Both A and R are true and R explains A", "A is false but R is true", "A is true but R is false", "Both A and R are false"], ans: 1, exp: "A is incorrect — profession and employment also earn livelihood but are not business. R correctly defines business." },
+    { type: 'mcq', q: "Which sector of industry includes mining and agriculture?", opts: ["Secondary", "Tertiary", "Primary", "Quaternary"], ans: 2, exp: "Primary industry includes agriculture, mining, fishing, and other activities that extract natural resources." }
+  ],
+  2: [
+    { type: 'mcq', q: "In a Partnership firm, the maximum number of partners allowed in a non-banking business is:", opts: ["10", "20", "50", "100"], ans: 2, exp: "As per Companies Act 2013, maximum 50 persons can form a partnership for non-banking business." },
+    { type: 'mcq', q: "The document that contains terms and conditions of partnership is called:", opts: ["Memorandum of Association", "Articles of Association", "Partnership Deed", "Certificate of Incorporation"], ans: 2, exp: "Partnership Deed (also called Partnership Agreement) contains the rights, duties, profit sharing ratio and other terms of partnership." },
+    { type: 'case', q: "A and B start a sweet shop. A invests capital and manages the shop, while B's name is never disclosed to customers. B is a:", opts: ["Active Partner", "Sleeping Partner", "Secret Partner", "Nominal Partner"], ans: 2, exp: "A Secret partner takes part in management but whose association with the firm is not disclosed to the general public." },
+    { type: 'ar', q: "Assertion (A): Cooperative societies follow 'one man, one vote' principle. Reason (R): All members have equal ownership rights in a cooperative.", opts: ["Both A and R are true and R explains A", "A is true but R is false", "A is false but R is true", "Both A and R are false"], ans: 0, exp: "Both statements are true. In cooperatives, voting is by membership not investment, ensuring democratic control." },
+    { type: 'mcq', q: "Which form of business organisation requires minimum 7 members to start?", opts: ["Private Limited Company", "Partnership", "Public Limited Company", "Cooperative Society"], ans: 2, exp: "A Public Limited Company requires minimum 7 members. There is no upper limit on members." }
+  ],
+  3: [
+    { type: 'mcq', q: "Which of the following is a Statutory Corporation?", opts: ["BHEL", "LIC", "Tata Motors", "Bajaj Finance"], ans: 1, exp: "LIC was created by Life Insurance Corporation Act, 1956 — a Statutory Corporation. BHEL is a Government Company." },
+    { type: 'mcq', q: "Disinvestment means:", opts: ["Government increases stake in PSU", "Government reduces stake in PSU", "Government closes PSU", "Government nationalises private firm"], ans: 1, exp: "Disinvestment refers to the process by which the government reduces its stake/ownership in a public sector enterprise." },
+    { type: 'case', q: "A company operates in 25 countries, with headquarters in the USA. It manufactures goods where costs are lowest and sells where prices are highest. This is an example of:", opts: ["Public enterprise", "Multinational Corporation", "Cooperative", "Joint Hindu Family Business"], ans: 1, exp: "An MNC has operations in multiple countries, headquarters in one country, and optimises production and sales globally." },
+    { type: 'ar', q: "Assertion (A): Public sector enterprises are always loss-making. Reason (R): ONGC and BHEL are profitable government companies.", opts: ["A is false but R is true", "Both A and R are true", "A is true but R is false", "Both A and R are false"], ans: 0, exp: "A is false — many PSUs like ONGC, IOCL, BHEL are profitable. R is true — these are examples of profit-making PSUs." },
+    { type: 'mcq', q: "In which year was Air India privatised by selling to Tata Group?", opts: ["2019", "2020", "2022", "2023"], ans: 2, exp: "The strategic disinvestment of Air India to Tata Group was completed in January 2022." }
+  ],
+  4: [
+    { type: 'mcq', q: "Which principle of insurance states that the insurer should not make profit from the insurance claim?", opts: ["Utmost Good Faith", "Insurable Interest", "Indemnity", "Subrogation"], ans: 2, exp: "Principle of Indemnity: Insurance is meant only to restore the insured to their original financial position, not to make profit." },
+    { type: 'mcq', q: "The cheapest mode of transport for long distances over land is:", opts: ["Road transport", "Air transport", "Rail transport", "Pipeline transport"], ans: 2, exp: "Rail transport is cheapest for long distances over land and best suited for bulky, heavy goods." },
+    { type: 'case', q: "ABC Bank accepts deposits from the public and gives loans. A borrower takes a loan to buy machinery. This bank function is called:", opts: ["Agency function", "Utility function", "Primary function", "Subsidiary function"], ans: 2, exp: "Accepting deposits and granting loans are the primary functions of a commercial bank." },
+    { type: 'ar', q: "Assertion (A): Cold storage is important for perishable agricultural goods. Reason (R): Cold storage creates time utility by preserving goods until needed.", opts: ["Both A and R are true and R explains A", "A is true but R is false", "A is false but R is true", "Both A and R are false"], ans: 0, exp: "Both true and R correctly explains why cold storage is important — it preserves goods and creates time utility." },
+    { type: 'mcq', q: "UPI stands for:", opts: ["Unique Payments Interface", "Unified Payments Interface", "Universal Payment Initiative", "United Payments India"], ans: 1, exp: "UPI — Unified Payments Interface — was launched by NPCI in 2016 and has revolutionised digital payments in India." }
+  ],
+  5: [
+    { type: 'mcq', q: "GeM (Government e-Marketplace) is an example of which type of e-commerce?", opts: ["B2B", "B2C", "C2C", "B2G"], ans: 3, exp: "GeM facilitates Business-to-Government (B2G) transactions where businesses sell goods/services to government departments." },
+    { type: 'mcq', q: "India is the world's largest destination for which type of outsourcing?", opts: ["Manufacturing outsourcing", "IT and IT-enabled services (ITeS)", "Agricultural outsourcing", "Mining outsourcing"], ans: 1, exp: "India accounts for over 55% of global IT outsourcing market, making it the world's #1 IT outsourcing destination." },
+    { type: 'case', q: "OLX, where individuals sell used goods to other individuals, is an example of:", opts: ["B2B e-commerce", "B2C e-commerce", "C2C e-commerce", "B2G e-commerce"], ans: 2, exp: "Consumer-to-Consumer (C2C) e-commerce involves transactions directly between individual consumers on third-party platforms." },
+    { type: 'ar', q: "Assertion (A): E-commerce eliminates the need for intermediaries. Reason (R): Buyers and sellers can connect directly through digital platforms.", opts: ["Both A and R are true and R explains A", "A is true but R is false", "A is false but R is true", "Both A and R are false"], ans: 0, exp: "Both are true. E-commerce platforms enable direct connection, reducing or eliminating middlemen in many transactions." },
+    { type: 'mcq', q: "KPO (Knowledge Process Outsourcing) differs from BPO because KPO:", opts: ["Involves cheaper work", "Requires specialised domain knowledge", "Only involves call centres", "Is done overseas"], ans: 1, exp: "KPO involves high-skill, knowledge-intensive processes like legal, financial analysis, research — requiring domain expertise." }
+  ],
+  6: [
+    { type: 'mcq', q: "Carroll's CSR Pyramid, from bottom to top, is:", opts: ["Ethical → Economic → Legal → Philanthropic", "Economic → Legal → Ethical → Philanthropic", "Philanthropic → Ethical → Legal → Economic", "Legal → Economic → Ethical → Philanthropic"], ans: 1, exp: "Carroll's CSR Pyramid: Economic (foundation) → Legal → Ethical → Philanthropic (top). Economic is the base requirement." },
+    { type: 'mcq', q: "Under Companies Act 2013, which companies must mandatorily spend 2% on CSR?", opts: ["All companies", "Companies with net profit > ₹5 crore", "All public limited companies only", "Companies with employees > 100"], ans: 1, exp: "Section 135 mandates CSR for companies with net profit ≥ ₹5 cr, OR net worth ≥ ₹500 cr, OR turnover ≥ ₹1000 cr." },
+    { type: 'case', q: "A company dumps industrial waste in a nearby river to save disposal costs. Which stakeholder's responsibility is being neglected?", opts: ["Shareholders", "Employees", "Community/Society", "Creditors"], ans: 2, exp: "Dumping waste harms the community and environment. Responsibility towards society includes not causing environmental harm." },
+    { type: 'ar', q: "Assertion (A): CSR is only charity/donation. Reason (R): CSR includes any activity that benefits society, including employee welfare and environmental protection.", opts: ["A is false but R is true", "Both A and R are true", "A is true but R is false", "Both A and R are false"], ans: 0, exp: "A is false — CSR is much more than charity. R correctly defines CSR as covering all socially beneficial activities." },
+    { type: 'mcq', q: "ITC's e-Choupal connects which group to market information?", opts: ["Urban consumers", "Factory workers", "Rural farmers", "Small retailers"], ans: 2, exp: "e-Choupal provides rural farmers with internet access to market prices, weather forecasts, and agricultural information." }
+  ],
+  7: [
+    { type: 'mcq', q: "Which of the following is a source of owner's funds?", opts: ["Debentures", "Bank loans", "Retained profits", "Public deposits"], ans: 2, exp: "Retained profits are profits kept in the business by owners. Debentures, loans, and public deposits are all borrowed funds." },
+    { type: 'mcq', q: "Angel investors typically invest in:", opts: ["Listed companies on stock exchange", "Government bonds", "Early-stage startups", "Cooperative societies"], ans: 2, exp: "Angel investors are high-net-worth individuals who provide early-stage funding to startups in exchange for equity." },
+    { type: 'case', q: "XYZ Ltd issues bonds at 9% annual interest for 7 years to raise ₹50 crore. Holders have no voting rights. This instrument is called:", opts: ["Equity shares", "Preference shares", "Debentures", "Public deposits"], ans: 2, exp: "Debentures are debt instruments with fixed interest and fixed maturity. Holders are creditors, not owners, so no voting rights." },
+    { type: 'ar', q: "Assertion (A): Equity shareholders get dividend after preference shareholders. Reason (R): Preference shareholders get priority in dividend payment.", opts: ["Both A and R are true and R explains A", "A is true but R is false", "A is false but R is true", "Both A and R are false"], ans: 0, exp: "Both true. Preference shareholders, as the name suggests, get preferential treatment in dividend distribution over equity holders." },
+    { type: 'mcq', q: "MUDRA scheme provides loans to:", opts: ["Large corporations", "Micro and small enterprises", "Agricultural cooperatives", "Export companies only"], ans: 1, exp: "MUDRA (Micro Units Development and Refinance Agency) provides loans up to ₹10 lakh to non-corporate, non-farm micro and small enterprises." }
+  ],
+  8: [
+    { type: 'mcq', q: "As per revised MSME definition 2020, a Small Enterprise has annual turnover of:", opts: ["Up to ₹5 crore", "Up to ₹50 crore", "Up to ₹250 crore", "Up to ₹500 crore"], ans: 1, exp: "Small Enterprise: Investment < ₹10 crore AND Turnover < ₹50 crore (as per MSME definition effective April 2020)." },
+    { type: 'mcq', q: "Lijjat Papad is organised as a:", opts: ["Private Limited Company", "Partnership", "Women's Cooperative", "Sole Proprietorship"], ans: 2, exp: "Shri Mahila Griha Udyog Lijjat Papad is organised as a cooperative with equal ownership among all women members." },
+    { type: 'case', q: "Meera has ₹80 and starts a business making papads from her home kitchen, selling to neighbours. Over time, she employs 5 women and supplies to shops. Meera is an example of:", opts: ["A manager", "An entrepreneur", "A trader", "A professional"], ans: 1, exp: "Meera shows classic entrepreneurial behaviour: identifying opportunity, taking risk with small capital, innovating, and growing her enterprise." },
+    { type: 'ar', q: "Assertion (A): Start-up India was launched to promote entrepreneurship. Reason (R): Start-up India offers 3-year tax exemption and fast-track patent applications.", opts: ["Both A and R are true and R explains A", "A is false but R is true", "A is true but R is false", "Both A and R are false"], ans: 0, exp: "Both true. Start-up India (launched Jan 2016) promotes startups with tax holidays, faster patent processing, and easier compliance." },
+    { type: 'mcq', q: "India ranks ___ in the global startup ecosystem:", opts: ["1st", "2nd", "3rd", "5th"], ans: 2, exp: "India is the 3rd largest startup ecosystem globally (after USA and China), with 100+ unicorn companies." }
+  ],
+  9: [
+    { type: 'mcq', q: "A wholesaler buying 1000 units from a manufacturer and selling them to retailers is performing which function?", opts: ["Price determination", "Bulk breaking", "Consumer research", "Product design"], ans: 1, exp: "Wholesalers buy in bulk from manufacturers and sell in smaller quantities to retailers — this function is called 'bulk breaking'." },
+    { type: 'mcq', q: "Under Consumer Protection Act 2019, which court handles complaints from ₹1 crore to ₹10 crore?", opts: ["District Consumer Commission", "State Consumer Commission", "National Consumer Commission", "Supreme Court"], ans: 1, exp: "State Consumer Commission handles complaints with value between ₹1 crore and ₹10 crore." },
+    { type: 'case', q: "A company advertises that its fruit juice is 100% natural but it actually contains artificial flavours. A consumer files a complaint. This is a case of:", opts: ["Deficient service", "Defective goods", "Unfair trade practice", "Restrictive trade practice"], ans: 2, exp: "Misleading advertising claiming false qualities is an Unfair Trade Practice under Consumer Protection Act." },
+    { type: 'ar', q: "Assertion (A): Departmental stores provide all goods under one roof. Reason (R): Departmental stores are large retail establishments organised into departments.", opts: ["Both A and R are true and R explains A", "A is true but R is false", "A is false but R is true", "Both A and R are false"], ans: 0, exp: "Both true. Departmental stores like Shoppers Stop have departments for clothing, electronics, food etc., providing one-stop shopping." },
+    { type: 'mcq', q: "The fastest growing segment of retail in India is:", opts: ["Departmental stores", "Hawkers", "E-commerce", "Weekly markets"], ans: 2, exp: "E-commerce (Amazon, Flipkart, Meesho) is the fastest growing retail segment, growing 20%+ annually in India." }
+  ],
+  10: [
+    { type: 'mcq', q: "The theory of Comparative Advantage in international trade was given by:", opts: ["Adam Smith", "David Ricardo", "Karl Marx", "John Keynes"], ans: 1, exp: "David Ricardo developed the theory of Comparative Advantage — countries should specialise in goods they produce at relatively lower cost." },
+    { type: 'mcq', q: "Import Export Code (IEC) is issued by:", opts: ["RBI", "SEBI", "DGFT (Directorate General of Foreign Trade)", "IRDA"], ans: 2, exp: "IEC (Import Export Code) is a 10-digit code issued by DGFT, Ministry of Commerce. It is mandatory for all importers and exporters." },
+    { type: 'case', q: "Country A imposes a 40% duty on imported cars to protect domestic car manufacturers. This is an example of:", opts: ["Non-tariff barrier", "Tariff barrier", "Trade facilitation", "Free trade"], ans: 1, exp: "Import duties (customs duties) are Tariff barriers — direct taxes on imports that make foreign goods more expensive." },
+    { type: 'ar', q: "Assertion (A): India has a trade deficit in merchandise trade. Reason (R): India imports more goods (especially crude oil) than it exports.", opts: ["Both A and R are true and R explains A", "A is false but R is true", "A is true but R is false", "Both A and R are false"], ans: 0, exp: "Both true. India's crude oil imports alone cost over $130 billion annually, creating a significant trade deficit in goods." },
+    { type: 'mcq', q: "A Letter of Credit (LC) in international trade is issued by:", opts: ["The exporter", "The importer's bank", "WTO", "Customs department"], ans: 1, exp: "Letter of Credit is issued by the importer's bank, guaranteeing payment to the exporter upon submission of specified documents." }
+  ]
+};
+
+// ============================================================
+// SVG DIAGRAMS PER CHAPTER
+// ============================================================
+function getDiagram(chapterId) {
+  const diagrams = {
+    1: `
+      <div class="diagram-container">
+        <div class="diagram-title">📊 Classification of Business Activities</div>
+        <svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#1a3a9e"/>
+              <stop offset="100%" style="stop-color:#00b4d8"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#06d6a0"/>
+              <stop offset="100%" style="stop-color:#118ab2"/>
+            </linearGradient>
+          </defs>
+          <!-- Root -->
+          <rect x="250" y="20" width="200" height="50" rx="12" fill="url(#g1)"/>
+          <text x="350" y="40" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="Nunito">BUSINESS</text>
+          <text x="350" y="58" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11" font-family="Nunito">ACTIVITIES</text>
+          <!-- Lines to children -->
+          <line x1="350" y1="70" x2="350" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <line x1="350" y1="95" x2="175" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <line x1="350" y1="95" x2="525" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <line x1="175" y1="95" x2="175" y2="110" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <line x1="525" y1="95" x2="525" y2="110" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <!-- Industry -->
+          <rect x="75" y="110" width="200" height="45" rx="10" fill="#1a3a9e" stroke="rgba(0,180,216,0.4)" stroke-width="1.5"/>
+          <text x="175" y="132" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="Nunito">INDUSTRY</text>
+          <text x="175" y="148" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Primary · Secondary · Tertiary</text>
+          <!-- Commerce -->
+          <rect x="425" y="110" width="200" height="45" rx="10" fill="#118ab2" stroke="rgba(6,214,160,0.4)" stroke-width="1.5"/>
+          <text x="525" y="132" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="Nunito">COMMERCE</text>
+          <text x="525" y="148" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Trade + Auxiliaries</text>
+          <!-- Industry sub -->
+          <line x1="120" y1="155" x2="120" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="175" y1="155" x2="175" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="230" y1="155" x2="230" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <rect x="70" y="180" width="100" height="40" rx="8" fill="rgba(26,58,158,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="120" y="197" text-anchor="middle" fill="white" font-size="10" font-family="Nunito" font-weight="bold">Primary</text>
+          <text x="120" y="212" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Nunito">Agriculture/Mining</text>
+          <rect x="125" y="180" width="100" height="40" rx="8" fill="rgba(26,58,158,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="175" y="197" text-anchor="middle" fill="white" font-size="10" font-family="Nunito" font-weight="bold">Secondary</text>
+          <text x="175" y="212" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Nunito">Manufacturing</text>
+          <rect x="180" y="180" width="100" height="40" rx="8" fill="rgba(26,58,158,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="230" y="197" text-anchor="middle" fill="white" font-size="10" font-family="Nunito" font-weight="bold">Tertiary</text>
+          <text x="230" y="212" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Nunito">Services</text>
+          <!-- Commerce sub -->
+          <line x1="470" y1="155" x2="470" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="580" y1="155" x2="580" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <rect x="420" y="180" width="100" height="40" rx="8" fill="rgba(17,138,178,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="470" y="197" text-anchor="middle" fill="white" font-size="10" font-family="Nunito" font-weight="bold">Trade</text>
+          <text x="470" y="212" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Nunito">Home / Foreign</text>
+          <rect x="530" y="180" width="100" height="40" rx="8" fill="rgba(17,138,178,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="580" y="197" text-anchor="middle" fill="white" font-size="10" font-family="Nunito" font-weight="bold">Auxiliaries</text>
+          <text x="580" y="212" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Nunito">Bank/Transport/etc</text>
+          <!-- Bottom label -->
+          <text x="350" y="300" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="11" font-family="Nunito">Business Activities: Industry + Commerce</text>
+        </svg>
+      </div>
+      <div class="diagram-container">
+        <div class="diagram-title">🎯 Objectives of Business</div>
+        <svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;">
+          <rect x="10" y="10" width="130" height="110" rx="12" fill="rgba(26,58,158,0.4)" stroke="rgba(0,180,216,0.4)" stroke-width="1.5"/>
+          <text x="75" y="35" text-anchor="middle" fill="#f4b942" font-size="12" font-weight="bold" font-family="Nunito">💰 ECONOMIC</text>
+          <text x="75" y="55" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Profit earning</text>
+          <text x="75" y="72" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Creating customers</text>
+          <text x="75" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Innovation</text>
+          <rect x="160" y="10" width="130" height="110" rx="12" fill="rgba(6,214,160,0.2)" stroke="rgba(6,214,160,0.4)" stroke-width="1.5"/>
+          <text x="225" y="35" text-anchor="middle" fill="#06d6a0" font-size="12" font-weight="bold" font-family="Nunito">🌱 SOCIAL</text>
+          <text x="225" y="55" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Quality goods</text>
+          <text x="225" y="72" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Employment</text>
+          <text x="225" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Community welfare</text>
+          <rect x="310" y="10" width="130" height="110" rx="12" fill="rgba(239,35,60,0.2)" stroke="rgba(239,35,60,0.4)" stroke-width="1.5"/>
+          <text x="375" y="35" text-anchor="middle" fill="#ff6b9d" font-size="12" font-weight="bold" font-family="Nunito">👥 HUMAN</text>
+          <text x="375" y="55" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Employee welfare</text>
+          <text x="375" y="72" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Job satisfaction</text>
+          <text x="375" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Fair treatment</text>
+          <rect x="460" y="10" width="130" height="110" rx="12" fill="rgba(195,119,255,0.2)" stroke="rgba(195,119,255,0.4)" stroke-width="1.5"/>
+          <text x="525" y="35" text-anchor="middle" fill="#c77dff" font-size="12" font-weight="bold" font-family="Nunito">🏛️ NATIONAL</text>
+          <text x="525" y="55" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">GDP growth</text>
+          <text x="525" y="72" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Foreign exchange</text>
+          <text x="525" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Self-reliance</text>
+          <rect x="180" y="155" width="240" height="50" rx="12" fill="url(#g1)"/>
+          <text x="300" y="176" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="Nunito">BUSINESS OBJECTIVES</text>
+          <text x="300" y="195" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">Multi-dimensional goals for sustainable success</text>
+          <line x1="75" y1="120" x2="270" y2="155" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="225" y1="120" x2="290" y2="155" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="375" y1="120" x2="330" y2="155" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="525" y1="120" x2="380" y2="155" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    `,
+    2: `
+      <div class="diagram-container">
+        <div class="diagram-title">🏢 Forms of Business Organisation — Comparison</div>
+        <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+          <!-- Headers -->
+          <rect x="10" y="10" width="680" height="36" rx="8" fill="rgba(26,58,158,0.6)"/>
+          <text x="80" y="33" text-anchor="middle" fill="#f4b942" font-size="11" font-weight="bold" font-family="Nunito">Basis</text>
+          <text x="210" y="33" text-anchor="middle" fill="#f4b942" font-size="11" font-weight="bold" font-family="Nunito">Sole Proprietorship</text>
+          <text x="360" y="33" text-anchor="middle" fill="#f4b942" font-size="11" font-weight="bold" font-family="Nunito">Partnership</text>
+          <text x="500" y="33" text-anchor="middle" fill="#f4b942" font-size="11" font-weight="bold" font-family="Nunito">Company</text>
+          <text x="630" y="33" text-anchor="middle" fill="#f4b942" font-size="11" font-weight="bold" font-family="Nunito">Cooperative</text>
+          <!-- Row 1: Formation -->
+          <rect x="10" y="50" width="680" height="34" rx="4" fill="rgba(255,255,255,0.04)"/>
+          <text x="80" y="71" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="10" font-family="Nunito">Formation</text>
+          <text x="210" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Very Easy</text>
+          <text x="360" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Easy (Deed)</text>
+          <text x="500" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Complex (Reg.)</text>
+          <text x="630" y="71" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Compulsory Reg.</text>
+          <!-- Row 2: Liability -->
+          <rect x="10" y="88" width="680" height="34" rx="4" fill="rgba(255,255,255,0.07)"/>
+          <text x="80" y="109" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="10" font-family="Nunito">Liability</text>
+          <text x="210" y="109" text-anchor="middle" fill="#ef233c" font-size="10" font-family="Nunito">Unlimited</text>
+          <text x="360" y="109" text-anchor="middle" fill="#ef233c" font-size="10" font-family="Nunito">Unlimited</text>
+          <text x="500" y="109" text-anchor="middle" fill="#06d6a0" font-size="10" font-family="Nunito">Limited</text>
+          <text x="630" y="109" text-anchor="middle" fill="#06d6a0" font-size="10" font-family="Nunito">Limited</text>
+          <!-- Row 3: Control -->
+          <rect x="10" y="126" width="680" height="34" rx="4" fill="rgba(255,255,255,0.04)"/>
+          <text x="80" y="147" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="10" font-family="Nunito">Control</text>
+          <text x="210" y="147" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Single Owner</text>
+          <text x="360" y="147" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">All Partners</text>
+          <text x="500" y="147" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Board of Directors</text>
+          <text x="630" y="147" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">Elected Committee</text>
+          <!-- Row 4: Capital -->
+          <rect x="10" y="164" width="680" height="34" rx="4" fill="rgba(255,255,255,0.07)"/>
+          <text x="80" y="185" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="10" font-family="Nunito">Capital</text>
+          <text x="210" y="185" text-anchor="middle" fill="#ef233c" font-size="10" font-family="Nunito">Very Limited</text>
+          <text x="360" y="185" text-anchor="middle" fill="#f4b942" font-size="10" font-family="Nunito">Limited</text>
+          <text x="500" y="185" text-anchor="middle" fill="#06d6a0" font-size="10" font-family="Nunito">Large (Public mkt)</text>
+          <text x="630" y="185" text-anchor="middle" fill="#f4b942" font-size="10" font-family="Nunito">Moderate</text>
+          <!-- Row 5: Continuity -->
+          <rect x="10" y="202" width="680" height="34" rx="4" fill="rgba(255,255,255,0.04)"/>
+          <text x="80" y="223" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="10" font-family="Nunito">Continuity</text>
+          <text x="210" y="223" text-anchor="middle" fill="#ef233c" font-size="10" font-family="Nunito">Uncertain</text>
+          <text x="360" y="223" text-anchor="middle" fill="#ef233c" font-size="10" font-family="Nunito">Uncertain</text>
+          <text x="500" y="223" text-anchor="middle" fill="#06d6a0" font-size="10" font-family="Nunito">Perpetual</text>
+          <text x="630" y="223" text-anchor="middle" fill="#06d6a0" font-size="10" font-family="Nunito">Perpetual</text>
+          <!-- Vertical dividers -->
+          <line x1="140" y1="10" x2="140" y2="240" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="280" y1="10" x2="280" y2="240" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="430" y1="10" x2="430" y2="240" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="570" y1="10" x2="570" y2="240" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        </svg>
+      </div>
+    `,
+    7: `
+      <div class="diagram-container">
+        <div class="diagram-title">💰 Sources of Business Finance</div>
+        <svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;">
+          <!-- Center box -->
+          <rect x="240" y="140" width="200" height="60" rx="12" fill="url(#g1)"/>
+          <text x="340" y="165" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Nunito">Business Finance</text>
+          <text x="340" y="185" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11" font-family="Nunito">Sources of Funds</text>
+          <!-- Owner's Funds -->
+          <rect x="30" y="60" width="160" height="100" rx="12" fill="rgba(6,214,160,0.2)" stroke="rgba(6,214,160,0.4)" stroke-width="1.5"/>
+          <text x="110" y="85" text-anchor="middle" fill="#06d6a0" font-size="12" font-weight="bold" font-family="Nunito">Owner's Funds</text>
+          <text x="110" y="105" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Equity shares</text>
+          <text x="110" y="122" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Preference shares</text>
+          <text x="110" y="139" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Retained profits</text>
+          <line x1="190" y1="110" x2="240" y2="165" stroke="rgba(6,214,160,0.5)" stroke-width="1.5" stroke-dasharray="4"/>
+          <!-- Borrowed Funds -->
+          <rect x="30" y="200" width="160" height="110" rx="12" fill="rgba(239,35,60,0.2)" stroke="rgba(239,35,60,0.4)" stroke-width="1.5"/>
+          <text x="110" y="225" text-anchor="middle" fill="#ff6b9d" font-size="12" font-weight="bold" font-family="Nunito">Borrowed Funds</text>
+          <text x="110" y="245" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Debentures</text>
+          <text x="110" y="262" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Bank loans</text>
+          <text x="110" y="279" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Public deposits</text>
+          <text x="110" y="296" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Trade credit</text>
+          <line x1="190" y1="240" x2="240" y2="190" stroke="rgba(239,35,60,0.5)" stroke-width="1.5" stroke-dasharray="4"/>
+          <!-- Special Sources -->
+          <rect x="490" y="60" width="165" height="110" rx="12" fill="rgba(195,119,255,0.2)" stroke="rgba(195,119,255,0.4)" stroke-width="1.5"/>
+          <text x="572" y="85" text-anchor="middle" fill="#c77dff" font-size="12" font-weight="bold" font-family="Nunito">Special Sources</text>
+          <text x="572" y="105" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Venture capital</text>
+          <text x="572" y="122" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Angel investors</text>
+          <text x="572" y="139" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• Crowdfunding</text>
+          <line x1="490" y1="110" x2="440" y2="165" stroke="rgba(195,119,255,0.5)" stroke-width="1.5" stroke-dasharray="4"/>
+          <!-- FI -->
+          <rect x="490" y="200" width="165" height="90" rx="12" fill="rgba(244,185,66,0.2)" stroke="rgba(244,185,66,0.4)" stroke-width="1.5"/>
+          <text x="572" y="225" text-anchor="middle" fill="#f4b942" font-size="12" font-weight="bold" font-family="Nunito">Financial Instns</text>
+          <text x="572" y="245" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• SIDBI</text>
+          <text x="572" y="262" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• NABARD</text>
+          <text x="572" y="279" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="Nunito">• IDBI</text>
+          <line x1="490" y1="240" x2="440" y2="195" stroke="rgba(244,185,66,0.5)" stroke-width="1.5" stroke-dasharray="4"/>
+        </svg>
+      </div>
+    `
+  };
+  return diagrams[chapterId] || `
+    <div class="diagram-container">
+      <div class="diagram-title">📊 Chapter ${chapterId} Overview Diagram</div>
+      <div class="concept-card">
+        <p>Key concepts from this chapter are presented in the Concepts tab. Refer to your textbook for additional diagrams.</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// APP STATE
+// ============================================================
+let appState = {
+  currentScreen: 'splash',
+  currentChapter: null,
+  currentQuizChapter: null,
+  currentQuestionIndex: 0,
+  score: 0,
+  answeredQuestions: [],
+  quizQuestions: [],
+  completedChapters: [],
+  quizScores: {}
+};
+
+// ============================================================
+// LOCAL STORAGE
+// ============================================================
+function saveState() {
+  localStorage.setItem('bs11_completed', JSON.stringify(appState.completedChapters));
+  localStorage.setItem('bs11_scores', JSON.stringify(appState.quizScores));
+}
+
+function loadState() {
+  try {
+    const c = localStorage.getItem('bs11_completed');
+    const s = localStorage.getItem('bs11_scores');
+    if (c) appState.completedChapters = JSON.parse(c);
+    if (s) appState.quizScores = JSON.parse(s);
+  } catch(e) { console.log('State load error', e); }
+}
+
+// ============================================================
+// SCREEN NAVIGATION
+// ============================================================
+function showScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + screenId).classList.add('active');
+  appState.currentScreen = screenId;
+
+  const nav = document.getElementById('bottomNav');
+  const showNav = ['home','chapter','quiz','simulation','progress'].includes(screenId);
+  nav.classList.toggle('visible', showNav);
+
+  // Update nav active state
+  ['home','chapters','quiz','sim','progress'].forEach(id => {
+    const btn = document.getElementById('nav-' + id);
+    if (btn) btn.classList.remove('active');
+  });
+
+  const navMap = { home: 'nav-home', chapter: 'nav-chapters', quiz: 'nav-quiz', simulation: 'nav-sim', progress: 'nav-progress' };
+  if (navMap[screenId]) {
+    const el = document.getElementById(navMap[screenId]);
+    if (el) el.classList.add('active');
+  }
+}
+
+function showHome() {
+  renderHomeChapters();
+  updateStats();
+  showScreen('home');
+  document.getElementById('nav-home').classList.add('active');
+}
+
+function showChaptersView() {
+  // Go to home and scroll to chapters
+  showHome();
+  setTimeout(() => {
+    const cl = document.getElementById('homeChapterList');
+    if (cl) cl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+function showQuizSelection() {
+  renderQuizSelection();
+  document.getElementById('quizSelectionView').style.display = 'block';
+  document.getElementById('quizPlayView').style.display = 'none';
+  showScreen('quiz');
+}
+
+function showSimulations() {
+  document.getElementById('simSelection').style.display = 'block';
+  document.getElementById('simArea').classList.remove('active');
+  showScreen('simulation');
+}
+
+function showProgress() {
+  renderProgress();
+  showScreen('progress');
+}
+
+function goBack() {
+  showHome();
+}
+
+// ============================================================
+// RENDER HOME
+// ============================================================
+function renderHomeChapters() {
+  const container = document.getElementById('homeChapterList');
+  container.innerHTML = CHAPTERS.map(ch => {
+    const done = appState.completedChapters.includes(ch.id);
+    const score = appState.quizScores[ch.id] ? `Quiz: ${appState.quizScores[ch.id]}%` : 'Not quizzed yet';
+    return `
+      <div class="chapter-item ${done ? 'completed' : ''}" onclick="openChapter(${ch.id})">
+        <div class="chapter-num">${ch.id}</div>
+        <div class="chapter-info">
+          <h4>${ch.icon} ${ch.title}</h4>
+          <p>${ch.subtitle} · ${score}</p>
+        </div>
+        <span class="chapter-arrow">${done ? '✅' : '→'}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateStats() {
+  document.getElementById('statCompleted').textContent = appState.completedChapters.length;
+  const scores = Object.values(appState.quizScores);
+  const avgScore = scores.length ? Math.round(scores.reduce((a,b) => a+b, 0) / scores.length) : 0;
+  document.getElementById('statScore').textContent = avgScore ? avgScore + '%' : '-';
+}
+
+// ============================================================
+// CHAPTER DETAIL
+// ============================================================
+function openChapter(chId) {
+  const ch = CHAPTERS.find(c => c.id === chId);
+  if (!ch) return;
+  appState.currentChapter = ch;
+
+  document.getElementById('chapterTitle').textContent = `${ch.icon} ${ch.title}`;
+  document.getElementById('chapterSubtitle').textContent = ch.subtitle;
+  document.getElementById('chapterHero').style.background = `linear-gradient(135deg, ${ch.color}dd 0%, ${ch.color}99 100%)`;
+
+  // Reset tabs
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-btn').classList.add('active');
+  document.getElementById('tab-concepts').classList.add('active');
+
+  // Render concepts
+  document.getElementById('conceptContent').innerHTML = ch.concepts.map(c => `
+    <div class="concept-card">
+      <h3>${c.icon} ${c.heading}</h3>
+      <p>${c.text}</p>
+      ${c.points ? `<ul>${c.points.map(p => `<li>${p}</li>`).join('')}</ul>` : ''}
+    </div>
+  `).join('');
+
+  // Render diagrams
+  document.getElementById('diagramContent').innerHTML = getDiagram(chId);
+
+  // Render case studies
+  document.getElementById('caseContent').innerHTML = ch.caseStudies.map(cs => `
+    <div class="case-study-card">
+      <div class="case-label">📚 Case Study · ${cs.company}</div>
+      <h3>${cs.title}</h3>
+      <p>${cs.description}</p>
+      <div class="key-learning">💡 ${cs.learning}</div>
+      ${cs.questions ? `<div style="margin-top:14px;"><strong style="font-size:13px;color:var(--teal);">🧠 Discussion Questions:</strong><ul style="padding-left:18px;margin-top:8px;">${cs.questions.map(q=>`<li style="font-size:13px;line-height:1.6;margin-bottom:6px;color:rgba(255,255,255,0.8);">${q}</li>`).join('')}</ul></div>` : ''}
+    </div>
+  `).join('');
+
+  // Render practice
+  document.getElementById('practiceContent').innerHTML = `
+    <div class="concept-card">
+      <h3>✏️ Practice Questions</h3>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:14px;">Answer these in your notebook for exam preparation.</p>
+      <ol style="padding-left:20px;">
+        ${ch.practiceQuestions.map((q,i) => `<li style="margin-bottom:12px;font-size:14px;line-height:1.6;color:rgba(255,255,255,0.85);">${q}</li>`).join('')}
+      </ol>
+    </div>
+    <button class="btn-primary mt-4" onclick="startQuizForChapter(${chId})" style="width:100%;">
+      🧠 Take Quiz for this Chapter
+    </button>
+  `;
+
+  showScreen('chapter');
+}
+
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function markChapterComplete() {
+  if (!appState.currentChapter) return;
+  const id = appState.currentChapter.id;
+  if (!appState.completedChapters.includes(id)) {
+    appState.completedChapters.push(id);
+    saveState();
+  }
+  showToast('✅ Chapter marked complete!');
+  // Update the back-home chapter list
+  renderHomeChapters();
+  updateStats();
+}
+
+// ============================================================
+// QUIZ ENGINE
+// ============================================================
+function renderQuizSelection() {
+  const grid = document.getElementById('quizSelectionGrid');
+  grid.innerHTML = CHAPTERS.map(ch => `
+    <div class="quiz-chapter-card" onclick="startQuizForChapter(${ch.id})">
+      <span class="ch-icon">${ch.icon}</span>
+      <h4>Ch. ${ch.id}: ${ch.title}</h4>
+      <p>${appState.quizScores[ch.id] ? `Best: ${appState.quizScores[ch.id]}%` : '5 Questions'}</p>
+    </div>
+  `).join('');
+}
+
+function startQuizForChapter(chId) {
+  const allQ = QUIZ_DATA[chId];
+  if (!allQ) {
+    showToast('Quiz coming soon for this chapter!');
+    return;
+  }
+
+  appState.currentQuizChapter = chId;
+  // Shuffle and pick up to 5 questions
+  const shuffled = [...allQ].sort(() => Math.random() - 0.5).slice(0, 5);
+  appState.quizQuestions = shuffled;
+  appState.currentQuestionIndex = 0;
+  appState.score = 0;
+  appState.answeredQuestions = [];
+
+  const ch = CHAPTERS.find(c => c.id === chId);
+  document.getElementById('quizChapterTitle').textContent = `🧠 ${ch.icon} Quiz`;
+
+  document.getElementById('quizSelectionView').style.display = 'none';
+  document.getElementById('quizPlayView').style.display = 'block';
+  document.getElementById('scoreCard').classList.remove('show');
+
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = appState.quizQuestions[appState.currentQuestionIndex];
+  const total = appState.quizQuestions.length;
+  const current = appState.currentQuestionIndex + 1;
+
+  document.getElementById('quizQuestionCounter').textContent = `Question ${current} of ${total}`;
+  document.getElementById('quizProgressFill').style.width = `${(current - 1) / total * 100}%`;
+
+  const typeMap = { mcq: { cls: 'badge-mcq', label: '📝 MCQ' }, case: { cls: 'badge-case', label: '🏢 Case Study' }, ar: { cls: 'badge-ar', label: '⚡ Assertion-Reason' } };
+  const typeBadge = typeMap[q.type] || typeMap.mcq;
+
+  const letters = ['A', 'B', 'C', 'D'];
+
+  document.getElementById('questionArea').innerHTML = `
+    <div class="question-card">
+      <div class="question-type-badge ${typeBadge.cls}">${typeBadge.label}</div>
+      <div class="question-text">${q.q}</div>
+      <div id="optionsArea">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" onclick="selectAnswer(${i})" id="opt-${i}">
+            <span class="option-letter">${letters[i]}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback-box" id="feedbackBox">
+        <h4 id="feedbackTitle"></h4>
+        <p id="feedbackText"></p>
+      </div>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">
+      ${appState.currentQuestionIndex < appState.quizQuestions.length - 1 ? 'Next Question →' : 'See Results 🎉'}
+    </button>
+  `;
+}
+
+function selectAnswer(selectedIdx) {
+  const q = appState.quizQuestions[appState.currentQuestionIndex];
+  const isCorrect = selectedIdx === q.ans;
+
+  // Disable all buttons
+  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === selectedIdx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  if (isCorrect) appState.score++;
+
+  // Show feedback
+  const fb = document.getElementById('feedbackBox');
+  const fbTitle = document.getElementById('feedbackTitle');
+  const fbText = document.getElementById('feedbackText');
+
+  fb.classList.add('show');
+  if (isCorrect) {
+    fbTitle.textContent = '✅ Correct!';
+    fb.classList.remove('wrong-feedback');
+  } else {
+    fbTitle.textContent = '❌ Incorrect';
+    fb.classList.add('wrong-feedback');
+    fbTitle.style.color = 'var(--red)';
+  }
+  fbText.textContent = q.exp;
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQuestion() {
+  appState.currentQuestionIndex++;
+  if (appState.currentQuestionIndex < appState.quizQuestions.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  const total = appState.quizQuestions.length;
+  const pct = Math.round(appState.score / total * 100);
+
+  // Save score
+  const chId = appState.currentQuizChapter;
+  if (!appState.quizScores[chId] || pct > appState.quizScores[chId]) {
+    appState.quizScores[chId] = pct;
+    saveState();
+  }
+
+  document.getElementById('questionArea').style.display = 'none';
+  const sc = document.getElementById('scoreCard');
+  sc.classList.add('show');
+
+  document.getElementById('finalScore').textContent = appState.score;
+  document.getElementById('finalTotal').textContent = `/${total}`;
+
+  const titles = { 100: '🏆 Perfect Score!', 80: '🌟 Excellent!', 60: '👍 Good Job!', 40: '📚 Keep Studying', 0: '💪 Try Again!' };
+  const msgs = { 100: 'Outstanding! You have mastered this chapter.', 80: 'Great work! You clearly understand the concepts.', 60: 'Good effort! Review the incorrect answers.', 40: 'Keep practising! Review the chapter again.', 0: 'Don\'t give up! Study the chapter and retry.' };
+
+  const level = pct >= 100 ? 100 : pct >= 80 ? 80 : pct >= 60 ? 60 : pct >= 40 ? 40 : 0;
+  document.getElementById('scoreTitle').textContent = titles[level];
+  document.getElementById('scoreMsg').textContent = `You scored ${pct}% — ${msgs[level]}`;
+
+  updateStats();
+}
+
+function exitQuiz() {
+  document.getElementById('questionArea').style.display = '';
+  showQuizSelection();
+}
+
+function retryQuiz() {
+  document.getElementById('questionArea').style.display = '';
+  startQuizForChapter(appState.currentQuizChapter);
+}
+
+// ============================================================
+// SIMULATIONS
+// ============================================================
+const simConfigs = {
+  decision: {
+    title: '🏢 Business Decision Simulator',
+    html: () => `
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">
+        You are running a business. Adjust your strategy and see the outcome.
+      </p>
+      <div class="slider-group">
+        <label>Product Price (₹) <span id="priceVal">500</span></label>
+        <input type="range" min="100" max="2000" value="500" step="50" oninput="document.getElementById('priceVal').textContent='₹'+this.value" id="slPrice">
+      </div>
+      <div class="slider-group">
+        <label>Marketing Budget (₹000) <span id="mktVal">50</span></label>
+        <input type="range" min="0" max="500" value="50" step="10" oninput="document.getElementById('mktVal').textContent='₹'+this.value+'K'" id="slMkt">
+      </div>
+      <div class="slider-group">
+        <label>Quality Investment (%) <span id="qualVal">60</span></label>
+        <input type="range" min="10" max="100" value="60" step="5" oninput="document.getElementById('qualVal').textContent=this.value+'%'" id="slQual">
+      </div>
+      <div class="slider-group">
+        <label>No. of Employees <span id="empVal">10</span></label>
+        <input type="range" min="2" max="100" value="10" step="1" oninput="document.getElementById('empVal').textContent=this.value" id="slEmp">
+      </div>
+      <button class="btn-simulate" onclick="runDecisionSim()">📊 Run Simulation</button>
+      <div class="result-display" id="decisionResult"></div>
+    `,
+    run: () => {
+      const price = parseInt(document.getElementById('slPrice').value);
+      const mkt = parseInt(document.getElementById('slMkt').value);
+      const qual = parseInt(document.getElementById('slQual').value);
+      const emp = parseInt(document.getElementById('slEmp').value);
+
+      const demand = Math.max(10, 1000 - price / 2 + mkt * 2 + qual * 3);
+      const revenue = demand * price / 1000;
+      const costs = mkt + qual * 100 + emp * 15;
+      const profit = revenue - costs;
+      const growth = profit > 0 ? 'Profitable ✅' : 'Loss-making ❌';
+
+      const el = document.getElementById('decisionResult');
+      el.classList.add('show');
+      el.innerHTML = `
+        <h4>${profit > 0 ? '📈 Business is Profitable!' : '📉 Business is in Loss'}</h4>
+        <div class="metrics-grid">
+          <div class="metric-item"><span class="metric-val">₹${revenue.toFixed(0)}K</span><div class="metric-label">Revenue</div></div>
+          <div class="metric-item"><span class="metric-val">₹${costs.toFixed(0)}K</span><div class="metric-label">Total Costs</div></div>
+          <div class="metric-item"><span class="metric-val" style="color:${profit>0?'var(--green)':'var(--red)'}">₹${profit.toFixed(0)}K</span><div class="metric-label">Net Profit/Loss</div></div>
+          <div class="metric-item"><span class="metric-val">${Math.round(demand)}</span><div class="metric-label">Units Demanded</div></div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;">
+          <strong>Analysis:</strong> ${profit > 200 ? 'Excellent strategy! High profit margin. Consider expansion.' : profit > 0 ? 'Good strategy but margins are thin. Optimise costs or raise price.' : 'Review your pricing and cost structure. Reduce costs or increase marketing effectiveness.'}
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--teal);">💡 Concept: This demonstrates profit = revenue - costs and factors affecting business decisions.</p>
+      `;
+    }
+  },
+  demand: {
+    title: '📈 Market Demand Simulator',
+    html: () => `
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">See how price and income affect demand and supply. Core economics for Business Studies!</p>
+      <div class="slider-group">
+        <label>Product Price (₹) <span id="dpVal">300</span></label>
+        <input type="range" min="50" max="1000" value="300" step="10" oninput="document.getElementById('dpVal').textContent='₹'+this.value" id="sdPrice">
+      </div>
+      <div class="slider-group">
+        <label>Consumer Income (₹000 per month) <span id="incVal">30</span></label>
+        <input type="range" min="5" max="100" value="30" step="5" oninput="document.getElementById('incVal').textContent='₹'+this.value+'K'" id="sdIncome">
+      </div>
+      <div class="slider-group">
+        <label>Substitute Product Price (₹) <span id="subVal">350</span></label>
+        <input type="range" min="50" max="1000" value="350" step="10" oninput="document.getElementById('subVal').textContent='₹'+this.value" id="sdSub">
+      </div>
+      <button class="btn-simulate" onclick="runDemandSim()">📊 Analyse Market</button>
+      <div class="result-display" id="demandResult"></div>
+    `,
+    run: () => {
+      const price = parseInt(document.getElementById('sdPrice').value);
+      const income = parseInt(document.getElementById('sdIncome').value);
+      const sub = parseInt(document.getElementById('sdSub').value);
+
+      const demand = Math.max(0, Math.round(500 - price * 0.4 + income * 3 + (sub - price) * 0.3));
+      const supply = Math.round(50 + price * 0.5);
+      const equilibrium = demand === supply ? 'Market in Equilibrium ✅' : demand > supply ? 'Excess Demand (Shortage)' : 'Excess Supply (Surplus)';
+
+      const el = document.getElementById('demandResult');
+      el.classList.add('show');
+      el.innerHTML = `
+        <h4>📊 Market Analysis</h4>
+        <div class="metrics-grid">
+          <div class="metric-item"><span class="metric-val">${demand}</span><div class="metric-label">Units Demanded</div></div>
+          <div class="metric-item"><span class="metric-val">${supply}</span><div class="metric-label">Units Supplied</div></div>
+          <div class="metric-item"><span class="metric-val" style="color:${demand===supply?'var(--green)':demand>supply?'var(--accent)':'var(--red)'}">₹${Math.round(price*(demand>supply?1.05:0.95))}</span><div class="metric-label">Price Trend</div></div>
+          <div class="metric-item"><span class="metric-val">${demand>supply?'↑':'demand<supply'?'↓':'→'}</span><div class="metric-label">Market Signal</div></div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;color:var(--accent)"><strong>Status: ${equilibrium}</strong></p>
+        <p style="margin-top:8px;font-size:12px;">
+          ${demand > supply ? 'Demand > Supply: Sellers can raise prices. Good for producers.' : demand < supply ? 'Supply > Demand: Prices will fall. Buyers benefit.' : 'Market is balanced. No pressure on price.'}
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--teal);">💡 Concept: Law of Demand — as price rises, demand falls. Law of Supply — as price rises, supply increases.</p>
+      `;
+    }
+  },
+  entrepreneur: {
+    title: '💡 Entrepreneurship Simulator',
+    html: () => `
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">Start your own business! Allocate ₹10,00,000 across different areas and see your startup's chances.</p>
+      <div class="slider-group">
+        <label>Capital for Production (₹ lakh) <span id="epVal">3</span></label>
+        <input type="range" min="0" max="10" value="3" step="0.5" oninput="document.getElementById('epVal').textContent='₹'+this.value+'L'" id="seP">
+      </div>
+      <div class="slider-group">
+        <label>Marketing & Branding (₹ lakh) <span id="emVal">2</span></label>
+        <input type="range" min="0" max="10" value="2" step="0.5" oninput="document.getElementById('emVal').textContent='₹'+this.value+'L'" id="seM">
+      </div>
+      <div class="slider-group">
+        <label>Technology & Innovation (₹ lakh) <span id="etVal">2</span></label>
+        <input type="range" min="0" max="10" value="2" step="0.5" oninput="document.getElementById('etVal').textContent='₹'+this.value+'L'" id="seT">
+      </div>
+      <div class="slider-group">
+        <label>Human Resources (₹ lakh) <span id="ehVal">1.5</span></label>
+        <input type="range" min="0" max="10" value="1.5" step="0.5" oninput="document.getElementById('ehVal').textContent='₹'+this.value+'L'" id="seH">
+      </div>
+      <button class="btn-simulate" onclick="runEntrepreneurSim()">🚀 Launch Startup</button>
+      <div class="result-display" id="entrResult"></div>
+    `,
+    run: () => {
+      const p = parseFloat(document.getElementById('seP').value);
+      const m = parseFloat(document.getElementById('seM').value);
+      const t = parseFloat(document.getElementById('seT').value);
+      const h = parseFloat(document.getElementById('seH').value);
+      const total = p + m + t + h;
+
+      const balance = (10 - total).toFixed(1);
+      const score = Math.min(100, Math.round(p * 10 + m * 12 + t * 15 + h * 8));
+      const rating = score >= 80 ? '🦄 Unicorn Potential!' : score >= 60 ? '🚀 High Growth Startup' : score >= 40 ? '🌱 Early Stage Growth' : '⚠️ Needs Rebalancing';
+
+      const el = document.getElementById('entrResult');
+      el.classList.add('show');
+      el.innerHTML = `
+        <h4>${rating}</h4>
+        <div class="metrics-grid">
+          <div class="metric-item"><span class="metric-val">₹${total.toFixed(1)}L</span><div class="metric-label">Invested</div></div>
+          <div class="metric-item"><span class="metric-val" style="color:${balance>=0?'var(--green)':'var(--red)'}">₹${balance}L</span><div class="metric-label">Cash Reserve</div></div>
+          <div class="metric-item"><span class="metric-val">${score}%</span><div class="metric-label">Success Score</div></div>
+          <div class="metric-item"><span class="metric-val">${score>=60?'Year 2':'Year 4'}</span><div class="metric-label">Breakeven Est.</div></div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;">
+          ${total > 10 ? '⚠️ Over budget! You have over-allocated capital. Reduce spending.' : score >= 70 ? 'Great allocation! Balanced investment across all areas.' : 'Tip: Technology and Marketing have highest returns for startups.'}
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--teal);">💡 Concept: Resource allocation is a key entrepreneurship skill. Balance production, marketing, technology and human resources.</p>
+      `;
+    }
+  },
+  trade: {
+    title: '🛒 Trade Simulator',
+    html: () => `
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">Experience the wholesale-retail trade chain. Buy goods and sell them profitably!</p>
+      <div class="slider-group">
+        <label>Buy from Manufacturer (units) <span id="tbVal">100</span></label>
+        <input type="range" min="10" max="500" value="100" step="10" oninput="document.getElementById('tbVal').textContent=this.value" id="stB">
+      </div>
+      <div class="slider-group">
+        <label>Wholesale Price (₹/unit) <span id="twVal">50</span></label>
+        <input type="range" min="10" max="500" value="50" step="5" oninput="document.getElementById('twVal').textContent='₹'+this.value" id="stW">
+      </div>
+      <div class="slider-group">
+        <label>Your Retail Selling Price (₹/unit) <span id="trVal">80</span></label>
+        <input type="range" min="10" max="1000" value="80" step="5" oninput="document.getElementById('trVal').textContent='₹'+this.value" id="stR">
+      </div>
+      <div class="slider-group">
+        <label>Market Competition (Low to High) <span id="tcVal">5</span></label>
+        <input type="range" min="1" max="10" value="5" step="1" oninput="document.getElementById('tcVal').textContent=this.value+'/10'" id="stC">
+      </div>
+      <button class="btn-simulate" onclick="runTradeSim()">💰 Calculate Trade Profit</button>
+      <div class="result-display" id="tradeResult"></div>
+    `,
+    run: () => {
+      const units = parseInt(document.getElementById('stB').value);
+      const buyPrice = parseInt(document.getElementById('stW').value);
+      const sellPrice = parseInt(document.getElementById('stR').value);
+      const comp = parseInt(document.getElementById('stC').value);
+
+      const costPrice = units * buyPrice;
+      const markup = sellPrice - buyPrice;
+      const markupPct = Math.round(markup / buyPrice * 100);
+      const competitionFactor = (11 - comp) / 10;
+      const unitsSold = Math.round(units * competitionFactor * (sellPrice <= buyPrice * 1.5 ? 0.9 : 0.6));
+      const revenue = unitsSold * sellPrice;
+      const profit = revenue - (unitsSold * buyPrice);
+      const unsold = units - unitsSold;
+
+      const el = document.getElementById('tradeResult');
+      el.classList.add('show');
+      el.innerHTML = `
+        <h4>💹 Trade Analysis</h4>
+        <div class="metrics-grid">
+          <div class="metric-item"><span class="metric-val">₹${costPrice.toLocaleString()}</span><div class="metric-label">Total Investment</div></div>
+          <div class="metric-item"><span class="metric-val">${markupPct}%</span><div class="metric-label">Markup %</div></div>
+          <div class="metric-item"><span class="metric-val">${unitsSold}</span><div class="metric-label">Units Sold</div></div>
+          <div class="metric-item"><span class="metric-val" style="color:${profit>0?'var(--green)':'var(--red)'}">₹${profit.toLocaleString()}</span><div class="metric-label">Gross Profit</div></div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;">
+          ${unsold > 0 ? `⚠️ ${unsold} units unsold — high competition or price too high.` : 'All units sold!'} 
+          ${markupPct > 100 ? ' Very high markup may reduce sales volume.' : ''}
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--teal);">💡 Concept: Markup = Selling Price - Cost Price. Trade profit depends on buying price, selling price, and units sold.</p>
+      `;
+    }
+  },
+  international: {
+    title: '🌐 International Trade Simulator',
+    html: () => `
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">Navigate export/import process. Set up a trade between India and another country.</p>
+      <div class="slider-group">
+        <label>Export Value ($000 USD) <span id="ixVal">100</span></label>
+        <input type="range" min="10" max="1000" value="100" step="10" oninput="document.getElementById('ixVal').textContent='$'+this.value+'K'" id="siX">
+      </div>
+      <div class="slider-group">
+        <label>Exchange Rate (₹ per $) <span id="ixrVal">83</span></label>
+        <input type="range" min="50" max="120" value="83" step="1" oninput="document.getElementById('ixrVal').textContent='₹'+this.value" id="siXR">
+      </div>
+      <div class="slider-group">
+        <label>Import Duty (%) <span id="idVal">15</span></label>
+        <input type="range" min="0" max="100" value="15" step="5" oninput="document.getElementById('idVal').textContent=this.value+'%'" id="siD">
+      </div>
+      <div class="slider-group">
+        <label>Shipping & Insurance Cost (% of value) <span id="isVal">5</span></label>
+        <input type="range" min="1" max="20" value="5" step="1" oninput="document.getElementById('isVal').textContent=this.value+'%'" id="siS">
+      </div>
+      <button class="btn-simulate" onclick="runIntlSim()">✈️ Execute Trade</button>
+      <div class="result-display" id="intlResult"></div>
+    `,
+    run: () => {
+      const exportVal = parseInt(document.getElementById('siX').value) * 1000;
+      const rate = parseInt(document.getElementById('siXR').value);
+      const duty = parseInt(document.getElementById('siD').value);
+      const shipping = parseInt(document.getElementById('siS').value);
+
+      const exportInr = exportVal * rate;
+      const dutyAmount = exportVal * (duty/100) * rate;
+      const shippingCost = exportVal * (shipping/100) * rate;
+      const totalCost = exportInr + dutyAmount + shippingCost;
+      const netProfit = exportInr - shippingCost;
+      const competitiveness = duty > 30 ? 'Low (High Tariff Barrier)' : duty > 15 ? 'Moderate' : 'High (Favourable Market)';
+
+      const el = document.getElementById('intlResult');
+      el.classList.add('show');
+      el.innerHTML = `
+        <h4>📦 International Trade Summary</h4>
+        <div class="metrics-grid">
+          <div class="metric-item"><span class="metric-val">₹${(exportInr/100000).toFixed(1)}L</span><div class="metric-label">Export Value (INR)</div></div>
+          <div class="metric-item"><span class="metric-val">₹${(dutyAmount/100000).toFixed(1)}L</span><div class="metric-label">Import Duty Paid</div></div>
+          <div class="metric-item"><span class="metric-val">₹${(shippingCost/100000).toFixed(1)}L</span><div class="metric-label">Shipping + Insurance</div></div>
+          <div class="metric-item"><span class="metric-val">₹${(netProfit/100000).toFixed(1)}L</span><div class="metric-label">Net Export Earnings</div></div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;"><strong>Market Competitiveness:</strong> ${competitiveness}</p>
+        <p style="margin-top:8px;font-size:12px;">
+          ${duty > 30 ? '⚠️ High import duty in the destination country makes your exports expensive. Consider FTA countries.' : '✅ Favourable trade conditions. This trade is economically viable.'}
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--teal);">💡 Concepts: Exchange rate, import duty (tariff barrier), CIF pricing (Cost + Insurance + Freight). Key for Ch.10 International Business.</p>
+      `;
+    }
+  }
+};
+
+function runSim(type) {
+  const config = simConfigs[type];
+  if (!config) return;
+
+  document.getElementById('simSelection').style.display = 'none';
+  document.getElementById('simArea').classList.add('active');
+  document.getElementById('simTitle').textContent = config.title;
+  document.getElementById('simContent').innerHTML = config.html();
+  window._currentSim = type;
+}
+
+function runDecisionSim() { simConfigs.decision.run(); }
+function runDemandSim() { simConfigs.demand.run(); }
+function runEntrepreneurSim() { simConfigs.entrepreneur.run(); }
+function runTradeSim() { simConfigs.trade.run(); }
+function runIntlSim() { simConfigs.international.run(); }
+
+function closeSim() {
+  document.getElementById('simSelection').style.display = 'block';
+  document.getElementById('simArea').classList.remove('active');
+}
+
+// ============================================================
+// PROGRESS SCREEN
+// ============================================================
+function renderProgress() {
+  const scores = appState.quizScores;
+  const completed = appState.completedChapters;
+
+  const overallProgress = Math.round(completed.length / CHAPTERS.length * 100);
+  const avgScore = Object.values(scores).length
+    ? Math.round(Object.values(scores).reduce((a,b)=>a+b,0) / Object.values(scores).length)
+    : 0;
+
+  document.getElementById('progressContent').innerHTML = `
+    <div class="concept-card" style="text-align:center;margin-bottom:24px;">
+      <h3 style="margin-bottom:16px;">📊 Overall Progress</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <div style="font-size:36px;font-weight:800;color:var(--accent);">${completed.length}/10</div>
+          <div style="font-size:12px;color:var(--gray);">Chapters Completed</div>
+        </div>
+        <div>
+          <div style="font-size:36px;font-weight:800;color:var(--green);">${avgScore}%</div>
+          <div style="font-size:12px;color:var(--gray);">Average Quiz Score</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:8px;height:10px;overflow:hidden;">
+        <div style="height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:${overallProgress}%;transition:width 1s ease;border-radius:8px;"></div>
+      </div>
+      <div style="font-size:12px;color:var(--gray);margin-top:6px;">${overallProgress}% of course completed</div>
+    </div>
+    <div class="section-title" style="margin-bottom:16px;">📖 Chapter-wise Progress</div>
+    ${CHAPTERS.map(ch => {
+      const done = completed.includes(ch.id);
+      const score = scores[ch.id] || 0;
+      return `
+        <div class="progress-chapter-item">
+          <div class="chapter-num" style="${done?'background:linear-gradient(135deg,var(--green),#05c48a)':''}">${ch.id}</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-label">
+              <span style="font-size:13px;font-weight:700;">${ch.icon} ${ch.title}</span>
+              <span style="font-size:12px;color:${done?'var(--green)':'var(--gray)'};">${done?'Completed ✅':'Pending'}</span>
+            </div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill" style="width:${score}%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="font-size:11px;color:var(--gray);">Quiz Score</span>
+              <span style="font-size:11px;color:${score>=80?'var(--green)':score>=50?'var(--accent)':'var(--gray)'};">${score?score+'%':'—'}</span>
+            </div>
+          </div>
+          <button onclick="openChapter(${ch.id})" style="background:rgba(255,255,255,0.08);border:none;color:white;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;font-family:var(--font-body);">${done?'Review':'Study'}</button>
+        </div>
+      `;
+    }).join('')}
+  `;
+
+  // Animate progress bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.mini-bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => el.style.width = w, 50);
+    });
+  }, 100);
+}
+
+function resetProgress() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    appState.completedChapters = [];
+    appState.quizScores = {};
+    saveState();
+    renderProgress();
+    updateStats();
+    showToast('Progress reset!');
+  }
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  loadState();
+  renderHomeChapters();
+  updateStats();
+
+  // Hide loading screen
+  setTimeout(() => {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    setTimeout(() => document.getElementById('loadingScreen').remove(), 500);
+  }, 800);
+
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  }
+}
+
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
